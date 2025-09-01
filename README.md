@@ -1,8 +1,8 @@
-# MindTech - Sistema de Gestão de Estudos
+# MindTech - Plataforma Completa de Gestão de Estudos
 
-Uma plataforma completa para organização de cronogramas de estudo, catálogo de disciplinas e acompanhamento de progresso com analytics avançados.
+Uma plataforma completa para organização de cronogramas de estudo, catálogo de disciplinas, simulados interativos e acompanhamento de progresso com analytics avançados.
 
-## 🚀 Funcionalidades
+## 🚀 Funcionalidades Principais
 
 ### 📅 Cronograma Inteligente
 - **Drag & Drop Calendar**: Interface intuitiva para organizar blocos de estudo
@@ -17,6 +17,13 @@ Uma plataforma completa para organização de cronogramas de estudo, catálogo d
 - **Comparação**: Compare até 3 disciplinas lado a lado
 - **Visualizações**: Modo grade e tabela com ordenação avançada
 - **Estatísticas Detalhadas**: Progresso individual por disciplina
+
+### 🎯 Simulados Interativos
+- **62 Questões Reais**: Base de questões de concursos públicos
+- **Configuração Avançada**: Por disciplina ou modo geral
+- **Feedback Imediato**: Gabarito após cada questão (opcional)
+- **Estatísticas Detalhadas**: Performance por disciplina
+- **Sistema de Filtros**: Quantidade personalizável (5, 10, 20, 30, 50, todas)
 
 ### 📊 Analytics de Progresso
 - **KPIs Dinâmicos**: Métricas automáticas de performance
