@@ -5,7 +5,10 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { Calendar, BookOpen, BarChart3, Menu, X, FileText } from "lucide-react"
+import { Calendar, BookOpen, BarChart3, Menu, X, FileText, LogIn } from "lucide-react"
+import { useAuth } from "@/contexts/AuthContext"
+import { AuthModal } from "@/components/auth/AuthModal"
+import { UserMenu } from "@/components/auth/UserMenu"
 
 const navigation = [
   {
@@ -37,6 +40,7 @@ const navigation = [
 export function Navigation() {
   const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false)
+  const { user } = useAuth()
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -74,6 +78,20 @@ export function Navigation() {
         </nav>
         
         <div className="flex flex-1 items-center justify-end space-x-4">
+          {/* Auth Section */}
+          <div className="hidden md:flex items-center gap-2">
+            {user ? (
+              <UserMenu />
+            ) : (
+              <AuthModal>
+                <Button variant="outline" size="sm" className="gap-2">
+                  <LogIn className="h-4 w-4" />
+                  Entrar
+                </Button>
+              </AuthModal>
+            )}
+          </div>
+
           {/* Mobile menu button */}
           <Button
             variant="ghost"
@@ -116,6 +134,23 @@ export function Navigation() {
                 </Link>
               )
             })}
+            
+            {/* Mobile Auth Section */}
+            <div className="pt-4 border-t">
+              {user ? (
+                <div className="px-3 py-2">
+                  <div className="font-medium">{user.name} {user.lastName}</div>
+                  <div className="text-xs text-muted-foreground">{user.email}</div>
+                </div>
+              ) : (
+                <AuthModal>
+                  <Button variant="outline" className="w-full gap-2">
+                    <LogIn className="h-4 w-4" />
+                    Entrar
+                  </Button>
+                </AuthModal>
+              )}
+            </div>
           </nav>
         </div>
       )}

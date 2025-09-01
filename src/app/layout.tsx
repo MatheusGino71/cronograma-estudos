@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Navigation } from "@/components/navigation";
 import { ReactQueryProvider } from "@/components/providers/react-query-provider";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -30,10 +31,12 @@ export default function RootLayout({
     <html lang="pt-BR" className={inter.variable}>
       <body className="min-h-screen bg-background font-sans antialiased">
         <ReactQueryProvider>
-          <Navigation />
-          <main className="flex-1">
-            {children}
-          </main>
+          <AuthProvider>
+            <Navigation />
+            <main className="flex-1">
+              {children}
+            </main>
+          </AuthProvider>
         </ReactQueryProvider>
       </body>
     </html>
