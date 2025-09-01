@@ -39,12 +39,50 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           createdAt: userData.createdAt?.toDate() || new Date(),
           updatedAt: userData.updatedAt?.toDate() || new Date()
         };
+      } else {
+        // Se não encontrar documento do usuário, criar com dados básicos
+        const basicUser: User = {
+          id: firebaseUser.uid,
+          email: firebaseUser.email || '',
+          name: firebaseUser.displayName?.split(' ')[0] || 'Usuário',
+          lastName: firebaseUser.displayName?.split(' ').slice(1).join(' ') || '',
+          phone: '',
+          avatar: firebaseUser.photoURL || '',
+          createdAt: new Date(),
+          updatedAt: new Date()
+        };
+        
+        // Tentar salvar no Firestore, mas não falhar se offline
+        try {
+          await setDoc(doc(db, 'users', firebaseUser.uid), {
+            name: basicUser.name,
+            lastName: basicUser.lastName,
+            phone: basicUser.phone,
+            avatar: basicUser.avatar,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
+          });
+        } catch (firestoreError) {
+          console.warn('Firestore offline, using local data:', firestoreError);
+        }
+        
+        return basicUser;
       }
       
-      return null;
     } catch (error) {
       console.error('Error fetching user data:', error);
-      return null;
+      
+      // Se houver erro (como offline), criar usuário básico
+      return {
+        id: firebaseUser.uid,
+        email: firebaseUser.email || '',
+        name: firebaseUser.displayName?.split(' ')[0] || 'Usuário',
+        lastName: firebaseUser.displayName?.split(' ').slice(1).join(' ') || '',
+        phone: '',
+        avatar: firebaseUser.photoURL || '',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
     }
   };
 
@@ -56,8 +94,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
       const user = await createUserFromFirebase(userCredential.user);
       
+      // user agora sempre retorna um objeto válido ou null
       if (!user) {
-        throw new Error('Dados do usuário não encontrados');
+        throw new Error('Erro ao processar dados do usuário');
       }
 
       setAuthState({
@@ -77,6 +116,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         errorMessage = 'Email inválido.';
       } else if (error.code === 'auth/too-many-requests') {
         errorMessage = 'Muitas tentativas. Tente novamente mais tarde.';
+      } else if (error.code === 'auth/network-request-failed') {
+        errorMessage = 'Erro de conexão. Verifique sua internet.';
       }
       
       setAuthState(prev => ({

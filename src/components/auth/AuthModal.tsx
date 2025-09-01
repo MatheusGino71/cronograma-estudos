@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { useState } from "react"
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { LoginForm } from "./LoginForm"
 import { RegisterForm } from "./RegisterForm"
 
@@ -31,6 +31,9 @@ export function AuthModal({ children, defaultMode = 'login' }: AuthModalProps) {
         {children}
       </DialogTrigger>
       <DialogContent className="sm:max-w-md p-0 overflow-hidden">
+        <DialogHeader className="sr-only">
+          <DialogTitle>{mode === 'login' ? 'Login' : 'Cadastro'}</DialogTitle>
+        </DialogHeader>
         {mode === 'login' ? (
           <LoginForm 
             onToggleMode={handleToggleMode} 

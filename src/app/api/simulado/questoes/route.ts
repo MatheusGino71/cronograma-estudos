@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { readFile } from 'fs/promises';
 import path from 'path';
 
+// Configurações para export estático
+export const dynamic = 'force-static';
+export const revalidate = false;
+
 export async function GET(request: NextRequest) {
   try {
     const filePath = path.join(process.cwd(), 'data', 'Simulado Correto Diagnóstico(Planilha1).csv');

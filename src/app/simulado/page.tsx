@@ -8,14 +8,14 @@ import { ConfigSimulado } from "@/types/simulado"
 
 export default function SimuladoPage() {
   const [configuracao, setConfiguracao] = useState<ConfigSimulado | null>(null)
-  const [resultado, setResultado] = useState<any>(null)
+  const [resultado, setResultado] = useState<Record<string, unknown> | null>(null)
 
   const handleIniciarSimulado = (config: ConfigSimulado) => {
     setConfiguracao(config)
     setResultado(null)
   }
 
-  const handleFinalizarSimulado = (res: any) => {
+  const handleFinalizarSimulado = (res: Record<string, unknown>) => {
     setResultado(res)
   }
 

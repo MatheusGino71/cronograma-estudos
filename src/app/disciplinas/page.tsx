@@ -275,7 +275,7 @@ export default function DisciplinasPage() {
           <div>
             <h4 className="font-medium mb-1">Como adicionar uma disciplina ao cronograma?</h4>
             <p className="text-sm text-muted-foreground">
-              Clique nos botões de ação rápida (25min, Rev, Sim) ou use "Adicionar ao cronograma" 
+              Clique nos botões de ação rápida (25min, Rev, Sim) ou use &quot;Adicionar ao cronograma&quot; 
               na visualização detalhada.
             </p>
           </div>
@@ -283,7 +283,7 @@ export default function DisciplinasPage() {
           <div>
             <h4 className="font-medium mb-1">Posso comparar diferentes disciplinas?</h4>
             <p className="text-sm text-muted-foreground">
-              Sim! Clique no ícone "+" em até 3 disciplinas para compará-las lado a lado.
+              Sim! Clique no ícone &quot;+&quot; em até 3 disciplinas para compará-las lado a lado.
             </p>
           </div>
           
