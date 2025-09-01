@@ -126,7 +126,7 @@ export function QuestaoCard({
         <div className="space-y-3">
           {questao.alternativas.map((alternativa, index) => (
             <button
-              key={`${questao.id}-${alternativa.letra}-${index}`}
+              key={`qcard-${questao.id}-alt-${alternativa.letra}-idx-${index}`}
               onClick={() => handleAlternativaClick(alternativa)}
               disabled={respondida && !mostrarGabarito}
               className={cn(

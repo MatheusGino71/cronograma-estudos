@@ -274,7 +274,7 @@ export function SimuladoInterativo({ config, onFinished }: SimuladoInterativoPro
             
             return (
               <button
-                key={`${questao.id}-${alternativa.letra}-${index}`}
+                key={`questao-${questaoAtual}-${questao.id}-alt-${alternativa.letra}-idx-${index}`}
                 onClick={() => handleSelecionarResposta(alternativa.letra)}
                 disabled={mostrandoResposta}
                 className={cn(buttonClass)}
