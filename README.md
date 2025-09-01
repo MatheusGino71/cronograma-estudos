@@ -2,9 +2,18 @@
 
 Uma plataforma completa para organização de cronogramas de estudo, catálogo de disciplinas, simulados interativos e acompanhamento de progresso com analytics avançados.
 
+🌐 **Aplicação Online**: https://cronograma-estudos-c3a5b.web.app
+🔗 **Repositório**: https://github.com/MatheusGino71/cronograma-estudos
+
 ## 🚀 Funcionalidades Principais
 
-### 📅 Cronograma Inteligente
+### � Sistema de Autenticação
+- **Firebase Authentication**: Login seguro com email/senha
+- **Perfil Personalizado**: Informações do usuário e preferências
+- **Recuperação de Senha**: Sistema de reset por email
+- **Sessões Persistentes**: Mantenha-se logado com segurança
+
+### �📅 Cronograma Inteligente
 - **Drag & Drop Calendar**: Interface intuitiva para organizar blocos de estudo
 - **Método 1-3-7**: Implementação do sistema de revisões espaçadas
 - **Notificações Push**: Lembretes automáticos para sessões de estudo
@@ -32,19 +41,71 @@ Uma plataforma completa para organização de cronogramas de estudo, catálogo d
 - **Insights Automáticos**: Sugestões baseadas no comportamento de estudo
 - **Exportação**: Relatórios em PDF e CSV
 
+### ⚙️ Configurações Avançadas
+- **Painel de Configurações**: Personalização completa da experiência
+- **Notificações**: Controle total sobre alertas e lembretes
+- **Aparência**: Temas claro/escuro e tamanho de fonte
+- **Privacidade**: Controles de visibilidade e compartilhamento
+- **Backup de Dados**: Exportação e importação de dados
+
 ## 🛠️ Stack Tecnológica
 
 ### Frontend
-- **Next.js 15** - React Framework com App Router
+- **Next.js 15** - React Framework com App Router e Turbopack
 - **TypeScript** - Tipagem estática
 - **Tailwind CSS** - Styling utilitário
-- **shadcn/ui** - Componentes UI modernos
+- **shadcn/ui** - Componentes UI modernos baseados em Radix UI
 - **Lucide React** - Ícones consistentes
+
+### Backend & Banco de Dados
+- **🔥 Firebase** - Plataforma completa do Google
+  - **Authentication**: Sistema de autenticação com email/senha
+  - **Firestore**: Banco de dados NoSQL em tempo real
+  - **Hosting**: Deploy automático com CDN global
+  - **Storage**: Armazenamento de arquivos (configurado)
+  - **Analytics**: Métricas de uso da aplicação
+
+### Configuração Firebase
+```typescript
+// Projeto Firebase: cronograma-estudos-c3a5b
+const firebaseConfig = {
+  projectId: "cronograma-estudos-c3a5b",
+  authDomain: "cronograma-estudos-c3a5b.firebaseapp.com",
+  // Configurações de segurança omitidas
+}
+```
+
+### Estrutura do Banco (Firestore)
+```typescript
+// Coleções principais:
+users/           // Dados dos usuários
+├── {userId}/
+    ├── name: string
+    ├── email: string
+    ├── avatar: string
+    ├── createdAt: timestamp
+    └── updatedAt: timestamp
+
+schedules/       // Cronogramas de estudo  
+├── {scheduleId}/
+    ├── userId: string
+    ├── blocks: StudyBlock[]
+    ├── createdAt: timestamp
+    └── updatedAt: timestamp
+
+progress/        // Logs de progresso
+├── {progressId}/
+    ├── userId: string
+    ├── disciplineId: string
+    ├── hoursStudied: number
+    ├── adherenceRate: number
+    └── date: timestamp
+```
 
 ### Estado e Dados
 - **Zustand** - Gerenciamento de estado global com persistência
 - **TanStack Query** - Cache e sincronização de dados
-- **localStorage** - Persistência local
+- **Firebase SDK** - Integração nativa com serviços Firebase
 
 ### Formulários e Validação
 - **React Hook Form** - Gestão de formulários
@@ -74,16 +135,23 @@ Uma plataforma completa para organização de cronogramas de estudo, catálogo d
 src/
 ├── app/                    # Next.js App Router
 │   ├── cronograma/        # Página de cronograma
-│   ├── disciplinas/       # Página de disciplinas
+│   ├── disciplinas/       # Página de disciplinas  
 │   ├── progresso/         # Página de analytics
-│   └── api/               # API Routes
+│   ├── perfil/           # Página de perfil do usuário
+│   ├── estudos/          # Dashboard de estudos
+│   ├── configuracoes/    # Painel de configurações
+│   ├── simulado/         # Sistema de simulados
+│   └── api/              # API Routes
 ├── components/            # Componentes reutilizáveis
 │   ├── ui/               # shadcn/ui components
+│   ├── auth/             # Componentes de autenticação
 │   ├── scheduler/        # Componentes de cronograma
 │   ├── disciplines/      # Componentes de disciplinas
 │   └── charts/           # Componentes de gráficos
+├── contexts/             # React Context (Auth)
 ├── hooks/                # Custom React hooks
 ├── lib/                  # Utilitários e configurações
+│   └── firebase.ts       # Configuração Firebase
 ├── store/                # Zustand stores
 ├── types/                # TypeScript type definitions
 └── styles/               # CSS global e configurações
@@ -94,14 +162,14 @@ src/
 ### Pré-requisitos
 - Node.js 18+ 
 - npm ou yarn
+- Conta Firebase (para funcionalidades completas)
 
 ### Instalação
 
 1. **Clone o repositório**
 ```bash
-git clone <repository-url>
-```bash
-cd mindtech
+git clone https://github.com/MatheusGino71/cronograma-estudos.git
+cd cronograma-estudos
 ```
 
 2. **Instale as dependências**
@@ -109,22 +177,117 @@ cd mindtech
 npm install
 ```
 
-3. **Execute o servidor de desenvolvimento**
+3. **Configure as variáveis de ambiente**
+Crie um arquivo `.env.local` na raiz do projeto:
+```bash
+# Firebase Configuration
+NEXT_PUBLIC_FIREBASE_API_KEY=sua_api_key_aqui
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=seu_projeto.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=seu_projeto_id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=seu_projeto.firebasestorage.app
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=seu_sender_id
+NEXT_PUBLIC_FIREBASE_APP_ID=seu_app_id
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=seu_measurement_id
+```
+
+4. **Execute o servidor de desenvolvimento**
 ```bash
 npm run dev
 ```
 
-4. **Acesse a aplicação**
+5. **Acesse a aplicação**
 Abra [http://localhost:3000](http://localhost:3000) no seu navegador.
+
+### 🔥 Configuração Firebase (Opcional para desenvolvimento)
+
+1. **Crie um projeto no Firebase Console**
+   - Acesse [Firebase Console](https://console.firebase.google.com)
+   - Crie um novo projeto
+   - Ative Authentication, Firestore e Hosting
+
+2. **Configure Authentication**
+   - Ative o provedor Email/Senha
+   - Configure domínios autorizados
+
+3. **Configure Firestore**
+   - Crie o banco em modo teste
+   - Importe as regras de segurança do arquivo `firestore.rules`
+
+4. **Deploy (Opcional)**
+```bash
+npm run build
+firebase deploy
+```
 
 ## 📜 Scripts Disponíveis
 
 ```bash
-npm run dev          # Servidor de desenvolvimento
-npm run build        # Build para produção
+npm run dev          # Servidor de desenvolvimento com Turbopack
+npm run build        # Build para produção com export estático
 npm start            # Servidor de produção
 npm run lint         # Verificar linting
 npm run type-check   # Verificar tipos TypeScript
+
+# Firebase Commands
+firebase login       # Fazer login no Firebase CLI
+firebase init        # Inicializar projeto Firebase
+firebase deploy      # Deploy completo
+firebase deploy --only hosting  # Deploy apenas do frontend
+```
+
+## 🔐 Configuração de Segurança
+
+### Firestore Rules
+```javascript
+// firestore.rules
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Users podem ler/escrever apenas seus próprios dados
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Cronogramas privados por usuário
+    match /schedules/{scheduleId} {
+      allow read, write: if request.auth != null && 
+        request.auth.uid == resource.data.userId;
+    }
+    
+    // Progress logs privados por usuário  
+    match /progress/{progressId} {
+      allow read, write: if request.auth != null && 
+        request.auth.uid == resource.data.userId;
+    }
+  }
+}
+```
+
+### Configuração de Hosting
+```json
+// firebase.json
+{
+  "hosting": {
+    "public": "out",
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "**/*.@(js|css|png|jpg|jpeg|gif|ico|svg)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000, immutable"
+          }
+        ]
+      }
+    ]
+  }
+}
 ```
 
 ## 🗄️ Estrutura de Dados
@@ -243,7 +406,17 @@ const locale = 'pt-BR' // Padrão português brasileiro
 
 ## 🚀 Deploy
 
-### Vercel (Recomendado)
+### 🔥 Firebase Hosting (Atual)
+```bash
+# Build e deploy automático
+npm run build
+firebase deploy --only hosting
+
+# URL de produção
+# https://cronograma-estudos-c3a5b.web.app
+```
+
+### Vercel (Alternativo)
 ```bash
 npm run build
 vercel --prod
@@ -253,8 +426,21 @@ vercel --prod
 ```dockerfile
 # Dockerfile incluído no projeto
 FROM node:18-alpine
-# ... configuração completa
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+COPY . .
+RUN npm run build
+EXPOSE 3000
+CMD ["npm", "start"]
 ```
+
+## 🌐 URLs do Projeto
+
+- **🚀 Aplicação**: https://cronograma-estudos-c3a5b.web.app
+- **📊 Firebase Console**: https://console.firebase.google.com/project/cronograma-estudos-c3a5b
+- **📁 GitHub**: https://github.com/MatheusGino71/cronograma-estudos
+- **🔧 Local**: http://localhost:3000
 
 ## 📈 Métricas e Analytics
 
