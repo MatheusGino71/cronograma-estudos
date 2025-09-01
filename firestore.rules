@@ -1,0 +1,50 @@
+// Firestore Security Rules
+// Configure estas regras no Firebase Console > Firestore Database > Rules
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Regras para a coleção de usuários
+    match /users/{userId} {
+      // Usuários podem ler e escrever apenas seus próprios dados
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Regras para questões do simulado (exemplo - ajustar conforme necessário)
+    match /questoes/{questaoId} {
+      // Qualquer usuário autenticado pode ler questões
+      allow read: if request.auth != null;
+      // Apenas administradores podem criar/editar questões
+      allow write: if request.auth != null && 
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+    
+    // Regras para cronogramas de estudo
+    match /cronogramas/{cronogramaId} {
+      // Usuários podem ler e escrever apenas seus próprios cronogramas
+      allow read, write: if request.auth != null && 
+        resource.data.userId == request.auth.uid;
+    }
+    
+    // Regras para progresso dos usuários
+    match /progresso/{progressoId} {
+      // Usuários podem ler e escrever apenas seu próprio progresso
+      allow read, write: if request.auth != null && 
+        resource.data.userId == request.auth.uid;
+    }
+    
+    // Regras para disciplinas (exemplo - ajustar conforme necessário)
+    match /disciplinas/{disciplinaId} {
+      // Qualquer usuário autenticado pode ler disciplinas
+      allow read: if request.auth != null;
+      // Apenas administradores podem criar/editar disciplinas
+      allow write: if request.auth != null && 
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+    
+    // Negação padrão para todas as outras coleções
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

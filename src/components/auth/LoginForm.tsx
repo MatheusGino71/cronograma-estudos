@@ -17,13 +17,15 @@ interface LoginFormProps {
 }
 
 export function LoginForm({ onToggleMode, onClose }: LoginFormProps) {
-  const { login, loading, error } = useAuth();
+  const { login, resetPassword, loading, error } = useAuth();
   const [formData, setFormData] = useState<LoginData>({
     email: '',
     password: ''
   });
   const [showPassword, setShowPassword] = useState(false);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+  const [isResettingPassword, setIsResettingPassword] = useState(false);
+  const [resetMessage, setResetMessage] = useState('');
 
   const validateForm = (): boolean => {
     const errors: Record<string, string> = {};
@@ -42,6 +44,30 @@ export function LoginForm({ onToggleMode, onClose }: LoginFormProps) {
 
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
+  };
+
+  const handleForgotPassword = async () => {
+    if (!formData.email) {
+      setValidationErrors({ email: 'Digite seu email para recuperar a senha' });
+      return;
+    }
+
+    if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      setValidationErrors({ email: 'Email inválido' });
+      return;
+    }
+
+    setIsResettingPassword(true);
+    setResetMessage('');
+    
+    try {
+      await resetPassword(formData.email);
+      setResetMessage('Email de recuperação enviado! Verifique sua caixa de entrada.');
+    } catch (error) {
+      console.error('Reset password error:', error);
+    } finally {
+      setIsResettingPassword(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -80,6 +106,12 @@ export function LoginForm({ onToggleMode, onClose }: LoginFormProps) {
           {error && (
             <Alert variant="destructive">
               <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+
+          {resetMessage && (
+            <Alert>
+              <AlertDescription className="text-green-600">{resetMessage}</AlertDescription>
             </Alert>
           )}
 
@@ -136,9 +168,10 @@ export function LoginForm({ onToggleMode, onClose }: LoginFormProps) {
               type="button"
               variant="link"
               className="px-0 text-sm"
-              onClick={() => {/* TODO: Implement forgot password */}}
+              onClick={handleForgotPassword}
+              disabled={loading || isResettingPassword}
             >
-              Esqueceu a senha?
+              {isResettingPassword ? 'Enviando...' : 'Esqueceu a senha?'}
             </Button>
           </div>
         </CardContent>
