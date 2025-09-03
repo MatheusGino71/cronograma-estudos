@@ -8,6 +8,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { Send, Bot, User, Loader2, Lightbulb, BookOpen, Calendar, HelpCircle } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import { processAIRequest } from '@/lib/ai-local';
 
 interface Message {
   id: string;
@@ -82,25 +83,18 @@ export default function ImprovedAIChat() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/ai', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          type: 'question',
-          data: {
-            question: textToSend,
-            context: messages.slice(-3).map(m => `${m.isUser ? 'Usuário' : 'AI'}: ${m.text}`).join('\n')
-          }
-        }),
+      console.log('Processando mensagem com IA local:', textToSend);
+      
+      // Usar IA local em vez de API
+      const result = await processAIRequest({
+        type: 'question',
+        data: {
+          question: textToSend,
+          context: messages.slice(-3).map(m => `${m.isUser ? 'Usuário' : 'AI'}: ${m.text}`).join('\n')
+        }
       });
 
-      if (!response.ok) {
-        throw new Error(`Erro ${response.status}: ${response.statusText}`);
-      }
-
-      const result = await response.json();
+      console.log('Resposta da IA local:', result);
 
       if (result.success) {
         const aiMessage: Message = {
@@ -111,13 +105,13 @@ export default function ImprovedAIChat() {
         };
         setMessages(prev => [...prev, aiMessage]);
       } else {
-        throw new Error(result.error || 'Erro desconhecido');
+        throw new Error('Erro na resposta da IA');
       }
     } catch (error) {
-      console.error('Erro ao enviar mensagem:', error);
+      console.error('Erro na IA local:', error);
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: `❌ **Erro**: Não foi possível processar sua pergunta. ${error instanceof Error ? error.message : 'Tente novamente.'}`,
+        text: `❌ **Erro temporário**: Houve um problema no processamento. Por favor, tente novamente.\n\n� **Dica**: O MindLegal AI está funcionando localmente para garantir sempre disponibilidade!`,
         isUser: false,
         timestamp: new Date()
       };

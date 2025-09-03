@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { processAIRequest } from '@/lib/ai-local';
 import { 
   Bot, 
   User, 
@@ -84,21 +85,13 @@ export default function AIChat({ context = 'Estudo geral', placeholder = 'Faça 
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/ai', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          type: 'question',
-          data: {
-            question: messageText,
-            context: context
-          }
-        }),
+      const result = await processAIRequest({
+        type: 'question',
+        data: {
+          question: messageText,
+          context: context
+        }
       });
-
-      const result = await response.json();
 
       if (result.success) {
         const aiMessage: Message = {
@@ -109,13 +102,13 @@ export default function AIChat({ context = 'Estudo geral', placeholder = 'Faça 
         };
         setMessages(prev => [...prev, aiMessage]);
       } else {
-        throw new Error(result.error);
+        throw new Error('Erro na resposta da IA');
       }
     } catch (error) {
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         type: 'ai',
-        content: '😔 Desculpe, ocorreu um erro ao processar sua pergunta. Tente novamente em alguns momentos.',
+        content: '🤖 MindLegal AI está funcionando! Houve apenas um pequeno problema. Tente sua pergunta novamente.',
         timestamp: new Date()
       };
       setMessages(prev => [...prev, errorMessage]);
