@@ -9,61 +9,17 @@ import {
   BookOpen, 
   Clock, 
   Calendar, 
-  TrendingUp,
-  PlayCircle,
-  PauseCircle,
-  CheckCircle,
   Target,
-  Brain,
-  FileText
+  PlayCircle,
+  Brain
 } from 'lucide-react';
 import Link from 'next/link';
 
 export default function MeusEstudos() {
-  const disciplinasAtivas = [
-    { nome: 'Anatomia', progresso: 75, tempoHoje: '2h 30min', status: 'Em andamento' },
-    { nome: 'Fisiologia', progresso: 60, tempoHoje: '1h 45min', status: 'Em andamento' },
-    { nome: 'Farmacologia', progresso: 40, tempoHoje: '45min', status: 'Pausado' },
-    { nome: 'Patologia', progresso: 85, tempoHoje: '3h 15min', status: 'Concluído hoje' }
-  ];
-
-  const sessoeRecentes = [
-    { disciplina: 'Anatomia', topico: 'Sistema Cardiovascular', duracao: '45min', data: 'Hoje', tipo: 'Teoria' },
-    { disciplina: 'Fisiologia', topico: 'Regulação Hormonal', duracao: '30min', data: 'Hoje', tipo: 'Exercícios' },
-    { disciplina: 'Farmacologia', topico: 'Antibióticos', duracao: '1h 20min', data: 'Ontem', tipo: 'Simulado' },
-    { disciplina: 'Patologia', topico: 'Neoplasias', duracao: '55min', data: 'Ontem', tipo: 'Teoria' }
-  ];
-
   const metasSemanais = {
-    horasEstudadas: { atual: 28, meta: 40 },
-    disciplinasConcluidas: { atual: 3, meta: 5 },
-    simuladosRealizados: { atual: 7, meta: 10 }
-  };
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'Em andamento':
-        return <PlayCircle className="h-4 w-4 text-green-500" />;
-      case 'Pausado':
-        return <PauseCircle className="h-4 w-4 text-yellow-500" />;
-      case 'Concluído hoje':
-        return <CheckCircle className="h-4 w-4 text-blue-500" />;
-      default:
-        return <BookOpen className="h-4 w-4 text-gray-500" />;
-    }
-  };
-
-  const getTipoIcon = (tipo: string) => {
-    switch (tipo) {
-      case 'Teoria':
-        return <BookOpen className="h-4 w-4" />;
-      case 'Exercícios':
-        return <FileText className="h-4 w-4" />;
-      case 'Simulado':
-        return <Brain className="h-4 w-4" />;
-      default:
-        return <BookOpen className="h-4 w-4" />;
-    }
+    horasEstudadas: { atual: 0, meta: 20 },
+    disciplinasConcluidas: { atual: 0, meta: 3 },
+    simuladosRealizados: { atual: 0, meta: 5 }
   };
 
   return (
@@ -72,8 +28,8 @@ export default function MeusEstudos() {
         <div className="max-w-6xl mx-auto">
           {/* Cabeçalho */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Meus Estudos</h1>
-            <p className="text-gray-600">Acompanhe seu progresso e gerencie suas sessões de estudo</p>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Meus Estudos - Direito</h1>
+            <p className="text-gray-600">Comece sua jornada jurídica criando seu primeiro cronograma de estudos</p>
           </div>
 
           {/* Metas Semanais */}
@@ -145,64 +101,54 @@ export default function MeusEstudos() {
             </TabsList>
 
             <TabsContent value="ativas" className="space-y-6">
-              <div className="grid gap-6">
-                {disciplinasAtivas.map((disciplina, index) => (
-                  <Card key={index}>
-                    <CardContent className="p-6">
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center space-x-3">
-                          {getStatusIcon(disciplina.status)}
-                          <div>
-                            <h3 className="font-semibold text-lg">{disciplina.nome}</h3>
-                            <p className="text-sm text-gray-600">Tempo hoje: {disciplina.tempoHoje}</p>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-2xl font-bold text-blue-600">{disciplina.progresso}%</p>
-                          <Badge variant={disciplina.status === 'Pausado' ? 'destructive' : 'default'}>
-                            {disciplina.status}
-                          </Badge>
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-sm">
-                          <span>Progresso Geral</span>
-                          <span>{disciplina.progresso}% concluído</span>
-                        </div>
-                        <Progress value={disciplina.progresso} className="h-2" />
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+              <Card className="text-center p-8">
+                <CardContent>
+                  <div className="text-gray-400 mb-6">
+                    <BookOpen className="h-24 w-24 mx-auto" />
+                  </div>
+                  <CardTitle className="text-2xl mb-4">Bem-vindo à sua jornada jurídica!</CardTitle>
+                  <CardDescription className="text-lg mb-6">
+                    Você ainda não possui disciplinas ativas. Comece criando seu cronograma personalizado de estudos em Direito.
+                  </CardDescription>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-md mx-auto">
+                    <Button asChild>
+                      <Link href="/cronograma">
+                        <Calendar className="h-4 w-4 mr-2" />
+                        Criar Cronograma
+                      </Link>
+                    </Button>
+                    <Button asChild variant="outline">
+                      <Link href="/disciplinas">
+                        <BookOpen className="h-4 w-4 mr-2" />
+                        Ver Disciplinas
+                      </Link>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
             </TabsContent>
 
             <TabsContent value="sessoes" className="space-y-6">
               <Card>
                 <CardHeader>
                   <CardTitle>Histórico de Sessões</CardTitle>
-                  <CardDescription>Suas sessões de estudo mais recentes</CardDescription>
+                  <CardDescription>Suas sessões de estudo aparecerão aqui</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    {sessoeRecentes.map((sessao, index) => (
-                      <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
-                        <div className="flex items-center space-x-3">
-                          {getTipoIcon(sessao.tipo)}
-                          <div>
-                            <p className="font-medium">{sessao.disciplina}</p>
-                            <p className="text-sm text-gray-600">{sessao.topico}</p>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <p className="font-medium">{sessao.duracao}</p>
-                          <p className="text-sm text-gray-600">{sessao.data}</p>
-                          <Badge variant="outline" className="mt-1">
-                            {sessao.tipo}
-                          </Badge>
-                        </div>
-                      </div>
-                    ))}
+                  <div className="text-center py-12">
+                    <div className="text-gray-400 mb-4">
+                      <Clock className="h-16 w-16 mx-auto" />
+                    </div>
+                    <h3 className="text-lg font-semibold mb-2">Nenhuma sessão registrada</h3>
+                    <p className="text-gray-600 mb-4">
+                      Quando você começar a estudar, suas sessões aparecerão aqui com detalhes sobre tempo de estudo, disciplinas e progresso.
+                    </p>
+                    <Button asChild>
+                      <Link href="/cronograma">
+                        <PlayCircle className="h-4 w-4 mr-2" />
+                        Iniciar Primeira Sessão
+                      </Link>
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -212,17 +158,17 @@ export default function MeusEstudos() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Cronograma Semanal</CardTitle>
-                    <CardDescription>Acesse seu cronograma personalizado</CardDescription>
+                    <CardTitle>Cronograma Jurídico</CardTitle>
+                    <CardDescription>Organize seus estudos em Direito</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <p className="text-gray-600 mb-4">
-                      Gerencie e acompanhe seu cronograma de estudos semanal.
+                      Crie um cronograma personalizado com as 12 disciplinas jurídicas essenciais para concursos públicos.
                     </p>
                     <Button asChild className="w-full">
                       <Link href="/cronograma">
                         <Calendar className="h-4 w-4 mr-2" />
-                        Ver Cronograma
+                        Criar Cronograma
                       </Link>
                     </Button>
                   </CardContent>
@@ -230,12 +176,12 @@ export default function MeusEstudos() {
 
                 <Card>
                   <CardHeader>
-                    <CardTitle>Simulados</CardTitle>
-                    <CardDescription>Teste seus conhecimentos</CardDescription>
+                    <CardTitle>Simulados Jurídicos</CardTitle>
+                    <CardDescription>Teste seus conhecimentos em Direito</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <p className="text-gray-600 mb-4">
-                      Realize simulados para avaliar seu progresso.
+                      Prepare-se para concursos com simulados específicos das principais bancas examinadoras.
                     </p>
                     <Button asChild className="w-full" variant="outline">
                       <Link href="/simulado">
@@ -246,6 +192,42 @@ export default function MeusEstudos() {
                   </CardContent>
                 </Card>
               </div>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Disciplinas Disponíveis</CardTitle>
+                  <CardDescription>Explore todas as áreas do Direito</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                    {[
+                      'Direito Constitucional',
+                      'Direito Administrativo', 
+                      'Direito Civil',
+                      'Direito Penal',
+                      'Direito Processual Civil',
+                      'Direito Processual Penal',
+                      'Direito Trabalhista',
+                      'Direito Processual do Trabalho',
+                      'Direito Tributário',
+                      'Direito Empresarial',
+                      'Direito Previdenciário',
+                      'Direito Ambiental'
+                    ].map((disciplina, index) => (
+                      <Badge key={index} variant="outline" className="p-2 text-center">
+                        {disciplina}
+                      </Badge>
+                    ))}
+                  </div>
+                  <div className="mt-4 text-center">
+                    <Button asChild variant="outline">
+                      <Link href="/disciplinas">
+                        Ver Todas as Disciplinas
+                      </Link>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
             </TabsContent>
           </Tabs>
         </div>
