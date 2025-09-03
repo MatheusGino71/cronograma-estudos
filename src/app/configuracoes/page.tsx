@@ -26,8 +26,11 @@ import {
   Eye
 } from 'lucide-react';
 import { useState } from 'react';
+import { useTheme } from '@/contexts/ThemeContext';
 
 export default function Configuracoes() {
+  const { theme, setTheme } = useTheme();
+  
   const [notifications, setNotifications] = useState({
     emailNotifications: true,
     pushNotifications: true,
@@ -260,21 +263,47 @@ export default function Configuracoes() {
                 <CardContent className="space-y-6">
                   <div className="space-y-2">
                     <Label>Tema</Label>
-                    <div className="grid grid-cols-3 gap-4">
-                      <div className="flex items-center space-x-2 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                    <p className="text-sm text-muted-foreground">
+                      Customize a interface do aplicativo
+                    </p>
+                    <div className="grid grid-cols-3 gap-4 mt-4">
+                      <button
+                        onClick={() => setTheme('light')}
+                        className={`flex items-center space-x-2 p-3 border rounded-lg cursor-pointer transition-colors ${
+                          theme === 'light' 
+                            ? 'bg-primary text-primary-foreground border-primary' 
+                            : 'hover:bg-accent hover:text-accent-foreground'
+                        }`}
+                      >
                         <Sun className="h-5 w-5" />
                         <span>Claro</span>
-                      </div>
-                      <div className="flex items-center space-x-2 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                      </button>
+                      <button
+                        onClick={() => setTheme('dark')}
+                        className={`flex items-center space-x-2 p-3 border rounded-lg cursor-pointer transition-colors ${
+                          theme === 'dark' 
+                            ? 'bg-primary text-primary-foreground border-primary' 
+                            : 'hover:bg-accent hover:text-accent-foreground'
+                        }`}
+                      >
                         <Moon className="h-5 w-5" />
                         <span>Escuro</span>
-                      </div>
-                      <div className="flex items-center space-x-2 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                      </button>
+                      <button
+                        onClick={() => setTheme('system')}
+                        className={`flex items-center space-x-2 p-3 border rounded-lg cursor-pointer transition-colors ${
+                          theme === 'system' 
+                            ? 'bg-primary text-primary-foreground border-primary' 
+                            : 'hover:bg-accent hover:text-accent-foreground'
+                        }`}
+                      >
                         <Settings className="h-5 w-5" />
                         <span>Sistema</span>
-                      </div>
+                      </button>
                     </div>
                   </div>
+
+                  <Separator />
 
                   <div className="space-y-2">
                     <Label htmlFor="font-size">Tamanho da Fonte</Label>

@@ -5,8 +5,9 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { Calendar, BookOpen, BarChart3, Menu, X, FileText, LogIn } from "lucide-react"
+import { Calendar, BookOpen, BarChart3, Menu, X, FileText, LogIn, Sun, Moon } from "lucide-react"
 import { useAuth } from "@/contexts/AuthContext"
+import { useTheme } from "@/contexts/ThemeContext"
 import { AuthModal } from "@/components/auth/AuthModal"
 import { UserMenu } from "@/components/auth/UserMenu"
 
@@ -41,6 +42,11 @@ export function Navigation() {
   const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false)
   const { user } = useAuth()
+  const { theme, setTheme, resolvedTheme } = useTheme()
+
+  const toggleTheme = () => {
+    setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -78,6 +84,21 @@ export function Navigation() {
         </nav>
         
         <div className="flex flex-1 items-center justify-end space-x-4">
+          {/* Theme Toggle */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleTheme}
+            className="h-9 w-9"
+          >
+            {resolvedTheme === 'dark' ? (
+              <Sun className="h-4 w-4" />
+            ) : (
+              <Moon className="h-4 w-4" />
+            )}
+            <span className="sr-only">Toggle theme</span>
+          </Button>
+
           {/* Auth Section */}
           <div className="hidden md:flex items-center gap-2">
             {user ? (
@@ -136,7 +157,26 @@ export function Navigation() {
             })}
             
             {/* Mobile Auth Section */}
-            <div className="pt-4 border-t">
+            <div className="pt-4 border-t space-y-3">
+              {/* Theme Toggle Mobile */}
+              <Button
+                variant="outline"
+                onClick={toggleTheme}
+                className="w-full gap-2 justify-start"
+              >
+                {resolvedTheme === 'dark' ? (
+                  <>
+                    <Sun className="h-4 w-4" />
+                    Modo Claro
+                  </>
+                ) : (
+                  <>
+                    <Moon className="h-4 w-4" />
+                    Modo Escuro
+                  </>
+                )}
+              </Button>
+
               {user ? (
                 <div className="px-3 py-2">
                   <div className="font-medium">{user.name} {user.lastName}</div>

@@ -4,6 +4,7 @@ import "./globals.css";
 import { Navigation } from "@/components/navigation";
 import { ReactQueryProvider } from "@/components/providers/react-query-provider";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -30,14 +31,16 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={inter.variable}>
       <body className="min-h-screen bg-background font-sans antialiased">
-        <ReactQueryProvider>
-          <AuthProvider>
-            <Navigation />
-            <main className="flex-1">
-              {children}
-            </main>
-          </AuthProvider>
-        </ReactQueryProvider>
+        <ThemeProvider>
+          <ReactQueryProvider>
+            <AuthProvider>
+              <Navigation />
+              <main className="flex-1">
+                {children}
+              </main>
+            </AuthProvider>
+          </ReactQueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

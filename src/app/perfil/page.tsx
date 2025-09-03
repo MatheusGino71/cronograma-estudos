@@ -17,17 +17,87 @@ import {
   Edit,
   Save
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 export default function MeuPerfil() {
+  const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState({
-    nome: 'Matheus Gino',
-    email: 'matheusgino17@icloud.com',
-    dataInscricao: '2025-01-15',
-    metaDiaria: '4 horas',
-    especialidade: 'Medicina'
+    nome: '',
+    email: '',
+    dataInscricao: '',
+    metaDiaria: '',
+    especialidade: '',
+    telefone: ''
   });
+
+  // Carregar dados do usuário
+  useEffect(() => {
+    const loadUserData = async () => {
+      if (!user) return;
+      
+      try {
+        const userDocRef = doc(db, 'users', user.id);
+        const userDoc = await getDoc(userDocRef);
+        
+        if (userDoc.exists()) {
+          const data = userDoc.data();
+          setUserData({
+            nome: data.name + ' ' + (data.lastName || ''),
+            email: data.email || user.email,
+            dataInscricao: data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleDateString('pt-BR') : 'Data não disponível',
+            metaDiaria: data.metaDiaria || '4 horas',
+            especialidade: data.especialidade || 'Não informado',
+            telefone: data.phone || ''
+          });
+        } else {
+          // Dados básicos do Firebase Auth
+          setUserData({
+            nome: user.name + ' ' + (user.lastName || ''),
+            email: user.email,
+            dataInscricao: user.createdAt ? user.createdAt.toLocaleDateString('pt-BR') : 'Data não disponível',
+            metaDiaria: '4 horas',
+            especialidade: 'Não informado',
+            telefone: user.phone || ''
+          });
+        }
+      } catch (error) {
+        console.error('Erro ao carregar dados do usuário:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUserData();
+  }, [user]);
+
+  // Função para salvar alterações
+  const handleSave = async () => {
+    if (!user) return;
+    
+    try {
+      const userDocRef = doc(db, 'users', user.id);
+      const nameParts = userData.nome.split(' ');
+      
+      await setDoc(userDocRef, {
+        name: nameParts[0] || '',
+        lastName: nameParts.slice(1).join(' ') || '',
+        email: userData.email,
+        phone: userData.telefone,
+        metaDiaria: userData.metaDiaria,
+        especialidade: userData.especialidade,
+        updatedAt: new Date()
+      }, { merge: true });
+      
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Erro ao salvar dados:', error);
+    }
+  };
 
   const stats = [
     { label: 'Dias de Estudo', value: '45', icon: Calendar },
@@ -35,6 +105,33 @@ export default function MeuPerfil() {
     { label: 'Simulados Realizados', value: '23', icon: Trophy },
     { label: 'Horas Totais', value: '180h', icon: Clock }
   ];
+
+  // Função para obter as iniciais do nome
+  const getInitials = (nome: string) => {
+    const names = nome.split(' ');
+    return names.length >= 2 
+      ? (names[0][0] + names[1][0]).toUpperCase()
+      : nome.substring(0, 2).toUpperCase();
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Acesso Negado</h2>
+          <p className="text-gray-600">Você precisa estar logado para acessar esta página.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -46,13 +143,13 @@ export default function MeuPerfil() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <Avatar className="h-20 w-20">
-                    <AvatarImage src="/placeholder-avatar.jpg" />
+                    <AvatarImage src={user.avatar || "/placeholder-avatar.jpg"} />
                     <AvatarFallback className="bg-blue-500 text-white text-2xl">
-                      MG
+                      {getInitials(userData.nome || user.name + ' ' + (user.lastName || ''))}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <CardTitle className="text-2xl">{userData.nome}</CardTitle>
+                    <CardTitle className="text-2xl">{userData.nome || 'Usuário'}</CardTitle>
                     <CardDescription className="text-lg">
                       Estudante de {userData.especialidade}
                     </CardDescription>
@@ -62,7 +159,7 @@ export default function MeuPerfil() {
                   </div>
                 </div>
                 <Button
-                  onClick={() => setIsEditing(!isEditing)}
+                  onClick={() => isEditing ? handleSave() : setIsEditing(true)}
                   variant={isEditing ? "default" : "outline"}
                 >
                   {isEditing ? <Save className="h-4 w-4 mr-2" /> : <Edit className="h-4 w-4 mr-2" />}
@@ -129,21 +226,43 @@ export default function MeuPerfil() {
                       />
                     </div>
                     <div className="space-y-2">
+                      <Label htmlFor="telefone">Telefone</Label>
+                      <Input
+                        id="telefone"
+                        type="tel"
+                        value={userData.telefone}
+                        disabled={!isEditing}
+                        onChange={(e) => setUserData({...userData, telefone: e.target.value})}
+                        placeholder="(00) 00000-0000"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="dataInscricao">Data de Inscrição</Label>
+                      <Input
+                        id="dataInscricao"
+                        value={userData.dataInscricao}
+                        disabled={true}
+                        className="bg-gray-50"
+                      />
+                    </div>
+                    <div className="space-y-2">
                       <Label htmlFor="especialidade">Área de Estudo</Label>
                       <Input
                         id="especialidade"
                         value={userData.especialidade}
                         disabled={!isEditing}
                         onChange={(e) => setUserData({...userData, especialidade: e.target.value})}
+                        placeholder="Ex: Medicina, Direito, Engenharia..."
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="meta">Meta Diária</Label>
+                      <Label htmlFor="meta">Meta Diária de Estudos</Label>
                       <Input
                         id="meta"
                         value={userData.metaDiaria}
                         disabled={!isEditing}
                         onChange={(e) => setUserData({...userData, metaDiaria: e.target.value})}
+                        placeholder="Ex: 4 horas, 6 horas..."
                       />
                     </div>
                   </div>
