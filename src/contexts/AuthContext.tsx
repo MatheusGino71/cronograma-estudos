@@ -235,18 +235,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Listen to Firebase auth state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        const user = await createUserFromFirebase(firebaseUser);
-        setAuthState({
-          user,
-          loading: false,
-          error: null
-        });
-      } else {
+      try {
+        if (firebaseUser) {
+          const user = await createUserFromFirebase(firebaseUser);
+          setAuthState({
+            user,
+            loading: false,
+            error: null
+          });
+        } else {
+          setAuthState({
+            user: null,
+            loading: false,
+            error: null
+          });
+        }
+      } catch (error) {
+        console.error('Auth state change error:', error);
         setAuthState({
           user: null,
           loading: false,
-          error: null
+          error: 'Erro ao verificar autenticação'
         });
       }
     });
