@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AIChat from '@/components/ai/AIChat';
+import Link from 'next/link';
 import { 
   Bot, 
   Brain, 
@@ -15,7 +16,12 @@ import {
   Sparkles,
   Target,
   Users,
-  CheckCircle
+  CheckCircle,
+  Scroll,
+  GraduationCap,
+  MessageSquare,
+  Lightbulb,
+  BarChart3
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -88,6 +94,30 @@ export default function AssistenteIA() {
       description: 'Solicite técnicas de memorização',
       prompt: 'Como memorizar os prazos processuais do CPC?',
       icon: Target
+    },
+    {
+      title: 'Jurisprudência',
+      description: 'Consulte decisões dos tribunais superiores',
+      prompt: 'Mostre jurisprudência sobre liberdade de expressão no STF',
+      icon: BookOpen
+    },
+    {
+      title: 'Resumo de Lei',
+      description: 'Solicite resumos de leis importantes',
+      prompt: 'Faça um resumo da Lei de Improbidade Administrativa',
+      icon: Scroll
+    },
+    {
+      title: 'Simulado',
+      description: 'Pratique com questões de concurso',
+      prompt: 'Crie um simulado com 10 questões de Direito Penal',
+      icon: GraduationCap
+    },
+    {
+      title: 'Plano de Revisão',
+      description: 'Organize suas revisões periódicas',
+      prompt: 'Crie um plano de revisão para Direito Constitucional',
+      icon: Lightbulb
     }
   ];
 
@@ -106,7 +136,7 @@ export default function AssistenteIA() {
             <p className="text-xl text-gray-600 mb-4">
               Seu assistente de estudos especializado em Direito brasileiro
             </p>
-            <div className="flex items-center justify-center gap-2">
+            <div className="flex items-center justify-center gap-2 mb-6">
               <Badge variant="secondary" className="flex items-center gap-1">
                 <Sparkles className="h-3 w-3" />
                 Powered by Google Gemini
@@ -115,6 +145,25 @@ export default function AssistenteIA() {
                 <CheckCircle className="h-3 w-3" />
                 Especialista em Concursos
               </Badge>
+            </div>
+            
+            {/* Botão de Acesso Rápido ao Chat */}
+            <div className="flex justify-center gap-3 mb-6">
+              <Link href="/chat-ia">
+                <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105">
+                  <MessageSquare className="h-5 w-5 mr-2" />
+                  Iniciar Chat Direto
+                </Button>
+              </Link>
+              <Button 
+                size="lg" 
+                variant="outline"
+                onClick={() => setActiveTab('chat')}
+                className="border-blue-200 text-blue-600 hover:bg-blue-50"
+              >
+                <Bot className="h-5 w-5 mr-2" />
+                Explorar Recursos
+              </Button>
             </div>
           </div>
 

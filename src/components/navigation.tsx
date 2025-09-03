@@ -25,10 +25,16 @@ const navigation = [
     description: 'Catálogo de matérias'
   },
   {
+    name: 'Chat IA',
+    href: '/chat-ia',
+    icon: Bot,
+    description: 'Chat direto com MindLegal AI'
+  },
+  {
     name: 'Assistente IA',
     href: '/assistente-ia',
     icon: Bot,
-    description: 'MindLegal AI - Seu tutor jurídico'
+    description: 'MindLegal AI - Recursos completos'
   },
   {
     name: 'Simulado',

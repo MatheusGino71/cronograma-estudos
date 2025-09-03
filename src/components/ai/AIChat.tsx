@@ -35,7 +35,7 @@ export default function AIChat({ context = 'Estudo geral', placeholder = 'Faça 
     {
       id: '1',
       type: 'ai',
-      content: '👋 Olá! Sou o **MindLegal AI**, seu assistente de estudos especializado em Direito brasileiro!\n\nPosso te ajudar com:\n• Explicações de conceitos jurídicos\n• Criação de cronogramas personalizados\n• Questões de concurso\n• Dicas de memorização\n• Jurisprudência relevante\n\nComo posso ajudar você hoje?',
+      content: '👋 **MindLegal AI** - Seu Assistente Jurídico Inteligente\n\n🎯 **Especializado em:**\n• Explicações de conceitos jurídicos\n• Criação de cronogramas personalizados\n• Questões de concurso das principais bancas\n• Técnicas de memorização para Direito\n• Jurisprudência atualizada dos tribunais superiores\n\n📚 **Áreas de conhecimento:**\nDireito Constitucional, Administrativo, Civil, Penal, Trabalhista, Tributário, Processual Civil, Processual Penal, Empresarial, Previdenciário e muito mais!\n\n⚡ **Pronto para turbinar seus estudos!**',
       timestamp: new Date()
     }
   ]);
@@ -50,7 +50,12 @@ export default function AIChat({ context = 'Estudo geral', placeholder = 'Faça 
     'Como funciona a prisão em flagrante?',
     'Diferença entre recurso e ação',
     'Crie um cronograma para OAB',
-    'Questões sobre Direito Constitucional'
+    'Questões sobre Direito Constitucional',
+    'O que é controle de constitucionalidade?',
+    'Explique o processo penal brasileiro',
+    'Direitos fundamentais na Constituição',
+    'Como funciona o habeas corpus?',
+    'Diferença entre culpa e dolo'
   ];
 
   // Auto scroll para a última mensagem
