@@ -5,7 +5,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { Calendar, BookOpen, BarChart3, Menu, X, FileText, LogIn, Sun, Moon } from "lucide-react"
+import { Calendar, BookOpen, BarChart3, Menu, X, FileText, LogIn, Sun, Moon, Bot } from "lucide-react"
 import { useAuth } from "@/contexts/AuthContext"
 import { useTheme } from "@/contexts/ThemeContext"
 import { AuthModal } from "@/components/auth/AuthModal"
@@ -23,6 +23,12 @@ const navigation = [
     href: '/disciplinas',
     icon: BookOpen,
     description: 'Catálogo de matérias'
+  },
+  {
+    name: 'Assistente IA',
+    href: '/assistente-ia',
+    icon: Bot,
+    description: 'MindLegal AI - Seu tutor jurídico'
   },
   {
     name: 'Simulado',
