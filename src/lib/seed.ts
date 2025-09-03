@@ -33,66 +33,6 @@ export const disciplines: Discipline[] = [
   },
   {
     id: '3',
-    name: 'Português',
-    board: 'FGV',
-    level: 'Iniciante',
-    durationMin: 80,
-    tags: ['Gramática', 'Interpretação de Texto', 'Redação'],
-    description: 'Gramática normativa, interpretação e compreensão textual, redação oficial e técnicas de escrita.',
-    materials: {
-      videos: 52,
-      pdfs: 8,
-      exercises: 200
-    },
-    prerequisites: []
-  },
-  {
-    id: '4',
-    name: 'Matemática e Raciocínio Lógico',
-    board: 'VUNESP',
-    level: 'Intermediário',
-    durationMin: 150,
-    tags: ['Álgebra', 'Geometria', 'Estatística', 'Lógica'],
-    description: 'Matemática básica, álgebra, geometria, estatística descritiva e raciocínio lógico-matemático.',
-    materials: {
-      videos: 60,
-      pdfs: 20,
-      exercises: 300
-    },
-    prerequisites: []
-  },
-  {
-    id: '5',
-    name: 'Contabilidade Geral',
-    board: 'FCC',
-    level: 'Avançado',
-    durationMin: 110,
-    tags: ['Balanço Patrimonial', 'DRE', 'Análise de Demonstrações'],
-    description: 'Princípios contábeis, elaboração e análise das demonstrações financeiras, contabilidade societária.',
-    materials: {
-      videos: 42,
-      pdfs: 18,
-      exercises: 180
-    },
-    prerequisites: ['Matemática e Raciocínio Lógico']
-  },
-  {
-    id: '6',
-    name: 'Informática',
-    board: 'CESPE/CEBRASPE',
-    level: 'Iniciante',
-    durationMin: 60,
-    tags: ['Windows', 'Microsoft Office', 'Internet', 'Segurança'],
-    description: 'Sistema operacional Windows, pacote Microsoft Office, navegação na internet e segurança da informação.',
-    materials: {
-      videos: 35,
-      pdfs: 10,
-      exercises: 100
-    },
-    prerequisites: []
-  },
-  {
-    id: '7',
     name: 'Direito Penal',
     board: 'FGV',
     level: 'Avançado',
@@ -107,19 +47,139 @@ export const disciplines: Discipline[] = [
     prerequisites: ['Direito Constitucional']
   },
   {
+    id: '4',
+    name: 'Direito Civil',
+    board: 'CESPE/CEBRASPE',
+    level: 'Intermediário',
+    durationMin: 140,
+    tags: ['Parte Geral', 'Obrigações', 'Contratos', 'Direitos Reais'],
+    description: 'Código Civil brasileiro: parte geral, direito das obrigações, contratos, responsabilidade civil e direitos reais.',
+    materials: {
+      videos: 55,
+      pdfs: 18,
+      exercises: 180
+    },
+    prerequisites: ['Direito Constitucional']
+  },
+  {
+    id: '5',
+    name: 'Direito Processual Civil',
+    board: 'FCC',
+    level: 'Avançado',
+    durationMin: 110,
+    tags: ['Processo de Conhecimento', 'Recursos', 'Execução'],
+    description: 'Novo Código de Processo Civil: processo de conhecimento, recursos, execução e cumprimento de sentença.',
+    materials: {
+      videos: 50,
+      pdfs: 20,
+      exercises: 170
+    },
+    prerequisites: ['Direito Civil']
+  },
+  {
+    id: '6',
+    name: 'Direito Processual Penal',
+    board: 'VUNESP',
+    level: 'Avançado',
+    durationMin: 120,
+    tags: ['Inquérito Policial', 'Ação Penal', 'Provas', 'Recursos'],
+    description: 'Código de Processo Penal: inquérito policial, ação penal, teoria geral das provas e recursos criminais.',
+    materials: {
+      videos: 46,
+      pdfs: 17,
+      exercises: 155
+    },
+    prerequisites: ['Direito Penal']
+  },
+  {
+    id: '7',
+    name: 'Direito Trabalhista',
+    board: 'FGV',
+    level: 'Intermediário',
+    durationMin: 100,
+    tags: ['CLT', 'Contrato de Trabalho', 'Direitos do Trabalhador'],
+    description: 'Consolidação das Leis do Trabalho: contrato de trabalho, direitos e deveres, jornada de trabalho e rescisão.',
+    materials: {
+      videos: 42,
+      pdfs: 14,
+      exercises: 140
+    },
+    prerequisites: ['Direito Constitucional']
+  },
+  {
     id: '8',
-    name: 'Atualidades',
+    name: 'Direito Processual do Trabalho',
+    board: 'CESPE/CEBRASPE',
+    level: 'Avançado',
+    durationMin: 90,
+    tags: ['Reclamação Trabalhista', 'Audiência', 'Recursos'],
+    description: 'Processo trabalhista: reclamação trabalhista, audiência, instrução processual e recursos na Justiça do Trabalho.',
+    materials: {
+      videos: 38,
+      pdfs: 13,
+      exercises: 130
+    },
+    prerequisites: ['Direito Trabalhista']
+  },
+  {
+    id: '9',
+    name: 'Direito Tributário',
+    board: 'FCC',
+    level: 'Avançado',
+    durationMin: 115,
+    tags: ['CTN', 'Tributos', 'Processo Administrativo Fiscal'],
+    description: 'Código Tributário Nacional: sistema tributário, tributos em espécie, processo administrativo fiscal e execução fiscal.',
+    materials: {
+      videos: 44,
+      pdfs: 16,
+      exercises: 165
+    },
+    prerequisites: ['Direito Administrativo']
+  },
+  {
+    id: '10',
+    name: 'Direito Empresarial',
     board: 'VUNESP',
     level: 'Intermediário',
-    durationMin: 40,
-    tags: ['Política', 'Economia', 'Sociedade', 'Meio Ambiente'],
-    description: 'Acontecimentos políticos, econômicos, sociais e ambientais do Brasil e do mundo nos últimos dois anos.',
+    durationMin: 95,
+    tags: ['Empresa', 'Sociedades', 'Títulos de Crédito'],
+    description: 'Direito empresarial moderno: teoria da empresa, sociedades empresárias, títulos de crédito e falência.',
     materials: {
-      videos: 25,
-      pdfs: 6,
-      exercises: 80
+      videos: 40,
+      pdfs: 15,
+      exercises: 135
     },
-    prerequisites: []
+    prerequisites: ['Direito Civil']
+  },
+  {
+    id: '11',
+    name: 'Direito Previdenciário',
+    board: 'FGV',
+    level: 'Intermediário',
+    durationMin: 85,
+    tags: ['INSS', 'Benefícios', 'Segurados'],
+    description: 'Sistema previdenciário brasileiro: segurados, dependentes, benefícios previdenciários e custeio da previdência.',
+    materials: {
+      videos: 36,
+      pdfs: 12,
+      exercises: 125
+    },
+    prerequisites: ['Direito Constitucional']
+  },
+  {
+    id: '12',
+    name: 'Direito Ambiental',
+    board: 'CESPE/CEBRASPE',
+    level: 'Intermediário',
+    durationMin: 80,
+    tags: ['Meio Ambiente', 'Licenciamento', 'Responsabilidade'],
+    description: 'Direito ambiental brasileiro: princípios, licenciamento ambiental, crimes ambientais e responsabilidade.',
+    materials: {
+      videos: 34,
+      pdfs: 11,
+      exercises: 115
+    },
+    prerequisites: ['Direito Administrativo']
   }
 ];
 

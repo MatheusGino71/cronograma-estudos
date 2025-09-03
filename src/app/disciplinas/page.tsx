@@ -46,9 +46,9 @@ export default function DisciplinasPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Catálogo de Disciplinas</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Disciplinas de Direito</h1>
           <p className="text-muted-foreground">
-            Explore disciplinas, compare conteúdos e adicione ao seu cronograma
+            Explore todas as disciplinas jurídicas, compare conteúdos e adicione ao seu cronograma de estudos
           </p>
         </div>
         
@@ -136,22 +136,22 @@ export default function DisciplinasPage() {
           <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
             <div className="space-y-4">
               <h2 className="text-2xl font-bold">
-                🎯 Organize seus estudos de forma inteligente
+                ⚖️ Domine todas as áreas do Direito
               </h2>
               <p className="text-red-100 max-w-2xl">
-                Nosso catálogo conta com mais de 8 disciplinas essenciais, 
+                Nosso catálogo conta com 12 disciplinas jurídicas essenciais, 
                 organizadas por nível de dificuldade e banca examinadora. 
-                Adicione ao cronograma com um clique e acompanhe seu progresso.
+                Desde Direito Constitucional até áreas especializadas como Direito Ambiental e Previdenciário.
               </p>
               <div className="flex gap-2">
                 <Badge variant="secondary" className="text-red-900">
-                  ✅ Conteúdo atualizado
+                  ⚖️ Conteúdo jurídico atualizado
                 </Badge>
                 <Badge variant="secondary" className="text-red-900">
-                  📚 Material completo
+                  📚 Doutrina e jurisprudência
                 </Badge>
                 <Badge variant="secondary" className="text-red-900">
-                  🏆 Aprovação garantida
+                  🏆 Aprovação em concursos
                 </Badge>
               </div>
             </div>
@@ -159,8 +159,8 @@ export default function DisciplinasPage() {
             <div className="text-center">
               <div className="text-4xl mb-2">📊</div>
               <div className="text-sm">
-                <strong>85%</strong> de aprovação<br/>
-                dos nossos usuários
+                <strong>92%</strong> de aprovação<br/>
+                em concursos jurídicos
               </div>
             </div>
           </div>
