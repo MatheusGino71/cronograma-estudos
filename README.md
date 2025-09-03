@@ -1,19 +1,28 @@
 # MindTech - Plataforma Completa de Gestão de Estudos
 
-Uma plataforma completa para organização de cronogramas de estudo, catálogo de disciplinas, simulados interativos e acompanhamento de progresso com analytics avançados.
+Uma plataforma completa para organização de cronogramas de estudo, catálogo de disciplinas, simulados interativos, assistente de IA especializado em Direito e acompanhamento de progresso com analytics avançados.
 
 🌐 **Aplicação Online**: https://cronograma-estudos-c3a5b.web.app
 🔗 **Repositório**: https://github.com/MatheusGino71/cronograma-estudos
 
 ## 🚀 Funcionalidades Principais
 
-### � Sistema de Autenticação
+### 🤖 **MindLegal AI - Assistente Jurídico Inteligente** ⭐ **NOVO!**
+- **Google Gemini Integration**: IA especializada em Direito brasileiro
+- **Chat Interativo**: Interface dedicada com layout responsivo (`/chat-ia`)
+- **Respostas Especializadas**: Cronogramas, explicações jurídicas, questões de concurso
+- **Sistema de Fallback**: Funciona mesmo sem chave API (modo demonstração)
+- **Markdown Rendering**: Respostas formatadas com sintaxe destacada
+- **Sugestões Inteligentes**: Detecção automática do tipo de pergunta
+- **Especialização Jurídica**: Focado em concursos públicos brasileiros
+
+### 🔐 Sistema de Autenticação
 - **Firebase Authentication**: Login seguro com email/senha
 - **Perfil Personalizado**: Informações do usuário e preferências
 - **Recuperação de Senha**: Sistema de reset por email
 - **Sessões Persistentes**: Mantenha-se logado com segurança
 
-### �📅 Cronograma Inteligente
+### 📅 Cronograma Inteligente
 - **Drag & Drop Calendar**: Interface intuitiva para organizar blocos de estudo
 - **Método 1-3-7**: Implementação do sistema de revisões espaçadas
 - **Notificações Push**: Lembretes automáticos para sessões de estudo
@@ -48,6 +57,27 @@ Uma plataforma completa para organização de cronogramas de estudo, catálogo d
 - **Privacidade**: Controles de visibilidade e compartilhamento
 - **Backup de Dados**: Exportação e importação de dados
 
+## 🤖 **Como Usar o MindLegal AI**
+
+### 🚀 **Acesso Rápido:**
+- **Chat Direto**: https://cronograma-estudos-c3a5b.web.app/chat-ia
+- **Página Completa**: https://cronograma-estudos-c3a5b.web.app/assistente-ia
+
+### 💡 **Exemplos de Perguntas:**
+```
+📅 "Crie um cronograma de estudos para Procurador Federal com 25h semanais"
+📚 "Explique o princípio da legalidade com exemplos práticos"
+📝 "Gere 10 questões de Direito Constitucional estilo CESPE"
+🧠 "Como memorizar as competências do STF?"
+```
+
+### ⚡ **Funcionalidades da IA:**
+- **Cronogramas Personalizados** - Para qualquer concurso público
+- **Explicações Jurídicas** - Conceitos com exemplos e jurisprudência
+- **Questões de Concurso** - No estilo das principais bancas (CESPE, FCC, FGV)
+- **Técnicas de Memorização** - Métodos específicos para Direito
+- **Jurisprudência Atualizada** - Decisões dos tribunais superiores
+
 ## 🛠️ Stack Tecnológica
 
 ### Frontend
@@ -56,6 +86,13 @@ Uma plataforma completa para organização de cronogramas de estudo, catálogo d
 - **Tailwind CSS** - Styling utilitário
 - **shadcn/ui** - Componentes UI modernos baseados em Radix UI
 - **Lucide React** - Ícones consistentes
+- **React Markdown** - Renderização de markdown para IA
+
+### Inteligência Artificial
+- **Google Gemini AI** - Modelo de linguagem especializado
+- **@google/generative-ai** - SDK oficial do Google Gemini
+- **Sistema de Fallback** - Respostas simuladas quando offline
+- **Especialização Jurídica** - Prompts otimizados para Direito brasileiro
 
 ### Backend & Banco de Dados
 - **🔥 Firebase** - Plataforma completa do Google
@@ -141,17 +178,25 @@ src/
 │   ├── estudos/          # Dashboard de estudos
 │   ├── configuracoes/    # Painel de configurações
 │   ├── simulado/         # Sistema de simulados
+│   ├── assistente-ia/    # Página completa da IA ⭐ NOVO!
+│   ├── chat-ia/          # Chat dedicado da IA ⭐ NOVO!
 │   └── api/              # API Routes
+│       └── ai/           # Endpoint da IA ⭐ NOVO!
 ├── components/            # Componentes reutilizáveis
 │   ├── ui/               # shadcn/ui components
 │   ├── auth/             # Componentes de autenticação
+│   ├── ai/               # Componentes da IA ⭐ NOVO!
+│   │   ├── AIChat.tsx    # Chat principal
+│   │   └── ImprovedAIChat.tsx # Chat melhorado
 │   ├── scheduler/        # Componentes de cronograma
 │   ├── disciplines/      # Componentes de disciplinas
 │   └── charts/           # Componentes de gráficos
 ├── contexts/             # React Context (Auth)
 ├── hooks/                # Custom React hooks
 ├── lib/                  # Utilitários e configurações
-│   └── firebase.ts       # Configuração Firebase
+│   ├── firebase.ts       # Configuração Firebase
+│   ├── gemini.ts         # Configuração Gemini ⭐ NOVO!
+│   └── gemini-api.ts     # API da IA ⭐ NOVO!
 ├── store/                # Zustand stores
 ├── types/                # TypeScript type definitions
 └── styles/               # CSS global e configurações
@@ -188,6 +233,9 @@ NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=seu_projeto.firebasestorage.app
 NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=seu_sender_id
 NEXT_PUBLIC_FIREBASE_APP_ID=seu_app_id
 NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=seu_measurement_id
+
+# Google Gemini AI Configuration ⭐ NOVO!
+GOOGLE_GEMINI_API_KEY=sua_chave_gemini_aqui
 ```
 
 4. **Execute o servidor de desenvolvimento**
