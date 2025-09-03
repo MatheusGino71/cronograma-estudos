@@ -2,6 +2,8 @@
 
 import * as React from "react"
 import { useState } from "react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -20,6 +22,7 @@ import { cn } from "@/lib/utils"
 export function UserMenu() {
   const { user, logout } = useAuth();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const router = useRouter();
 
   if (!user) return null;
 
@@ -27,9 +30,14 @@ export function UserMenu() {
     setIsLoggingOut(true);
     try {
       await logout();
+      router.push('/');
     } finally {
       setIsLoggingOut(false);
     }
+  };
+
+  const handleNavigation = (path: string) => {
+    router.push(path);
   };
 
   const getInitials = (name: string, lastName: string) => {
@@ -79,22 +87,34 @@ export function UserMenu() {
         
         <DropdownMenuSeparator />
         
-        <DropdownMenuItem className="cursor-pointer">
+        <DropdownMenuItem 
+          className="cursor-pointer"
+          onClick={() => handleNavigation('/perfil')}
+        >
           <User className="mr-2 h-4 w-4" />
           <span>Meu Perfil</span>
         </DropdownMenuItem>
         
-        <DropdownMenuItem className="cursor-pointer">
+        <DropdownMenuItem 
+          className="cursor-pointer"
+          onClick={() => handleNavigation('/estudos')}
+        >
           <BookOpen className="mr-2 h-4 w-4" />
           <span>Meus Estudos</span>
         </DropdownMenuItem>
         
-        <DropdownMenuItem className="cursor-pointer">
+        <DropdownMenuItem 
+          className="cursor-pointer"
+          onClick={() => handleNavigation('/progresso')}
+        >
           <BarChart className="mr-2 h-4 w-4" />
           <span>Progresso</span>
         </DropdownMenuItem>
         
-        <DropdownMenuItem className="cursor-pointer">
+        <DropdownMenuItem 
+          className="cursor-pointer"
+          onClick={() => handleNavigation('/configuracoes')}
+        >
           <Settings className="mr-2 h-4 w-4" />
           <span>Configurações</span>
         </DropdownMenuItem>
