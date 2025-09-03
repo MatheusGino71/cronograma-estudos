@@ -100,10 +100,10 @@ export default function MeuPerfil() {
   };
 
   const stats = [
-    { label: 'Dias de Estudo', value: '45', icon: Calendar },
-    { label: 'Disciplinas Ativas', value: '12', icon: BookOpen },
-    { label: 'Simulados Realizados', value: '23', icon: Trophy },
-    { label: 'Horas Totais', value: '180h', icon: Clock }
+    { label: 'Dias de Estudo', value: '0', icon: Calendar },
+    { label: 'Disciplinas Ativas', value: '0', icon: BookOpen },
+    { label: 'Simulados Realizados', value: '0', icon: Trophy },
+    { label: 'Horas Totais', value: '0h', icon: Clock }
   ];
 
   // Função para obter as iniciais do nome
@@ -154,7 +154,7 @@ export default function MeuPerfil() {
                       Estudante de {userData.especialidade}
                     </CardDescription>
                     <Badge variant="secondary" className="mt-2">
-                      Usuário Ativo
+                      Novo Usuário
                     </Badge>
                   </div>
                 </div>
@@ -279,9 +279,17 @@ export default function MeuPerfil() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">
-                    Configurações de preferências serão implementadas em breve.
-                  </p>
+                  <div className="text-center py-8">
+                    <div className="text-gray-400 mb-4">
+                      <User className="h-16 w-16 mx-auto" />
+                    </div>
+                    <p className="text-gray-600 mb-2">
+                      <strong>Configure suas preferências</strong>
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      Personalize sua experiência de estudos definindo horários, lembretes e métodos de aprendizado.
+                    </p>
+                  </div>
                 </CardContent>
               </Card>
             </TabsContent>
@@ -295,9 +303,17 @@ export default function MeuPerfil() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">
-                    Histórico detalhado será implementado em breve.
-                  </p>
+                  <div className="text-center py-8">
+                    <div className="text-gray-400 mb-4">
+                      <Calendar className="h-16 w-16 mx-auto" />
+                    </div>
+                    <p className="text-gray-600 mb-2">
+                      <strong>Nenhuma atividade registrada ainda</strong>
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      Comece criando seu primeiro cronograma de estudos para ver seu histórico aqui.
+                    </p>
+                  </div>
                 </CardContent>
               </Card>
             </TabsContent>
