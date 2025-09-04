@@ -77,7 +77,17 @@ export const useScheduleStore = create<ScheduleState>()(
     }),
     {
       name: 'schedule-storage',
-      version: 1,
+      version: 2,
+      migrate: (persistedState: any, version: number) => {
+        if (version < 2) {
+          // Migração da versão 1 para 2 - adicionar userId
+          return {
+            ...persistedState,
+            userId: undefined
+          }
+        }
+        return persistedState
+      }
     }
   )
 );

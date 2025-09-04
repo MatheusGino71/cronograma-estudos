@@ -5,6 +5,7 @@ import { Navigation } from "@/components/navigation";
 import { ReactQueryProvider } from "@/components/providers/react-query-provider";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import { ClearLocalStorage } from "@/components/utils/ClearLocalStorage";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -34,6 +35,7 @@ export default function RootLayout({
         <ThemeProvider>
           <ReactQueryProvider>
             <AuthProvider>
+              <ClearLocalStorage />
               <Navigation />
               <main className="flex-1">
                 {children}
