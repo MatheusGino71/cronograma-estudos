@@ -103,10 +103,10 @@ export function ResultadoSimuladoComponent({ resultado, onVoltarConfigurador }: 
               type: 'Estudo',
               pomodoros: area.prioridade === 'alta' ? 3 : 2,
               completed: false,
-              userId: user.id
+              userId: user?.id
             }
 
-            addBlock(bloco, user.id)
+            addBlock(bloco)
           }
         }
       }
@@ -126,10 +126,10 @@ export function ResultadoSimuladoComponent({ resultado, onVoltarConfigurador }: 
           type: 'Revisão',
           pomodoros: 1,
           completed: false,
-          userId: user.id
+          userId: user?.id
         }
 
-        addBlock(blocoRevisao, user.id)
+        addBlock(blocoRevisao)
       }
 
       diaAtual += 2 // Espaçar disciplinas

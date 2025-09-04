@@ -26,6 +26,7 @@ export interface StudyBlock {
   type: 'Estudo' | 'Revisão' | 'Simulado';
   pomodoros?: number;
   completed?: boolean;
+  userId?: string; // Para isolamento de dados por usuário
 }
 
 export interface PlanSettings {
