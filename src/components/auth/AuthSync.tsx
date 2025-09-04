@@ -27,9 +27,9 @@ export function AuthSync() {
       setProgressUserId(user.id)
       
       // Resetar dados se necessário (mudança de usuário)
-      resetDisciplineData(user.id)
-      resetScheduleData(user.id)
-      resetProgressData(user.id)
+      resetDisciplineData()
+      resetScheduleData()
+      resetProgressData()
     } else {
       // Usuário deslogado - limpar stores
       setDisciplineUserId(null)

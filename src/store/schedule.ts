@@ -6,6 +6,7 @@ interface ScheduleState {
   blocks: StudyBlock[];
   selectedDate: string;
   viewMode: 'week' | 'month';
+  userId?: string;
   add: (block: StudyBlock) => void;
   update: (block: StudyBlock) => void;
   remove: (id: string) => void;
@@ -14,6 +15,8 @@ interface ScheduleState {
   setViewMode: (mode: 'week' | 'month') => void;
   getBlocksByDate: (date: string) => StudyBlock[];
   getBlocksByDateRange: (startDate: string, endDate: string) => StudyBlock[];
+  setUserId: (userId: string | null) => void;
+  resetDataForNewUser: () => void;
 }
 
 export const useScheduleStore = create<ScheduleState>()(
@@ -22,6 +25,7 @@ export const useScheduleStore = create<ScheduleState>()(
       blocks: [],
       selectedDate: new Date().toISOString().split('T')[0],
       viewMode: 'week',
+      userId: undefined,
       
       add: (block) => 
         set((state) => ({ 
@@ -59,7 +63,17 @@ export const useScheduleStore = create<ScheduleState>()(
         return get().blocks.filter(block => 
           block.date >= startDate && block.date <= endDate
         );
-      }
+      },
+
+      setUserId: (userId) =>
+        set({ userId: userId || undefined }),
+
+      resetDataForNewUser: () =>
+        set({ 
+          blocks: [],
+          selectedDate: new Date().toISOString().split('T')[0],
+          viewMode: 'week'
+        })
     }),
     {
       name: 'schedule-storage',

@@ -11,6 +11,7 @@ interface DisciplineState {
     level?: string;
     tags?: string[];
   };
+  userId?: string;
   addToFavorites: (disciplineId: string) => void;
   removeFromFavorites: (disciplineId: string) => void;
   isFavorite: (disciplineId: string) => boolean;
@@ -21,6 +22,8 @@ interface DisciplineState {
   setSearchTerm: (term: string) => void;
   setFilters: (filters: DisciplineState['filters']) => void;
   clearFilters: () => void;
+  setUserId: (userId: string | null) => void;
+  resetDataForNewUser: () => void;
 }
 
 export const useDisciplineStore = create<DisciplineState>()(
@@ -30,6 +33,7 @@ export const useDisciplineStore = create<DisciplineState>()(
       comparison: [],
       searchTerm: '',
       filters: {},
+      userId: undefined,
       
       addToFavorites: (disciplineId) =>
         set((state) => ({
@@ -73,7 +77,18 @@ export const useDisciplineStore = create<DisciplineState>()(
         set({ filters }),
       
       clearFilters: () =>
-        set({ filters: {}, searchTerm: '' })
+        set({ filters: {}, searchTerm: '' }),
+
+      setUserId: (userId) =>
+        set({ userId: userId || undefined }),
+
+      resetDataForNewUser: () =>
+        set({ 
+          favorites: [], 
+          comparison: [], 
+          searchTerm: '', 
+          filters: {} 
+        })
     }),
     {
       name: 'discipline-storage',

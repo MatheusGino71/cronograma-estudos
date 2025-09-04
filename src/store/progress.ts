@@ -5,10 +5,13 @@ import { ProgressLog, KPI, Insight } from '@/types';
 interface ProgressState {
   logs: ProgressLog[];
   insights: Insight[];
+  userId?: string;
   addLog: (log: ProgressLog) => void;
   getKPIs: () => KPI;
   generateInsights: () => void;
   clearLogs: () => void;
+  setUserId: (userId: string | null) => void;
+  resetProgressForNewUser: () => void;
 }
 
 export const useProgressStore = create<ProgressState>()(
@@ -16,6 +19,7 @@ export const useProgressStore = create<ProgressState>()(
     (set, get) => ({
       logs: [],
       insights: [],
+      userId: undefined,
       
       addLog: (log) =>
         set((state) => ({
@@ -89,7 +93,16 @@ export const useProgressStore = create<ProgressState>()(
       },
       
       clearLogs: () =>
-        set({ logs: [], insights: [] })
+        set({ logs: [], insights: [] }),
+
+      setUserId: (userId) =>
+        set({ userId: userId || undefined }),
+
+      resetProgressForNewUser: () =>
+        set({ 
+          logs: [],
+          insights: []
+        })
     }),
     {
       name: 'progress-storage',
