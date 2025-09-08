@@ -4,6 +4,9 @@ import * as React from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Calendar, BookOpen, BarChart3, ArrowRight, Clock, Target, TrendingUp, FileText } from "lucide-react"
+import { useAuth } from "@/contexts/AuthContext"
+import { AuthModal } from "@/components/auth/AuthModal"
+import { LoaderIcon } from "lucide-react"
 
 const features = [
   {
@@ -43,6 +46,88 @@ const stats = [
 ]
 
 export default function Home() {
+  const { user, loading } = useAuth()
+  
+  // Se está carregando, mostra loader
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <LoaderIcon className="h-8 w-8 animate-spin text-primary" />
+        <span className="ml-2 text-muted-foreground">Carregando...</span>
+      </div>
+    )
+  }
+  
+  // Se está logado, redireciona para o cronograma (dashboard)
+  if (user) {
+    return (
+      <div className="flex flex-col">
+        {/* Hero Section para usuários logados */}
+        <section className="relative py-12 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center">
+              <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white sm:text-5xl">
+                Bem-vindo de volta, {user.name}! 👋
+              </h1>
+              <p className="mt-4 text-xl text-gray-600 dark:text-gray-300">
+                Continue organizando seus estudos com inteligência
+              </p>
+              <div className="mt-8 flex justify-center">
+                <Link href="/cronograma">
+                  <Button size="lg" className="mr-4">
+                    <Calendar className="h-5 w-5 mr-2" />
+                    Ir para Cronograma
+                  </Button>
+                </Link>
+                <Link href="/simulado">
+                  <Button variant="outline" size="lg">
+                    <FileText className="h-5 w-5 mr-2" />
+                    Fazer Simulado
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Features Grid para usuários logados */}
+        <section className="py-12 bg-gray-50 dark:bg-gray-900">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white text-center mb-12">
+              Suas Ferramentas de Estudo
+            </h2>
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+              {features.map((feature) => (
+                <Link key={feature.name} href={feature.href}>
+                  <div className="relative group bg-white dark:bg-gray-800 p-6 rounded-lg shadow hover:shadow-lg transition-shadow cursor-pointer">
+                    <div>
+                      <span className={`inline-flex p-3 rounded-lg ${feature.color} bg-opacity-10`}>
+                        <feature.icon className={`h-6 w-6 ${feature.color}`} aria-hidden="true" />
+                      </span>
+                    </div>
+                    <div className="mt-4">
+                      <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+                        {feature.name}
+                        <span className="absolute inset-0" aria-hidden="true" />
+                      </h3>
+                      <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                        {feature.description}
+                      </p>
+                    </div>
+                    <span className="pointer-events-none absolute top-6 right-6 text-gray-300 group-hover:text-gray-400" aria-hidden="true">
+                      <ArrowRight className="h-6 w-6" />
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      </div>
+    )
+  }
+
+  // Para usuários não logados, mostra landing page
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
@@ -91,21 +176,21 @@ export default function Home() {
             catálogo de disciplinas e acompanhamento de progresso com analytics avançados.
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-6">
-            <Link href="/cronograma">
+            <AuthModal defaultMode="register">
               <Button size="lg" className="gap-2 bg-red-600 hover:bg-red-700 text-white shadow-xl">
                 Começar agora
                 <ArrowRight className="h-4 w-4" />
               </Button>
-            </Link>
-            <Link href="/disciplinas">
+            </AuthModal>
+            <AuthModal defaultMode="login">
               <Button 
                 variant="outline" 
                 size="lg" 
                 className="border-2 border-white text-white bg-transparent hover:bg-white hover:text-black shadow-xl backdrop-blur-sm"
               >
-                Explorar disciplinas
+                Fazer Login
               </Button>
-            </Link>
+            </AuthModal>
           </div>
         </div>
       </section>
@@ -181,12 +266,12 @@ export default function Home() {
             acompanhe seu progresso em tempo real.
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-6">
-            <Link href="/cronograma">
+            <AuthModal defaultMode="register">
               <Button size="lg" variant="secondary" className="gap-2">
                 Criar cronograma
                 <Calendar className="h-4 w-4" />
               </Button>
-            </Link>
+            </AuthModal>
           </div>
         </div>
       </section>

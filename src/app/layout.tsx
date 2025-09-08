@@ -4,6 +4,7 @@ import "./globals.css";
 import { Navigation } from "@/components/navigation";
 import { ReactQueryProvider } from "@/components/providers/react-query-provider";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { AuthWrapper } from "@/components/auth/AuthWrapper";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { ClearLocalStorage } from "@/components/utils/ClearLocalStorage";
 
@@ -38,7 +39,9 @@ export default function RootLayout({
               <ClearLocalStorage />
               <Navigation />
               <main className="flex-1">
-                {children}
+                <AuthWrapper>
+                  {children}
+                </AuthWrapper>
               </main>
             </AuthProvider>
           </ReactQueryProvider>
