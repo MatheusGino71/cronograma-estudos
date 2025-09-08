@@ -33,8 +33,29 @@ export function PlanejamentoCronograma({ resultado, onVoltarSimulado }: Planejam
   const [horasSemanais, setHorasSemanais] = useState([20])
   const [periodoEstudo, setPeriodoEstudo] = useState('8-semanas')
   const [foco, setFoco] = useState('equilibrado')
+  const [diasSelecionados, setDiasSelecionados] = useState(['segunda', 'terca', 'quarta', 'quinta', 'sexta'])
   
   const addBlock = useScheduleStore((state) => state.add)
+
+  // Dias da semana disponíveis
+  const diasSemana = [
+    { id: 'segunda', nome: 'Segunda', abrev: 'SEG' },
+    { id: 'terca', nome: 'Terça', abrev: 'TER' },
+    { id: 'quarta', nome: 'Quarta', abrev: 'QUA' },
+    { id: 'quinta', nome: 'Quinta', abrev: 'QUI' },
+    { id: 'sexta', nome: 'Sexta', abrev: 'SEX' },
+    { id: 'sabado', nome: 'Sábado', abrev: 'SAB' },
+    { id: 'domingo', nome: 'Domingo', abrev: 'DOM' }
+  ]
+
+  // Função para alternar seleção de dias
+  const toggleDia = (diaId: string) => {
+    setDiasSelecionados(prev => 
+      prev.includes(diaId) 
+        ? prev.filter(d => d !== diaId)
+        : [...prev, diaId]
+    )
+  }
 
   // Função para baixar cronograma em PDF
   const handleBaixarPDF = async () => {
@@ -80,11 +101,19 @@ export function PlanejamentoCronograma({ resultado, onVoltarSimulado }: Planejam
       yPosition += 15
       
       doc.setFontSize(10)
-      const diasSemana = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado']
-      const horasPorDia = horasSemanais[0] / 6
+      const diasNomeMap = {
+        'segunda': 'Segunda-feira', 'terca': 'Terça-feira', 'quarta': 'Quarta-feira',
+        'quinta': 'Quinta-feira', 'sexta': 'Sexta-feira', 'sabado': 'Sábado', 'domingo': 'Domingo'
+      }
+      const horasPorDia = diasSelecionados.length > 0 ? horasSemanais[0] / diasSelecionados.length : 0
       
-      diasSemana.forEach((dia, index) => {
-        doc.text(`${dia}-feira:`, 25, yPosition)
+      // Mostrar apenas os dias selecionados
+      diasSelecionados.forEach((diaId, index) => {
+        const nomeCompleto = diasNomeMap[diaId as keyof typeof diasNomeMap]
+        doc.text(`${nomeCompleto}:`, 25, yPosition)
+        yPosition += 6
+        
+        doc.text(`  • Duração: ${horasPorDia.toFixed(1)}h de estudo`, 30, yPosition)
         yPosition += 6
         
         disciplinasComAnalise.slice(0, 2).forEach(disc => {
@@ -94,6 +123,19 @@ export function PlanejamentoCronograma({ resultado, onVoltarSimulado }: Planejam
         
         yPosition += 5
       })
+      
+      // Informações adicionais
+      yPosition += 10
+      doc.setFontSize(12)
+      doc.text('Configurações do Cronograma:', 20, yPosition)
+      yPosition += 10
+      
+      doc.setFontSize(10)
+      doc.text(`• Dias de estudo: ${diasSelecionados.length} dia(s) por semana`, 25, yPosition)
+      yPosition += 6
+      doc.text(`• Total semanal: ${horasSemanais[0]}h`, 25, yPosition)
+      yPosition += 6
+      doc.text(`• Estratégia: ${foco === 'pontos-fracos' ? 'Foco nos pontos fracos' : foco === 'equilibrado' ? 'Abordagem equilibrada' : 'Revisão geral'}`, 25, yPosition)
       
       // Salvar PDF
       doc.save(`cronograma-estudos-${new Date().toISOString().split('T')[0]}.pdf`)
@@ -108,39 +150,60 @@ export function PlanejamentoCronograma({ resultado, onVoltarSimulado }: Planejam
   // Função para salvar no cronograma do usuário
   const handleSalvarCronograma = () => {
     try {
+      if (diasSelecionados.length === 0) {
+        toast.error('Selecione pelo menos um dia da semana para estudar.')
+        return
+      }
+
       const agora = new Date()
-      const horasPorDia = horasSemanais[0] / 6
+      const horasPorDia = horasSemanais[0] / diasSelecionados.length
+      
+      // Mapear dias selecionados para números da semana (0 = domingo, 1 = segunda, etc.)
+      const diasDaSemanaMap = {
+        'domingo': 0, 'segunda': 1, 'terca': 2, 'quarta': 3,
+        'quinta': 4, 'sexta': 5, 'sabado': 6
+      }
+      
+      const diasSelecionadosNumeros = diasSelecionados.map(dia => diasDaSemanaMap[dia as keyof typeof diasDaSemanaMap])
       
       disciplinasComAnalise.forEach((disc, disciplinaIndex) => {
         // Criar blocos para cada disciplina baseado na prioridade
-        const blocosParaDisciplina = disc.prioridade === 'alta' ? 6 : 
-                                   disc.prioridade === 'media' ? 4 : 2
+        const sessoesPorSemana = disc.prioridade === 'alta' ? 3 : 
+                                disc.prioridade === 'media' ? 2 : 1
         
         for (let semana = 0; semana < 4; semana++) {
-          for (let dia = 0; dia < blocosParaDisciplina; dia++) {
+          for (let sessao = 0; sessao < sessoesPorSemana; sessao++) {
+            // Escolher um dia aleatório dos dias selecionados
+            const diaEscolhido = diasSelecionadosNumeros[sessao % diasSelecionadosNumeros.length]
+            
             const dataBloco = new Date(agora)
-            dataBloco.setDate(agora.getDate() + (semana * 7) + (dia + disciplinaIndex) % 7)
+            const inicioSemana = dataBloco.getDate() - dataBloco.getDay() + (semana * 7)
+            dataBloco.setDate(inicioSemana + diaEscolhido)
             
-            const horaInicio = 8 + (dia * 2) % 10 // Distribui entre 8h e 18h
-            const horaFim = horaInicio + (horasPorDia / blocosParaDisciplina * 7) // Converte para duração
-            
-            addBlock({
-              id: `sim-${Date.now()}-${disciplinaIndex}-${semana}-${dia}`,
-              disciplineId: `disc-${disc.disciplina.toLowerCase().replace(/\s+/g, '-')}`,
-              title: `Estudo: ${disc.disciplina}`,
-              date: dataBloco.toISOString().split('T')[0],
-              start: `${horaInicio.toString().padStart(2, '0')}:00`,
-              end: `${Math.floor(horaFim).toString().padStart(2, '0')}:${Math.floor((horaFim % 1) * 60).toString().padStart(2, '0')}`,
-              completed: false,
-              userId: 'current-user', // TODO: pegar do contexto de auth
-              type: 'Estudo',
-              pomodoros: Math.ceil((horaFim - horaInicio) * 2) // 1 pomodoro = 30min
-            })
+            // Apenas criar blocos para datas futuras
+            if (dataBloco >= agora) {
+              const horaInicio = 8 + (sessao * 3) % 8 // Distribui entre 8h e 16h
+              const duracaoEstudo = Math.min(horasPorDia, 3) // Máximo 3h por sessão
+              const horaFim = horaInicio + duracaoEstudo
+              
+              addBlock({
+                id: `sim-${Date.now()}-${disciplinaIndex}-${semana}-${sessao}`,
+                disciplineId: `disc-${disc.disciplina.toLowerCase().replace(/\s+/g, '-')}`,
+                title: `Estudo: ${disc.disciplina}`,
+                date: dataBloco.toISOString().split('T')[0],
+                start: `${horaInicio.toString().padStart(2, '0')}:00`,
+                end: `${Math.floor(horaFim).toString().padStart(2, '0')}:${Math.floor((horaFim % 1) * 60).toString().padStart(2, '0')}`,
+                completed: false,
+                userId: 'current-user', // TODO: pegar do contexto de auth
+                type: 'Estudo',
+                pomodoros: Math.ceil(duracaoEstudo * 2) // 1 pomodoro = 30min
+              })
+            }
           }
         }
       })
       
-      toast.success(`Cronograma salvo! ${disciplinasComAnalise.length} disciplinas adicionadas ao seu cronograma.`)
+      toast.success(`Cronograma salvo! Blocos de estudo criados para os dias selecionados.`)
       
     } catch (error) {
       console.error('Erro ao salvar cronograma:', error)
@@ -409,6 +472,43 @@ export function PlanejamentoCronograma({ resultado, onVoltarSimulado }: Planejam
                       <SelectItem value="revisao">Revisão Geral Uniforme</SelectItem>
                     </SelectContent>
                   </Select>
+                </div>
+              </div>
+
+              {/* Seleção de Dias da Semana */}
+              <div className="space-y-3">
+                <label className="text-sm font-medium">Dias de Estudo</label>
+                <p className="text-xs text-muted-foreground">
+                  Selecione os dias da semana que você deseja estudar
+                </p>
+                <div className="grid grid-cols-7 gap-2">
+                  {diasSemana.map((dia) => (
+                    <button
+                      key={dia.id}
+                      onClick={() => toggleDia(dia.id)}
+                      className={`p-3 text-xs font-medium rounded-lg border-2 transition-all duration-200 ${
+                        diasSelecionados.includes(dia.id)
+                          ? 'bg-blue-500 text-white border-blue-500 shadow-md'
+                          : 'bg-white hover:bg-gray-50 text-gray-700 border-gray-200 hover:border-gray-300'
+                      }`}
+                    >
+                      <div className="text-center">
+                        <div className="font-bold">{dia.abrev}</div>
+                        <div className="text-xs opacity-80">{dia.nome}</div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+                <div className="text-xs text-muted-foreground">
+                  {diasSelecionados.length === 0 && (
+                    <span className="text-red-500">⚠️ Selecione pelo menos um dia</span>
+                  )}
+                  {diasSelecionados.length > 0 && (
+                    <span>
+                      📅 {diasSelecionados.length} dia(s) selecionado(s) • 
+                      {horasSemanais[0] > 0 && ` ${(horasSemanais[0] / diasSelecionados.length).toFixed(1)}h por dia`}
+                    </span>
+                  )}
                 </div>
               </div>
             </CardContent>
