@@ -1,15 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Só usa export para production no GitHub Pages
-  output: process.env.NODE_ENV === 'production' ? 'export' : undefined,
+  // Para GitHub Pages
+  output: 'export',
   distDir: 'out',
   trailingSlash: true,
   images: {
     unoptimized: true
   },
-  // Só usa basePath para production no GitHub Pages
-  basePath: process.env.NODE_ENV === 'production' ? '/cronograma-estudos' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/cronograma-estudos' : '',
+  // Configuração para GitHub Pages
+  basePath: '/cronograma-estudos',
+  assetPrefix: '/cronograma-estudos',
   eslint: {
     ignoreDuringBuilds: true,
   },
