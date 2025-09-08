@@ -8,7 +8,7 @@ export const revalidate = false;
 
 export async function GET(request: NextRequest) {
   try {
-    const filePath = path.join(process.cwd(), 'data', 'Simulado Correto Diagnóstico(Planilha1).csv');
+    const filePath = path.join(process.cwd(), 'public', 'questoes.csv');
     const csvContent = await readFile(filePath, 'utf-8');
     
     return new NextResponse(csvContent, {
