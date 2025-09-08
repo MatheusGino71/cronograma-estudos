@@ -214,7 +214,7 @@ export default function MeusEstudos() {
                       'Direito Previdenciário',
                       'Direito Ambiental'
                     ].map((disciplina, index) => (
-                      <Badge key={index} variant="outline" className="p-2 text-center">
+                      <Badge key={`disciplina-estudos-${disciplina}-${index}`} variant="outline" className="p-2 text-center">
                         {disciplina}
                       </Badge>
                     ))}

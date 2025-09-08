@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { ResultadoDisciplina } from "@/types/simulado"
 import { PreviewSemanal } from "@/components/simulado/PreviewSemanal"
-import { Calendar, Clock, Target, BookOpen, CheckCircle2, AlertTriangle } from "lucide-react"
+import { Calendar, Clock, Target, BookOpen, CheckCircle2, AlertTriangle, Award } from "lucide-react"
 
 interface CronogramaPersonalizadoProps {
   resultadosPorDisciplina: ResultadoDisciplina[]
@@ -109,50 +109,80 @@ export function CronogramaPersonalizado({
   }
 
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Calendar className="h-5 w-5 text-blue-500" />
-          Cronograma Personalizado de Estudo
+    <Card className="w-full bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 shadow-lg">
+      <CardHeader className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-t-lg">
+        <CardTitle className="flex items-center gap-2 text-xl">
+          <Calendar className="h-6 w-6" />
+          🎯 Seu Cronograma Personalizado de Estudos
         </CardTitle>
-        <p className="text-sm text-muted-foreground">
-          Baseado no seu desempenho no simulado - Plano de 3 semanas
+        <p className="text-blue-100">
+          📊 Baseado no seu desempenho no simulado - Plano inteligente de 3 semanas para maximizar seus resultados
         </p>
       </CardHeader>
       <CardContent>
-        {/* Resumo Geral */}
-        <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-            <div>
-              <div className="flex items-center justify-center gap-2 mb-1">
-                <Clock className="h-4 w-4 text-blue-600" />
-                <span className="font-semibold text-blue-800">Total Semanal</span>
+        {/* Alerta Especial para Baixo Desempenho */}
+        {itensCronograma.filter(i => i.prioridade === 'alta').length >= 3 && (
+          <div className="mb-6 p-4 bg-gradient-to-r from-red-100 to-orange-100 border-l-4 border-red-500 rounded-lg">
+            <div className="flex items-center gap-3">
+              <AlertTriangle className="h-6 w-6 text-red-600" />
+              <div>
+                <h4 className="font-bold text-red-800">⚠️ Atenção: Cronograma Intensivo Recomendado!</h4>
+                <p className="text-red-700 text-sm mt-1">
+                  Seu desempenho indica necessidade de foco especial. Este cronograma foi otimizado para recuperação rápida nas áreas críticas.
+                  <strong> Siga rigorosamente por 3 semanas para ver melhorias significativas!</strong>
+                </p>
               </div>
-              <span className="text-2xl font-bold text-blue-900">{totalHoras}h</span>
             </div>
-            <div>
-              <div className="flex items-center justify-center gap-2 mb-1">
-                <Target className="h-4 w-4 text-green-600" />
-                <span className="font-semibold text-green-800">Disciplinas</span>
+          </div>
+        )}
+
+        {/* Resumo Geral - Mais Impactante */}
+        <div className="mb-6 p-6 bg-gradient-to-r from-orange-50 to-red-50 rounded-xl border-2 border-orange-200 shadow-md">
+          <div className="text-center mb-4">
+            <h3 className="text-xl font-bold text-gray-800 mb-2">🚀 Seu Plano de Ação Personalizado</h3>
+            <p className="text-gray-600">Baseado na análise do seu desempenho, este cronograma foi criado especificamente para você!</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="text-center p-4 bg-white rounded-lg border border-orange-200 shadow-sm">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <Clock className="h-5 w-5 text-blue-600" />
+                <span className="font-bold text-blue-800 text-lg">Dedicação Total</span>
               </div>
-              <span className="text-2xl font-bold text-green-900">{itensCronograma.length}</span>
+              <span className="text-3xl font-extrabold text-blue-900">{totalHoras}h</span>
+              <p className="text-sm text-blue-700 mt-1">por semana</p>
             </div>
-            <div>
-              <div className="flex items-center justify-center gap-2 mb-1">
-                <BookOpen className="h-4 w-4 text-purple-600" />
-                <span className="font-semibold text-purple-800">Foco Principal</span>
+            <div className="text-center p-4 bg-white rounded-lg border border-orange-200 shadow-sm">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <Target className="h-5 w-5 text-green-600" />
+                <span className="font-bold text-green-800 text-lg">Disciplinas</span>
               </div>
-              <span className="text-sm font-medium text-purple-900">
-                {itensCronograma.filter(i => i.prioridade === 'alta').length} áreas fracas
+              <span className="text-3xl font-extrabold text-green-900">{itensCronograma.length}</span>
+              <p className="text-sm text-green-700 mt-1">para estudar</p>
+            </div>
+            <div className="text-center p-4 bg-white rounded-lg border border-orange-200 shadow-sm">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <AlertTriangle className="h-5 w-5 text-red-600" />
+                <span className="font-bold text-red-800 text-lg">Prioridade Alta</span>
+              </div>
+              <span className="text-3xl font-extrabold text-red-900">
+                {itensCronograma.filter(i => i.prioridade === 'alta').length}
               </span>
+              <p className="text-sm text-red-700 mt-1">áreas críticas</p>
             </div>
+          </div>
+          
+          <div className="mt-4 p-3 bg-yellow-100 border border-yellow-300 rounded-lg">
+            <p className="text-center text-yellow-800 font-medium">
+              💡 <strong>Dica:</strong> Foque {Math.round((itensCronograma.filter(i => i.prioridade === 'alta').length / itensCronograma.length) * 100)}% do seu tempo nas disciplinas de prioridade alta para maximizar seus resultados!
+            </p>
           </div>
         </div>
 
         {/* Lista de Disciplinas */}
         <div className="space-y-4">
           {itensCronograma.map((item, index) => (
-            <Card key={index} className={`${item.cor} border`}>
+            <Card key={`cronograma-item-${item.disciplina}-${index}`} className={`${item.cor} border`}>
               <CardContent className="pt-4">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
@@ -201,7 +231,7 @@ export function CronogramaPersonalizado({
                       <span className="text-sm font-medium">Focar em:</span>
                       <div className="flex flex-wrap gap-1 mt-1">
                         {item.topicos.map((topico, idx) => (
-                          <Badge key={idx} variant="secondary" className="text-xs">
+                          <Badge key={`topico-${item.disciplina}-${idx}-${topico}`} variant="secondary" className="text-xs">
                             {topico}
                           </Badge>
                         ))}
@@ -236,7 +266,7 @@ export function CronogramaPersonalizado({
                   {itensCronograma
                     .filter(i => i.prioridade === 'alta')
                     .map((item, idx) => (
-                      <li key={idx} className="flex items-center gap-2">
+                      <li key={`alta-${item.disciplina}-${idx}`} className="flex items-center gap-2">
                         <AlertTriangle className="h-3 w-3 text-red-500" />
                         {item.disciplina}: {item.horasSemanais}h
                       </li>
@@ -256,7 +286,7 @@ export function CronogramaPersonalizado({
                   {itensCronograma
                     .filter(i => i.prioridade === 'media')
                     .map((item, idx) => (
-                      <li key={idx} className="flex items-center gap-2">
+                      <li key={`media-${item.disciplina}-${idx}`} className="flex items-center gap-2">
                         <Target className="h-3 w-3 text-yellow-500" />
                         {item.disciplina}: {item.horasSemanais}h
                       </li>
@@ -276,7 +306,7 @@ export function CronogramaPersonalizado({
                   {itensCronograma
                     .filter(i => i.prioridade === 'baixa')
                     .map((item, idx) => (
-                      <li key={idx} className="flex items-center gap-2">
+                      <li key={`baixa-${item.disciplina}-${idx}`} className="flex items-center gap-2">
                         <CheckCircle2 className="h-3 w-3 text-green-500" />
                         {item.disciplina}: {item.horasSemanais}h
                       </li>
@@ -290,37 +320,54 @@ export function CronogramaPersonalizado({
         {/* Preview da Primeira Semana */}
         <PreviewSemanal resultadosPorDisciplina={resultadosPorDisciplina} />
 
-        {/* Botão para Salvar */}
-        <div className="mt-6 flex justify-center">
+        {/* Botão para Salvar - Mais Destacado */}
+        <div className="mt-8 text-center">
+          <div className="mb-4 p-4 bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg">
+            <h4 className="font-bold text-green-800 mb-2">🎯 Pronto para Começar?</h4>
+            <p className="text-green-700 text-sm">
+              Clique abaixo para salvar este cronograma personalizado no seu sistema e começar sua jornada de estudos otimizada!
+            </p>
+          </div>
+          
           <Button 
             onClick={onSalvarCronograma}
             disabled={cronogramaGerado}
             size="lg"
-            className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+            className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200"
           >
             {cronogramaGerado ? (
               <>
-                <CheckCircle2 className="mr-2 h-4 w-4" />
-                Cronograma Salvo!
+                <CheckCircle2 className="mr-3 h-5 w-5" />
+                ✅ Cronograma Salvo com Sucesso!
               </>
             ) : (
               <>
-                <Calendar className="mr-2 h-4 w-4" />
-                Salvar Cronograma no Sistema
+                <Calendar className="mr-3 h-5 w-5" />
+                🚀 Salvar Meu Cronograma Personalizado
               </>
             )}
           </Button>
         </div>
 
         {cronogramaGerado && (
-          <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
-            <div className="flex items-center gap-2 text-green-800">
-              <CheckCircle2 className="h-4 w-4" />
-              <span className="font-medium">Cronograma salvo com sucesso!</span>
+          <div className="mt-6 p-5 bg-gradient-to-r from-green-100 to-emerald-100 border-2 border-green-300 rounded-xl shadow-md">
+            <div className="flex items-center gap-3 text-green-800 mb-3">
+              <CheckCircle2 className="h-6 w-6" />
+              <span className="font-bold text-lg">🎉 Perfeito! Seu cronograma está pronto!</span>
             </div>
-            <p className="text-sm text-green-700 mt-1">
-              Você pode visualizar e editar seu cronograma na página de Cronograma.
+            <p className="text-green-700 mb-3">
+              Seu cronograma personalizado foi salvo com sucesso! Agora você pode acompanhar seu progresso e seguir o plano otimizado.
             </p>
+            <div className="flex gap-3 justify-center">
+              <Button variant="outline" onClick={() => window.location.href = '/cronograma'} className="border-green-500 text-green-700 hover:bg-green-50">
+                <Calendar className="h-4 w-4 mr-2" />
+                Ver Meu Cronograma
+              </Button>
+              <Button variant="outline" onClick={() => window.location.href = '/progresso'} className="border-blue-500 text-blue-700 hover:bg-blue-50">
+                <Target className="h-4 w-4 mr-2" />
+                Acompanhar Progresso
+              </Button>
+            </div>
           </div>
         )}
       </CardContent>

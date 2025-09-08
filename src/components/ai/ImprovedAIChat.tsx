@@ -232,7 +232,7 @@ export default function ImprovedAIChat() {
                 const Icon = suggestion.icon;
                 return (
                   <Button
-                    key={index}
+                    key={`quick-suggestion-${suggestion.category}-${index}`}
                     variant="outline"
                     size="sm"
                     className="justify-start text-left h-auto py-2 px-3 hover:bg-blue-50 hover:border-blue-200 dark:hover:bg-blue-900/20"

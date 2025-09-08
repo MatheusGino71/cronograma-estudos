@@ -193,7 +193,7 @@ export default function AssistenteIA() {
                     <CardContent>
                       <div className="grid grid-cols-1 gap-2">
                         {specializations.map((area, index) => (
-                          <Badge key={index} variant="outline" className="text-center py-1">
+                          <Badge key={`specialization-app-${area}-${index}`} variant="outline" className="text-center py-1">
                             {area}
                           </Badge>
                         ))}
@@ -229,7 +229,7 @@ export default function AssistenteIA() {
             <TabsContent value="features" className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {features.map((feature, index) => (
-                  <Card key={index}>
+                  <Card key={`feature-app-${feature.title}-${index}`}>
                     <CardHeader>
                       <div className="flex items-center gap-3">
                         <div className="p-2 bg-blue-100 rounded-lg">
@@ -246,7 +246,7 @@ export default function AssistenteIA() {
                         <p className="text-sm font-medium">Exemplos:</p>
                         <ul className="text-sm text-gray-600 space-y-1">
                           {feature.examples.map((example, idx) => (
-                            <li key={idx} className="flex items-center gap-2">
+                            <li key={`example-app-${feature.title}-${idx}-${example.substring(0,10)}`} className="flex items-center gap-2">
                               <CheckCircle className="h-3 w-3 text-green-500 flex-shrink-0" />
                               {example}
                             </li>
@@ -262,7 +262,7 @@ export default function AssistenteIA() {
             <TabsContent value="examples" className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {quickActions.map((action, index) => (
-                  <Card key={index} className="cursor-pointer hover:shadow-md transition-shadow">
+                  <Card key={`action-app-${action.title}-${index}`} className="cursor-pointer hover:shadow-md transition-shadow">
                     <CardHeader>
                       <div className="flex items-center gap-3">
                         <div className="p-2 bg-purple-100 rounded-lg">

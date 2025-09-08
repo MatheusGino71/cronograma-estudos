@@ -9,6 +9,7 @@ import { ResultadoSimulado, ResultadoDisciplina } from "@/types/simulado"
 import { StudyBlock } from "@/types"
 import { DicasEstudo } from "@/components/simulado/DicasEstudo"
 import { CronogramaPersonalizado } from "@/components/simulado/CronogramaPersonalizado"
+import MetodoEstudoPersonalizado from "@/components/simulado/MetodoEstudoPersonalizado"
 import { useScheduleStore } from "@/store/schedule"
 import { useAuth } from "@/contexts/AuthContext"
 import { 
@@ -181,7 +182,7 @@ export function ResultadoSimuladoComponent({ resultado, onVoltarConfigurador }: 
             </h3>
             <div className="flex flex-wrap gap-2">
               {areasFragas.filter(area => area.prioridade === 'alta').map((area, index) => (
-                <Badge key={index} variant="destructive" className="bg-red-100 text-red-800 border-red-200">
+                <Badge key={`area-fraca-${area.disciplina}-${index}`} variant="destructive" className="bg-red-100 text-red-800 border-red-200">
                   {area.disciplina} ({area.percentual.toFixed(1)}%)
                 </Badge>
               ))}
@@ -297,8 +298,8 @@ export function ResultadoSimuladoComponent({ resultado, onVoltarConfigurador }: 
                     Aproveitamento: {area.percentual.toFixed(1)}% - Recomendado: {area.horasRecomendadas}h/semana
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    {area.topicos.map((topico) => (
-                      <Badge key={topico} variant="outline" className="text-xs">
+                    {area.topicos.map((topico, topicoIndex) => (
+                      <Badge key={`topico-${area.disciplina}-${topicoIndex}-${topico}`} variant="outline" className="text-xs">
                         {topico}
                       </Badge>
                     ))}
@@ -310,7 +311,14 @@ export function ResultadoSimuladoComponent({ resultado, onVoltarConfigurador }: 
         </Card>
       )}
 
-      {/* Geração de Cronograma */}
+      {/* Cronograma Personalizado - Logo após os resultados */}
+      <CronogramaPersonalizado
+        resultadosPorDisciplina={resultado.resultadosPorDisciplina}
+        onSalvarCronograma={gerarCronograma}
+        cronogramaGerado={cronogramaGerado}
+      />
+
+      {/* Geração de Cronograma - Versão simplificada */}
       <Card className="border-l-4 border-l-green-500">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -358,14 +366,20 @@ export function ResultadoSimuladoComponent({ resultado, onVoltarConfigurador }: 
         </CardContent>
       </Card>
 
-      {/* Ações */}
-      {/* Cronograma Personalizado */}
-      <CronogramaPersonalizado
-        resultadosPorDisciplina={resultado.resultadosPorDisciplina}
-        onSalvarCronograma={gerarCronograma}
-        cronogramaGerado={cronogramaGerado}
+      {/* Método de Estudo Personalizado */}
+      <MetodoEstudoPersonalizado 
+        resultados={resultado.resultadosPorDisciplina}
+        percentualGeral={(resultado.acertos / resultado.totalQuestoes) * 100}
+        questoesCorretas={resultado.acertos}
+        totalQuestoes={resultado.totalQuestoes}
+        tempoTotal={`${Math.floor(resultado.tempoTotal / 60)}:${String(resultado.tempoTotal % 60).padStart(2, '0')}`}
+        onIniciarPlano={() => {
+          alert('Plano de estudos iniciado! Você será redirecionado para o cronograma.');
+          window.location.href = '/cronograma';
+        }}
       />
 
+      {/* Ações */}
       {/* Dicas Personalizadas */}
       <DicasEstudo 
         resultadosPorDisciplina={resultado.resultadosPorDisciplina}

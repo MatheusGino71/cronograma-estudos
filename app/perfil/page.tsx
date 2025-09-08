@@ -172,7 +172,7 @@ export default function MeuPerfil() {
           {/* Estatísticas */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             {stats.map((stat, index) => (
-              <Card key={index}>
+              <Card key={`stat-app-${stat.label}-${index}`}>
                 <CardContent className="p-6">
                   <div className="flex items-center space-x-3">
                     <div className="p-2 bg-blue-100 rounded-lg">

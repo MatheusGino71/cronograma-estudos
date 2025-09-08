@@ -157,7 +157,7 @@ export function DicasEstudo({ resultadosPorDisciplina, percentualGeral }: DicasE
       <CardContent>
         <div className="space-y-4">
           {dicas.map((dica, index) => (
-            <Card key={index} className={getCardStyle(dica.tipo)}>
+            <Card key={`dica-${dica.titulo}-${index}`} className={getCardStyle(dica.tipo)}>
               <CardContent className="pt-4">
                 <div className="flex items-start gap-3">
                   <dica.icon className="h-5 w-5 mt-0.5 flex-shrink-0" />

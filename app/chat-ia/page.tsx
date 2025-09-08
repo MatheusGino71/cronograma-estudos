@@ -266,7 +266,7 @@ export default function ChatPage() {
                   const Icon = suggestion.icon;
                   return (
                     <Button
-                      key={index}
+                      key={`chat-suggestion-app-${suggestion.category}-${index}`}
                       variant="outline"
                       className="justify-start text-left h-auto py-3 px-4 hover:bg-blue-50 hover:border-blue-200 dark:hover:bg-blue-900/20 transition-all duration-200"
                       onClick={() => handleSuggestionClick(suggestion.text)}

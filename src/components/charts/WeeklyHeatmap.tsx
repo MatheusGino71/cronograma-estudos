@@ -109,7 +109,7 @@ export function WeeklyHeatmap({ className }: WeeklyHeatmapProps) {
         <div className="grid grid-cols-8 gap-1 text-xs text-center">
           <div></div> {/* Espaço para labels das semanas */}
           {['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].map((day, index) => (
-            <div key={index} className="font-medium text-muted-foreground py-1">
+            <div key={`day-header-${day}-${index}`} className="font-medium text-muted-foreground py-1">
               {day}
             </div>
           ))}

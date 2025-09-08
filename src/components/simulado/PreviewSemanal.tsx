@@ -162,7 +162,7 @@ export function PreviewSemanal({ resultadosPorDisciplina }: PreviewSemanalProps)
       <CardContent>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {cronograma.map((dia, index) => (
-            <Card key={index} className={`${dia.sessoes.length > 0 ? 'bg-blue-50 border-blue-200' : 'bg-gray-50 border-gray-200'}`}>
+            <Card key={`dia-${dia.dia}-${index}`} className={`${dia.sessoes.length > 0 ? 'bg-blue-50 border-blue-200' : 'bg-gray-50 border-gray-200'}`}>
               <CardHeader className="pb-3">
                 <CardTitle className="text-base flex items-center justify-between">
                   <span>{dia.dia}</span>
@@ -179,7 +179,7 @@ export function PreviewSemanal({ resultadosPorDisciplina }: PreviewSemanalProps)
                 ) : (
                   <div className="space-y-3">
                     {dia.sessoes.map((sessao, sessaoIndex) => (
-                      <div key={sessaoIndex} className="flex items-start gap-3 p-3 bg-white rounded-lg border">
+                      <div key={`sessao-${dia.dia}-${sessaoIndex}-${sessao.disciplina}`} className="flex items-start gap-3 p-3 bg-white rounded-lg border">
                         <div className="flex items-center gap-2 text-sm font-medium min-w-0 flex-1">
                           <Clock className="h-3 w-3 text-blue-500 flex-shrink-0" />
                           <span className="text-blue-600 font-mono text-xs">

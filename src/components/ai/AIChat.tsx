@@ -204,7 +204,7 @@ export default function AIChat({ context = 'Estudo geral', placeholder = 'Faça 
             <div className="flex flex-wrap gap-2">
               {suggestions.map((suggestion, index) => (
                 <Button
-                  key={index}
+                  key={`suggestion-${suggestion.substring(0,15)}-${index}`}
                   variant="outline"
                   size="sm"
                   onClick={() => sendMessage(suggestion)}
