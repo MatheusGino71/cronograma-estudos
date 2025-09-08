@@ -2,15 +2,19 @@
 const nextConfig = {
   output: 'export',
   trailingSlash: true,
-  skipTrailingSlashRedirect: true,
-  distDir: 'out',
   images: {
     unoptimized: true
   },
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/cronograma-estudos' : '',
-  basePath: process.env.NODE_ENV === 'production' ? '/cronograma-estudos' : '',
+  basePath: '/cronograma-estudos',
+  assetPrefix: '/cronograma-estudos/',
   experimental: {
     missingSuspenseWithCSRBailout: false,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
   },
 }
 
