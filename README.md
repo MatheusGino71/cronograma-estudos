@@ -1,13 +1,201 @@
-# MindTech - Plataforma Completa de Gestão de Estudos
+# 🎓 MindTech - Sistema Inteligente de Cronograma de Estudos
 
-Uma plataforma completa para organização de cronogramas de estudo, catálogo de disciplinas, simulados interativos, assistente de IA especializado em Direito e acompanhamento de progresso com analytics avançados.
+**Uma plataforma completa para otimizar seus estudos com inteligência artificial e análise de performance.**
 
-🌐 **Aplicação Online**: https://cronograma-estudos-c3a5b.web.app
-🔗 **Repositório**: https://github.com/MatheusGino71/cronograma-estudos
+![Next.js](https://img.shields.io/badge/Next.js-15.5.2-black?style=for-the-badge&logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)
+![React](https://img.shields.io/badge/React-18-61dafb?style=for-the-badge&logo=react)
+![Firebase](https://img.shields.io/badge/Firebase-Auth-orange?style=for-the-badge&logo=firebase)
+![Zustand](https://img.shields.io/badge/Zustand-State-purple?style=for-the-badge)
 
-## 🚀 Funcionalidades Principais
+## 🚀 **Demo Live**
 
-### 🤖 **MindLegal AI - Assistente Jurídico Inteligente** ⭐ **NOVO!**
+### 🌐 **Acesse o projeto funcionando:**
+**[https://cronograma-estudos.vercel.app](https://cronograma-estudos.vercel.app)**
+
+---
+
+## ✨ **Principais Funcionalidades**
+
+### 🧠 **Sistema de Simulados Inteligente**
+- **Questões reais** de concursos organizadas por disciplina
+- **Análise detalhada** de performance por área
+- **Cronograma personalizado** baseado nos resultados
+- **Método de estudo científico** adaptado à sua performance
+
+### 📊 **Método de Estudo Personalizado** *(NOVO)*
+- **Análise automática** da sua performance
+- **4 abas organizadas**: Visão Geral, Cronograma, Recursos, Métodos
+- **Priorização inteligente** das disciplinas
+- **Recursos educacionais** recomendados
+- **Cronograma semanal** otimizado
+- **Sistema de acompanhamento** e conquistas
+
+### 🎯 **Cronograma Inteligente**
+- **Geração automática** baseada em resultados
+- **Blocos de estudo** otimizados por prioridade
+- **Visualização em calendário** interativo
+- **Acompanhamento de progresso** em tempo real
+
+### 🤖 **Chat IA Integrado**
+- **Assistente virtual** especializado em estudos
+- **Sugestões personalizadas** de cronogramas
+- **Dicas de métodos** de aprendizagem
+- **Suporte 24/7** para dúvidas
+
+### 🔐 **Sistema de Autenticação**
+- **Login seguro** com Firebase Auth
+- **Dados isolados** por usuário
+- **Sincronização automática** entre dispositivos
+- **Privacidade garantida**
+
+---
+
+## 🛠️ **Tecnologias Utilizadas**
+
+### **Frontend**
+- ⚡ **Next.js 15.5.2** - Framework React com Turbopack
+- 🎨 **Tailwind CSS** - Estilização moderna e responsiva
+- 📱 **Shadcn/ui** - Componentes UI de alta qualidade
+- 🎯 **TypeScript** - Tipagem estática para maior confiabilidade
+
+### **State Management**
+- 🐻 **Zustand** - Gerenciamento de estado simples e poderoso
+- 💾 **Persist Middleware** - Persistência automática de dados
+
+### **Backend & Auth**
+- 🔥 **Firebase Auth** - Autenticação segura e confiável
+- 📊 **CSV Parser** - Processamento de questões de concursos
+- 🤖 **Google Gemini AI** - Inteligência artificial integrada
+
+### **Design & UX**
+- 🎨 **Lucide Icons** - Ícones modernos e consistentes
+- 📊 **Recharts** - Gráficos e visualizações interativas
+- 🌈 **Gradientes e animações** - Interface moderna e atrativa
+
+---
+
+## 🚦 **Como Usar**
+
+### 1. **Acesse o Sistema**
+👉 **[cronograma-estudos.vercel.app](https://cronograma-estudos.vercel.app)**
+
+### 2. **Faça Login**
+- Clique em "Entrar" no canto superior direito
+- Use sua conta Google ou crie uma nova
+
+### 3. **Realize um Simulado**
+- Vá para a seção "Simulado"
+- Configure suas disciplinas
+- Responda as questões
+- Veja sua análise detalhada
+
+### 4. **Gere seu Método de Estudo**
+- Na tela de resultados, encontre o "Método de Estudo Personalizado"
+- Clique em "Gerar Plano"
+- Explore as 4 abas com seu plano personalizado
+- Inicie seus estudos otimizados!
+
+---
+
+## 🎯 **Para Quem é Este Sistema?**
+
+### 👨‍🎓 **Concurseiros**
+- Otimize seus estudos com base na performance real
+- Foque nas disciplinas que mais precisam de atenção
+- Acompanhe seu progresso de forma visual
+
+### 📚 **Estudantes**
+- Organize seus estudos de forma científica
+- Use métodos comprovados de aprendizagem
+- Mantenha a motivação com metas e conquistas
+
+### 🏢 **Instituições de Ensino**
+- Ofereça uma ferramenta moderna aos alunos
+- Acompanhe o progresso da turma
+- Forneça suporte personalizado
+
+---
+
+## � **Instalação Local**
+
+```bash
+# Clone o repositório
+git clone https://github.com/MatheusGino71/cronograma-estudos.git
+
+# Entre no diretório
+cd cronograma-estudos
+
+# Instale as dependências
+npm install
+
+# Configure as variáveis de ambiente
+cp .env.example .env.local
+
+# Inicie o servidor de desenvolvimento
+npm run dev
+```
+
+### **Variáveis de Ambiente Necessárias:**
+```env
+NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_auth_domain
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
+```
+
+---
+
+## 🤝 **Contribuições**
+
+Contribuições são sempre bem-vindas! Para contribuir:
+
+1. **Fork** o projeto
+2. **Crie uma branch** para sua feature (`git checkout -b feature/AmazingFeature`)
+3. **Commit** suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. **Push** para a branch (`git push origin feature/AmazingFeature`)
+5. **Abra um Pull Request**
+
+---
+
+## 📄 **Licença**
+
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+---
+
+## 👨‍💻 **Desenvolvedor**
+
+**Matheus Gino**
+- 🐱 GitHub: [@MatheusGino71](https://github.com/MatheusGino71)
+- 💼 LinkedIn: [Matheus Gino](https://linkedin.com/in/matheusgino)
+- 📧 Email: matheusgino.dev@gmail.com
+
+---
+
+## 🌟 **Apoie o Projeto**
+
+Se este projeto te ajudou, considere:
+- ⭐ Dar uma **estrela** no repositório
+- 🐛 Reportar **bugs** ou sugerir melhorias
+- 📢 **Compartilhar** com outros estudantes
+- 🤝 **Contribuir** com código ou ideias
+
+---
+
+<div align="center">
+
+### 🎓 **Transforme seus estudos com inteligência artificial!**
+
+**[🚀 Acesse agora: cronograma-estudos.vercel.app](https://cronograma-estudos.vercel.app)**
+
+---
+
+*Feito com ❤️ para ajudar estudantes a alcançarem seus objetivos*
+
+</div>
 - **Google Gemini Integration**: IA especializada em Direito brasileiro
 - **Chat Interativo**: Interface dedicada com layout responsivo (`/chat-ia`)
 - **Respostas Especializadas**: Cronogramas, explicações jurídicas, questões de concurso
