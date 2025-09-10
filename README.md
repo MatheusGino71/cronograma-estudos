@@ -11,7 +11,9 @@
 ## 🚀 **Demo Live**
 
 ### 🌐 **Acesse o projeto funcionando:**
-**[https://cronograma-estudos.vercel.app](https://cronograma-estudos.vercel.app)**
+**[https://matheusgino71.github.io/cronograma-estudos/](https://matheusgino71.github.io/cronograma-estudos/)**
+
+*Deploy automático via GitHub Pages*
 
 ---
 
