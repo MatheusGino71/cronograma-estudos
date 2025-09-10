@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { BookOpen, Settings, Play } from "lucide-react"
+import { BookOpen, Settings, Play, Calendar, Target } from "lucide-react"
 import { ConfigSimulado, ModoSimulado } from "@/types/simulado"
 import { carregarQuestoes } from "@/lib/carrega-questoes"
 import { agruparPorDisciplina } from "@/lib/simulado-utils"
@@ -21,6 +21,7 @@ export function ConfiguradorSimulado({ onStart }: ConfiguradorSimuladoProps) {
   const [disciplinasSelecionadas, setDisciplinasSelecionadas] = useState<string[]>([])
   const [numeroQuestoes, setNumeroQuestoes] = useState([10]) // Começar com 10 questões
   const [mostrarGabarito, setMostrarGabarito] = useState(true)
+  const [dataProva, setDataProva] = useState<string>('')
   const [disciplinasDisponiveis, setDisciplinasDisponiveis] = useState<{
     disciplina: string;
     total: number;
@@ -32,22 +33,18 @@ export function ConfiguradorSimulado({ onStart }: ConfiguradorSimuladoProps) {
     async function carregarDisciplinas() {
       try {
         const questoes = await carregarQuestoes()
-        console.log('Questões carregadas:', questoes.length)
         
         const agrupadas = agruparPorDisciplina(questoes)
-        console.log('Disciplinas:', Object.keys(agrupadas))
         
         const disciplinas = Object.entries(agrupadas).map(([disciplina, questoesDisciplina]) => ({
           disciplina,
           total: questoesDisciplina.length
         })).sort((a, b) => a.disciplina.localeCompare(b.disciplina))
         
-        console.log('Disciplinas processadas:', disciplinas)
-        
         setDisciplinasDisponiveis(disciplinas)
         setTotalQuestoesDisponiveis(questoes.length)
-      } catch (error) {
-        console.error('Erro ao carregar disciplinas:', error)
+      } catch {
+        // Erro ao carregar disciplinas
       } finally {
         setCarregando(false)
       }
@@ -87,7 +84,8 @@ export function ConfiguradorSimulado({ onStart }: ConfiguradorSimuladoProps) {
       modo,
       disciplinas: modo === 'geral' ? undefined : disciplinasSelecionadas,
       numeroQuestoes: numeroQuestoes[0],
-      mostrarGabarito
+      mostrarGabarito,
+      dataProva: dataProva ? new Date(dataProva) : undefined
     }
     
     onStart(config)
@@ -297,6 +295,50 @@ export function ConfiguradorSimulado({ onStart }: ConfiguradorSimuladoProps) {
             </CardContent>
           </Card>
 
+          {/* Data da Prova */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Target className="h-5 w-5 text-red-600" />
+                Data da Prova (Opcional)
+              </CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Defina quando será sua prova para gerar um cronograma de estudos personalizado
+              </p>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="data-prova" className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4" />
+                  Data da Prova
+                </Label>
+                <input
+                  type="date"
+                  id="data-prova"
+                  value={dataProva}
+                  onChange={(e) => setDataProva(e.target.value)}
+                  min={new Date().toISOString().split('T')[0]}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                />
+                {dataProva && (
+                  <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                    <p className="text-sm text-blue-800 font-medium">
+                      📅 Prova agendada para: {new Date(dataProva).toLocaleDateString('pt-BR', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })}
+                    </p>
+                    <p className="text-xs text-blue-600 mt-1">
+                      Após o simulado, você poderá gerar um cronograma de estudos baseado nesta data
+                    </p>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Resumo */}
           <Card>
             <CardHeader>
@@ -341,6 +383,15 @@ export function ConfiguradorSimulado({ onStart }: ConfiguradorSimuladoProps) {
                     {mostrarGabarito ? 'Sim' : 'Não'}
                   </span>
                 </div>
+                
+                {dataProva && (
+                  <div className="flex justify-between">
+                    <span className="text-sm text-muted-foreground">Data da prova:</span>
+                    <span className="text-sm font-medium">
+                      {new Date(dataProva).toLocaleDateString('pt-BR')}
+                    </span>
+                  </div>
+                )}
               </div>
 
               <Button 

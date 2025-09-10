@@ -57,7 +57,6 @@ export async function callGeminiAPI(prompt: string): Promise<{ success: boolean;
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('Erro na API do Gemini:', response.status, errorText);
       
       if (response.status === 403) {
         return {
@@ -90,8 +89,7 @@ export async function callGeminiAPI(prompt: string): Promise<{ success: boolean;
       };
     }
 
-  } catch (error) {
-    console.error('Erro ao chamar API do Gemini:', error);
+  } catch {
     return {
       success: false,
       text: '',

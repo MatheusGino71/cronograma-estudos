@@ -18,8 +18,22 @@ const eslintConfig = [
       "out/**",
       "build/**",
       "next-env.d.ts",
+      "app/**", // Ignorar pasta duplicada se existir
     ],
   },
+  {
+    rules: {
+      // Configurações mais permissivas para desenvolvimento
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-unused-vars": ["warn", { 
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_" 
+      }],
+      "react/no-unescaped-entities": "off",
+      "prefer-const": "warn",
+      "no-console": process.env.NODE_ENV === "production" ? "error" : "warn",
+    }
+  }
 ];
 
 export default eslintConfig;

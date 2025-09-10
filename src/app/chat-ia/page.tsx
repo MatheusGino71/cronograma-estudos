@@ -3,7 +3,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { Send, Bot, User, Loader2, Lightbulb, BookOpen, Calendar, HelpCircle, ArrowLeft } from 'lucide-react';
@@ -200,19 +199,19 @@ export default function ChatPage() {
                       <div className="prose prose-sm max-w-none dark:prose-invert">
                         <ReactMarkdown
                           components={{
-                            p: ({ children }: any) => <p className="mb-2 last:mb-0 leading-relaxed">{children}</p>,
-                            ul: ({ children }: any) => <ul className="list-disc list-inside mb-2 space-y-1">{children}</ul>,
-                            ol: ({ children }: any) => <ol className="list-decimal list-inside mb-2 space-y-1">{children}</ol>,
-                            li: ({ children }: any) => <li className="mb-1">{children}</li>,
-                            strong: ({ children }: any) => <strong className="font-semibold text-blue-600 dark:text-blue-400">{children}</strong>,
-                            code: ({ children }: any) => (
+                            p: ({ children }) => <p className="mb-2 last:mb-0 leading-relaxed">{children}</p>,
+                            ul: ({ children }) => <ul className="list-disc list-inside mb-2 space-y-1">{children}</ul>,
+                            ol: ({ children }) => <ol className="list-decimal list-inside mb-2 space-y-1">{children}</ol>,
+                            li: ({ children }) => <li className="mb-1">{children}</li>,
+                            strong: ({ children }) => <strong className="font-semibold text-blue-600 dark:text-blue-400">{children}</strong>,
+                            code: ({ children }) => (
                               <code className="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded text-sm font-mono">
                                 {children}
                               </code>
                             ),
-                            h1: ({ children }: any) => <h1 className="text-lg font-bold mb-3 text-blue-600 dark:text-blue-400 border-b pb-1">{children}</h1>,
-                            h2: ({ children }: any) => <h2 className="text-md font-semibold mb-2 text-blue-600 dark:text-blue-400">{children}</h2>,
-                            h3: ({ children }: any) => <h3 className="text-sm font-semibold mb-1 text-blue-600 dark:text-blue-400">{children}</h3>,
+                            h1: ({ children }) => <h1 className="text-lg font-bold mb-3 text-blue-600 dark:text-blue-400 border-b pb-1">{children}</h1>,
+                            h2: ({ children }) => <h2 className="text-md font-semibold mb-2 text-blue-600 dark:text-blue-400">{children}</h2>,
+                            h3: ({ children }) => <h3 className="text-sm font-semibold mb-1 text-blue-600 dark:text-blue-400">{children}</h3>,
                           }}
                         >
                           {message.text}

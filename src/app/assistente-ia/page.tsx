@@ -15,13 +15,11 @@ import {
   HelpCircle,
   Sparkles,
   Target,
-  Users,
   CheckCircle,
   Scroll,
   GraduationCap,
   MessageSquare,
-  Lightbulb,
-  BarChart3
+  Lightbulb
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -276,7 +274,7 @@ export default function AssistenteIA() {
                     </CardHeader>
                     <CardContent>
                       <div className="bg-gray-50 p-3 rounded-lg mb-4">
-                        <p className="text-sm italic">"{action.prompt}"</p>
+                        <p className="text-sm italic">&ldquo;{action.prompt}&rdquo;</p>
                       </div>
                       <Button 
                         className="w-full" 
