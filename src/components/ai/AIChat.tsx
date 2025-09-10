@@ -12,10 +12,6 @@ import {
   User, 
   Send, 
   Loader2, 
-  BookOpen, 
-  Calendar,
-  HelpCircle,
-  FileText,
   Lightbulb
 } from 'lucide-react';
 
@@ -104,7 +100,7 @@ export default function AIChat({ context = 'Estudo geral', placeholder = 'Faça 
       } else {
         throw new Error('Erro na resposta da IA');
       }
-    } catch (error) {
+    } catch {
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         type: 'ai',

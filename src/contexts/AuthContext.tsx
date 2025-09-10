@@ -62,15 +62,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp()
           });
-        } catch (firestoreError) {
-          console.warn('Firestore offline, using local data:', firestoreError);
+        } catch {
+          // Firestore offline, using local data
         }
         
         return basicUser;
       }
       
-    } catch (error) {
-      console.error('Error fetching user data:', error);
+    } catch {
+      // Error fetching user data
       
       // Se houver erro (como offline), criar usuário básico
       return {
@@ -105,7 +105,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         error: null
       });
     } catch (error: any) {
-      console.error('Login error:', error);
+      // Login error
       let errorMessage = 'Erro ao fazer login. Verifique suas credenciais.';
       
       if (error.code === 'auth/user-not-found') {
@@ -165,7 +165,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         error: null
       });
     } catch (error: any) {
-      console.error('Register error:', error);
+      // Register error
       let errorMessage = 'Erro ao criar conta. Tente novamente.';
       
       if (error.code === 'auth/email-already-in-use') {
@@ -196,8 +196,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         loading: false,
         error: null
       });
-    } catch (error: any) {
-      console.error('Logout error:', error);
+    } catch {
+      // Logout error
       setAuthState(prev => ({
         ...prev,
         loading: false,
@@ -215,7 +215,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       setAuthState(prev => ({ ...prev, loading: false }));
     } catch (error: any) {
-      console.error('Reset password error:', error);
+      // Reset password error
       let errorMessage = 'Erro ao enviar email de recuperação';
       
       if (error.code === 'auth/user-not-found') {
@@ -250,8 +250,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             error: null
           });
         }
-      } catch (error) {
-        console.error('Auth state change error:', error);
+      } catch {
+        // Auth state change error
         setAuthState({
           user: null,
           loading: false,

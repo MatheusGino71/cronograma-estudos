@@ -21,8 +21,8 @@ export async function carregarQuestoes(): Promise<Questao[]> {
     questoesCache = parseCSVToQuestions(csvContent);
     
     return questoesCache;
-  } catch (error) {
-    console.error('Erro ao carregar questões:', error);
+  } catch {
+    // Erro ao carregar questões
     return [];
   }
 }

@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "analyze": "ANALYZE=true npm run build",
+    "dev:fast": "next dev --turbopack",
+    "build:fast": "next build --experimental-build-worker",
+    "start:fast": "next start"
+  }
+}

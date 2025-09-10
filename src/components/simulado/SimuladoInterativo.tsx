@@ -65,8 +65,8 @@ export function SimuladoInterativo({ config, onFinished }: SimuladoInterativoPro
           
         setQuestoes(questoesFinais)
         setTempoInicio(new Date())
-      } catch (error) {
-        console.error('Erro ao carregar questões:', error)
+      } catch {
+        // Erro ao carregar questões
       } finally {
         setCarregando(false)
       }

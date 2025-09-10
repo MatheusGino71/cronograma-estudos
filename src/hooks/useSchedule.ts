@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { useScheduleStore } from '@/store/schedule';
-import { useProgressStore } from '@/store/progress';
 
 export function useAdherence() {
   const blocks = useScheduleStore((state) => state.blocks);

@@ -11,7 +11,7 @@
 ## 🚀 **Demo Live**
 
 ### 🌐 **Acesse o projeto funcionando:**
-**[https://cronograma-estudos.vercel.app](https://cronograma-estudos.vercel.app)**
+**[https://cronograma-estudos-c3a5b.web.app](https://cronograma-estudos-c3a5b.web.app)**
 
 ---
 
@@ -78,7 +78,7 @@
 ## 🚦 **Como Usar**
 
 ### 1. **Acesse o Sistema**
-👉 **[cronograma-estudos.vercel.app](https://cronograma-estudos.vercel.app)**
+👉 **[cronograma-estudos-c3a5b.web.app](https://cronograma-estudos-c3a5b.web.app)**
 
 ### 2. **Faça Login**
 - Clique em "Entrar" no canto superior direito
@@ -189,7 +189,7 @@ Se este projeto te ajudou, considere:
 
 ### 🎓 **Transforme seus estudos com inteligência artificial!**
 
-**[🚀 Acesse agora: cronograma-estudos.vercel.app](https://cronograma-estudos.vercel.app)**
+**[🚀 Acesse agora: cronograma-estudos-c3a5b.web.app](https://cronograma-estudos-c3a5b.web.app)**
 
 ---
 
@@ -650,12 +650,6 @@ firebase deploy --only hosting
 
 # URL de produção
 # https://cronograma-estudos-c3a5b.web.app
-```
-
-### Vercel (Alternativo)
-```bash
-npm run build
-vercel --prod
 ```
 
 ### Docker

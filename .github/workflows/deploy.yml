@@ -17,6 +17,7 @@ jobs:
           touch out/.nojekyll
         env:
           CI: false
+          GITHUB_PAGES: true
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4

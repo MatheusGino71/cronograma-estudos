@@ -4,17 +4,17 @@ import * as React from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { DisciplineCard } from "@/components/disciplines/DisciplineCard"
 import { DisciplineTable } from "@/components/disciplines/DisciplineTable"
 import { useFilteredDisciplines, useDisciplineStats } from "@/hooks/useDisciplines"
 import { useDisciplineStore } from "@/store/discipline"
 import { Discipline } from "@/types"
-import { Grid3X3, List, Heart, GitCompare, Star, TrendingUp, BookOpen, Clock } from "lucide-react"
+import { Grid3X3, List, Heart, GitCompare, TrendingUp, BookOpen, Clock } from "lucide-react"
 
 export default function DisciplinasPage() {
   const [viewMode, setViewMode] = React.useState<'grid' | 'table'>('grid')
-  const [selectedDiscipline, setSelectedDiscipline] = React.useState<Discipline | null>(null)
+  const [_selectedDiscipline, setSelectedDiscipline] = React.useState<Discipline | null>(null)
   
   const { data: disciplines = [], isLoading } = useFilteredDisciplines()
   const { data: stats = [] } = useDisciplineStats()

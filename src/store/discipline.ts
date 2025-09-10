@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Discipline } from '@/types';
 
 interface DisciplineState {
   favorites: string[];

@@ -3,16 +3,37 @@
 import * as React from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { KpiGrid } from "@/components/charts/KpiCard"
-import { TrendChart } from "@/components/charts/TrendChart"
-import { DisciplineStackedBars } from "@/components/charts/DisciplineStackedBars"
-import { WeeklyHeatmap } from "@/components/charts/WeeklyHeatmap"
-import { InsightsList } from "@/components/charts/InsightsList"
+import { SkeletonCard } from "@/components/ui/loading"
 import { useProgressStore } from "@/store/progress"
 import { useScheduleStore } from "@/store/schedule"
 import { Download, FileText, BarChart3, Calendar } from "lucide-react"
-import html2canvas from 'html2canvas'
-import jsPDF from 'jspdf'
+import dynamic from 'next/dynamic'
+
+// Lazy loading dos componentes pesados
+const KpiGrid = dynamic(() => import("@/components/charts/KpiCard").then(mod => ({ default: mod.KpiGrid })), {
+  loading: () => <SkeletonCard />,
+  ssr: false
+})
+
+const TrendChart = dynamic(() => import("@/components/charts/TrendChart").then(mod => ({ default: mod.TrendChart })), {
+  loading: () => <div className="h-64 bg-gray-100 animate-pulse rounded-lg" />,
+  ssr: false
+})
+
+const DisciplineStackedBars = dynamic(() => import("@/components/charts/DisciplineStackedBars").then(mod => ({ default: mod.DisciplineStackedBars })), {
+  loading: () => <div className="h-48 bg-gray-100 animate-pulse rounded-lg" />,
+  ssr: false
+})
+
+const WeeklyHeatmap = dynamic(() => import("@/components/charts/WeeklyHeatmap").then(mod => ({ default: mod.WeeklyHeatmap })), {
+  loading: () => <div className="h-32 bg-gray-100 animate-pulse rounded-lg" />,
+  ssr: false
+})
+
+const InsightsList = dynamic(() => import("@/components/charts/InsightsList").then(mod => ({ default: mod.InsightsList })), {
+  loading: () => <SkeletonCard />,
+  ssr: false
+})
 
 export default function ProgressoPage() {
   const { getKPIs, logs } = useProgressStore()
@@ -27,6 +48,11 @@ export default function ProgressoPage() {
     
     setIsExporting(true)
     try {
+      const [html2canvas, jsPDF] = await Promise.all([
+        import('html2canvas').then(mod => mod.default),
+        import('jspdf').then(mod => mod.default)
+      ])
+      
       const canvas = await html2canvas(dashboardRef.current, {
         scale: 1,
         useCORS: true,
@@ -46,8 +72,8 @@ export default function ProgressoPage() {
       
       pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio)
       pdf.save(`relatorio-progresso-${new Date().toISOString().split('T')[0]}.pdf`)
-    } catch (error) {
-      console.error('Erro ao exportar PDF:', error)
+    } catch {
+      // Erro silencioso para produção
     } finally {
       setIsExporting(false)
     }

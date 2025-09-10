@@ -5,7 +5,7 @@ import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -13,12 +13,10 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
-import { PlanSettings } from "@/types"
 import { disciplines, templates } from "@/lib/seed"
 import { useGenerateSchedule } from "@/hooks/useDisciplines"
-import { Calendar, Clock, Target, Wand2, ChevronLeft, ChevronRight } from "lucide-react"
+import { Clock, Target, Wand2, ChevronLeft, ChevronRight } from "lucide-react"
 import { format, addWeeks } from "date-fns"
-import { ptBR } from "date-fns/locale"
 
 const planSchema = z.object({
   weeklyHours: z.number().min(5).max(70),
@@ -60,8 +58,8 @@ export function PlanWizard({ open, onOpenChange }: PlanWizardProps) {
       try {
         const result = await generateSchedule.mutateAsync(values)
         setPreviewData(result)
-      } catch (error) {
-        console.error('Error generating preview:', error)
+      } catch {
+        // Error generating preview
       }
     }
     

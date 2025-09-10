@@ -45,4 +45,5 @@ export interface ConfigSimulado {
   numeroQuestoes?: number;
   tempoLimite?: number; // em minutos
   mostrarGabarito?: boolean;
+  dataProva?: Date; // data da prova para cronograma de estudos
 }

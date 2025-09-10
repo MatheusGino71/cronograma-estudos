@@ -58,68 +58,114 @@ export default function Home() {
     )
   }
   
-  // Se está logado, redireciona para o cronograma (dashboard)
+  // Se está logado, mostra página com vídeo de fundo
   if (user) {
     return (
       <div className="flex flex-col">
-        {/* Hero Section para usuários logados */}
-        <section className="relative py-12 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center">
-              <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white sm:text-5xl">
-                Bem-vindo de volta, {user.name}! 👋
-              </h1>
-              <p className="mt-4 text-xl text-gray-600 dark:text-gray-300">
-                Continue organizando seus estudos com inteligência
-              </p>
-              <div className="mt-8 flex justify-center">
-                <Link href="/cronograma">
-                  <Button size="lg" className="mr-4">
-                    <Calendar className="h-5 w-5 mr-2" />
-                    Ir para Cronograma
-                  </Button>
-                </Link>
-                <Link href="/simulado">
-                  <Button variant="outline" size="lg">
-                    <FileText className="h-5 w-5 mr-2" />
-                    Fazer Simulado
-                  </Button>
-                </Link>
-              </div>
+        {/* Hero Section para usuários logados com vídeo de fundo */}
+        <section className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden min-h-screen flex items-center">
+          {/* Video Background */}
+          <div className="absolute inset-0 w-full h-full z-0">
+            <video 
+              autoPlay 
+              muted 
+              loop 
+              playsInline
+              preload="metadata"
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{ 
+                filter: 'brightness(0.5)',
+                background: '#000'
+              }}
+            >
+              <source src="/video-pagina.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            {/* Fallback com gradiente se o vídeo não carregar */}
+            <div 
+              className="absolute inset-0 opacity-40"
+              style={{
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+              }}
+            ></div>
+            {/* Overlay sutil para legibilidade */}
+            <div className="absolute inset-0 bg-black/20"></div>
+          </div>
+          
+          <div className="relative z-10 max-w-4xl mx-auto text-center w-full">
+            <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl" 
+                style={{ 
+                  textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 20px rgba(0,0,0,0.6)' 
+                }}>
+              Bem-vindo de volta,
+              <span className="text-red-400 block">{user.name}! 👋</span>
+            </h1>
+            <p className="mt-6 text-lg leading-8 text-gray-100 max-w-2xl mx-auto" 
+               style={{ 
+                 textShadow: '1px 1px 3px rgba(0,0,0,0.8)' 
+               }}>
+              Continue organizando seus estudos com inteligência. 
+              Acesse suas ferramentas de estudo e acompanhe seu progresso.
+            </p>
+            <div className="mt-10 flex items-center justify-center gap-x-6">
+              <Link href="/cronograma">
+                <Button size="lg" className="gap-2 bg-red-600 hover:bg-red-700 text-white shadow-xl">
+                  <Calendar className="h-5 w-5" />
+                  Ir para Cronograma
+                </Button>
+              </Link>
+              <Link href="/simulado">
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  className="border-2 border-white text-white bg-transparent hover:bg-white hover:text-black shadow-xl backdrop-blur-sm"
+                >
+                  <FileText className="h-5 w-5 mr-2" />
+                  Fazer Simulado
+                </Button>
+              </Link>
             </div>
           </div>
         </section>
 
         {/* Features Grid para usuários logados */}
-        <section className="py-12 bg-gray-50 dark:bg-gray-900">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white text-center mb-12">
-              Suas Ferramentas de Estudo
-            </h2>
-            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-              {features.map((feature) => (
-                <Link key={feature.name} href={feature.href}>
-                  <div className="relative group bg-white dark:bg-gray-800 p-6 rounded-lg shadow hover:shadow-lg transition-shadow cursor-pointer">
-                    <div>
-                      <span className={`inline-flex p-3 rounded-lg ${feature.color} bg-opacity-10`}>
-                        <feature.icon className={`h-6 w-6 ${feature.color}`} aria-hidden="true" />
-                      </span>
+        <section className="py-24 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+                Suas Ferramentas de Estudo
+              </h2>
+              <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+                Acesse todas as funcionalidades para organizar e monitorar 
+                seus estudos de forma inteligente.
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
+              {features.map((feature) => {
+                const Icon = feature.icon
+                return (
+                  <Link
+                    key={feature.name}
+                    href={feature.href}
+                    className="group relative p-8 bg-card rounded-2xl border hover:shadow-lg transition-all duration-200 hover:-translate-y-1"
+                  >
+                    <div className={`inline-flex p-3 rounded-lg ${feature.color} bg-background`}>
+                      <Icon className={`h-6 w-6 ${feature.color}`} />
                     </div>
-                    <div className="mt-4">
-                      <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-                        {feature.name}
-                        <span className="absolute inset-0" aria-hidden="true" />
-                      </h3>
-                      <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                        {feature.description}
-                      </p>
+                    <h3 className="mt-6 text-xl font-semibold text-foreground group-hover:text-red-600 transition-colors">
+                      {feature.name}
+                    </h3>
+                    <p className="mt-3 text-muted-foreground leading-relaxed">
+                      {feature.description}
+                    </p>
+                    <div className="mt-6 flex items-center text-sm font-medium text-red-600 group-hover:translate-x-1 transition-transform">
+                      Acessar
+                      <ArrowRight className="ml-1 h-4 w-4" />
                     </div>
-                    <span className="pointer-events-none absolute top-6 right-6 text-gray-300 group-hover:text-gray-400" aria-hidden="true">
-                      <ArrowRight className="h-6 w-6" />
-                    </span>
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                )
+              })}
             </div>
           </div>
         </section>

@@ -83,8 +83,6 @@ export default function ImprovedAIChat() {
     setIsLoading(true);
 
     try {
-      console.log('Processando mensagem com IA local:', textToSend);
-      
       // Usar IA local em vez de API
       const result = await processAIRequest({
         type: 'question',
@@ -93,8 +91,6 @@ export default function ImprovedAIChat() {
           context: messages.slice(-3).map(m => `${m.isUser ? 'Usuário' : 'AI'}: ${m.text}`).join('\n')
         }
       });
-
-      console.log('Resposta da IA local:', result);
 
       if (result.success) {
         const aiMessage: Message = {
@@ -107,11 +103,10 @@ export default function ImprovedAIChat() {
       } else {
         throw new Error('Erro na resposta da IA');
       }
-    } catch (error) {
-      console.error('Erro na IA local:', error);
+    } catch {
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: `❌ **Erro temporário**: Houve um problema no processamento. Por favor, tente novamente.\n\n� **Dica**: O MindLegal AI está funcionando localmente para garantir sempre disponibilidade!`,
+        text: `❌ **Erro temporário**: Houve um problema no processamento. Por favor, tente novamente.\n\n📱 **Dica**: O MindLegal AI está funcionando localmente para garantir sempre disponibilidade!`,
         isUser: false,
         timestamp: new Date()
       };
@@ -169,19 +164,19 @@ export default function ImprovedAIChat() {
                   <div className="prose prose-sm max-w-none dark:prose-invert">
                     <ReactMarkdown
                       components={{
-                        p: ({ children }: any) => <p className="mb-2 last:mb-0">{children}</p>,
-                        ul: ({ children }: any) => <ul className="list-disc list-inside mb-2">{children}</ul>,
-                        ol: ({ children }: any) => <ol className="list-decimal list-inside mb-2">{children}</ol>,
-                        li: ({ children }: any) => <li className="mb-1">{children}</li>,
-                        strong: ({ children }: any) => <strong className="font-semibold">{children}</strong>,
-                        code: ({ children }: any) => (
+                        p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+                        ul: ({ children }) => <ul className="list-disc list-inside mb-2">{children}</ul>,
+                        ol: ({ children }) => <ol className="list-decimal list-inside mb-2">{children}</ol>,
+                        li: ({ children }) => <li className="mb-1">{children}</li>,
+                        strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
+                        code: ({ children }) => (
                           <code className="bg-gray-200 dark:bg-gray-700 px-1 py-0.5 rounded text-sm">
                             {children}
                           </code>
                         ),
-                        h1: ({ children }: any) => <h1 className="text-lg font-bold mb-2 text-blue-600">{children}</h1>,
-                        h2: ({ children }: any) => <h2 className="text-md font-semibold mb-2 text-blue-600">{children}</h2>,
-                        h3: ({ children }: any) => <h3 className="text-sm font-semibold mb-1 text-blue-600">{children}</h3>,
+                        h1: ({ children }) => <h1 className="text-lg font-bold mb-2 text-blue-600">{children}</h1>,
+                        h2: ({ children }) => <h2 className="text-md font-semibold mb-2 text-blue-600">{children}</h2>,
+                        h3: ({ children }) => <h3 className="text-sm font-semibold mb-1 text-blue-600">{children}</h3>,
                       }}
                     >
                       {message.text}
