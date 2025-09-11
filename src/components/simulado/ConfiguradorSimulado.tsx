@@ -4,23 +4,37 @@ import * as React from "react"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
+
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { BookOpen, Settings, Play } from "lucide-react"
 import { ConfigSimulado, ModoSimulado } from "@/types/simulado"
 import { carregarQuestoes } from "@/lib/carrega-questoes"
 import { agruparPorDisciplina } from "@/lib/simulado-utils"
+import { TEMAS_CONCURSO, obterDisciplinasPorTema } from "@/lib/temas-concurso"
 
 interface ConfiguradorSimuladoProps {
   onStart: (config: ConfigSimulado) => void;
 }
 
+// Função para calcular semanas até a prova
+function calcularSemanasAteProva(dataProva: string): number {
+  if (!dataProva) return 0
+  
+  const hoje = new Date()
+  const prova = new Date(dataProva)
+  const diferencaMilissegundos = prova.getTime() - hoje.getTime()
+  const diferencaDias = Math.ceil(diferencaMilissegundos / (1000 * 60 * 60 * 24))
+  
+  return Math.ceil(diferencaDias / 7)
+}
+
 export function ConfiguradorSimulado({ onStart }: ConfiguradorSimuladoProps) {
   const [modo, setModo] = useState<ModoSimulado>('geral')
-  const [disciplinasSelecionadas, setDisciplinasSelecionadas] = useState<string[]>([])
+  const [temaSelecionado, setTemaSelecionado] = useState('')
   const [numeroQuestoes, setNumeroQuestoes] = useState([10]) // Começar com 10 questões
   const [mostrarGabarito, setMostrarGabarito] = useState(true)
+  const [dataProva, setDataProva] = useState('')
   const [disciplinasDisponiveis, setDisciplinasDisponiveis] = useState<{
     disciplina: string;
     total: number;
@@ -56,38 +70,27 @@ export function ConfiguradorSimulado({ onStart }: ConfiguradorSimuladoProps) {
     carregarDisciplinas()
   }, [])
 
-  const handleDisciplinaChange = (disciplina: string, checked: boolean) => {
-    setDisciplinasSelecionadas(prev => {
-      if (checked) {
-        return [...prev, disciplina]
-      } else {
-        return prev.filter(d => d !== disciplina)
-      }
-    })
-  }
-
-  const handleSelecionarTodas = () => {
-    setDisciplinasSelecionadas(disciplinasDisponiveis.map(d => d.disciplina))
-  }
-
-  const handleDesmarcarTodas = () => {
-    setDisciplinasSelecionadas([])
-  }
-
-  const totalQuestoesSelecionadas = disciplinasSelecionadas.length === 0 
+  const totalQuestoesSelecionadas = modo === 'geral' 
     ? totalQuestoesDisponiveis
-    : disciplinasDisponiveis
-        .filter(d => disciplinasSelecionadas.includes(d.disciplina))
-        .reduce((acc, d) => acc + d.total, 0)
+    : temaSelecionado
+    ? (() => {
+        const disciplinasTema = obterDisciplinasPorTema(temaSelecionado)
+        return disciplinasDisponiveis
+          .filter(d => disciplinasTema.includes(d.disciplina))
+          .reduce((acc, d) => acc + d.total, 0)
+      })()
+    : 0
 
   const maxQuestoes = Math.min(totalQuestoesSelecionadas, 200) // Aumentei de 100 para 200
 
   const handleIniciar = () => {
     const config: ConfigSimulado = {
       modo,
-      disciplinas: modo === 'geral' ? undefined : disciplinasSelecionadas,
+      tema: modo === 'tema' ? temaSelecionado : undefined,
+      disciplinas: modo === 'tema' ? obterDisciplinasPorTema(temaSelecionado) : undefined,
       numeroQuestoes: numeroQuestoes[0],
-      mostrarGabarito
+      mostrarGabarito,
+      dataProva: dataProva || undefined
     }
     
     onStart(config)
@@ -151,69 +154,77 @@ export function ConfiguradorSimulado({ onStart }: ConfiguradorSimuladoProps) {
                 
                 <div 
                   className={`p-4 border rounded-lg cursor-pointer transition-all ${
-                    modo === 'disciplina' ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:bg-gray-50'
+                    modo === 'tema' ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:bg-gray-50'
                   }`}
-                  onClick={() => setModo('disciplina')}
+                  onClick={() => setModo('tema')}
                 >
                   <div className="flex items-center gap-2">
                     <Settings className="h-5 w-5" />
-                    <span className="font-medium">Por Disciplina</span>
+                    <span className="font-medium">Por Tema</span>
                   </div>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Escolha disciplinas específicas
+                    Escolha uma área de concurso específica
                   </p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* Seleção de Disciplinas */}
-          {modo === 'disciplina' && (
+          {/* Seleção de Temas */}
+          {modo === 'tema' && (
             <Card>
               <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg">Disciplinas</CardTitle>
-                  <div className="flex gap-2">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={handleSelecionarTodas}
-                    >
-                      Todas
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={handleDesmarcarTodas}
-                    >
-                      Limpar
-                    </Button>
-                  </div>
-                </div>
+                <CardTitle className="text-lg">Área do Concurso</CardTitle>
+                <p className="text-sm text-muted-foreground">
+                  Escolha o tema que corresponde ao seu concurso. As disciplinas serão selecionadas automaticamente.
+                </p>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-60 overflow-y-auto">
-                  {disciplinasDisponiveis.map((disc) => (
-                    <div key={disc.disciplina} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={disc.disciplina}
-                        checked={disciplinasSelecionadas.includes(disc.disciplina)}
-                        onCheckedChange={(checked) => 
-                          handleDisciplinaChange(disc.disciplina, checked as boolean)
-                        }
-                      />
-                      <Label 
-                        htmlFor={disc.disciplina} 
-                        className="flex-1 cursor-pointer text-sm"
-                      >
-                        {disc.disciplina}
-                        <Badge variant="secondary" className="ml-2">
-                          {disc.total}
-                        </Badge>
-                      </Label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
+                  {TEMAS_CONCURSO.map((tema) => (
+                    <div 
+                      key={tema.id} 
+                      className={`p-4 border rounded-lg cursor-pointer transition-all ${
+                        temaSelecionado === tema.id 
+                          ? 'border-red-500 bg-red-50' 
+                          : 'border-gray-200 hover:bg-gray-50'
+                      }`}
+                      onClick={() => setTemaSelecionado(tema.id)}
+                    >
+                      <div className="flex items-start gap-3">
+                        <span className="text-2xl">{tema.icone}</span>
+                        <div className="flex-1">
+                          <h3 className="font-medium text-sm">{tema.nome}</h3>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {tema.descricao}
+                          </p>
+                          <div className="mt-2 flex flex-wrap gap-1">
+                            {tema.disciplinas.slice(0, 4).map((disciplina, index) => (
+                              <Badge key={index} variant="secondary" className="text-xs">
+                                {disciplina}
+                              </Badge>
+                            ))}
+                            {tema.disciplinas.length > 4 && (
+                              <Badge variant="secondary" className="text-xs">
+                                +{tema.disciplinas.length - 4}
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
+                {temaSelecionado && (
+                  <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+                    <p className="text-sm text-blue-700">
+                      <span className="font-medium">
+                        {TEMAS_CONCURSO.find(t => t.id === temaSelecionado)?.nome}
+                      </span> selecionado 
+                      ({totalQuestoesSelecionadas} questões disponíveis para este tema)
+                    </p>
+                  </div>
+                )}
               </CardContent>
             </Card>
           )}
@@ -294,6 +305,21 @@ export function ConfiguradorSimulado({ onStart }: ConfiguradorSimuladoProps) {
                   className="h-5 w-5 text-red-600 rounded border-gray-300 focus:ring-red-500"
                 />
               </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="data-prova">Data da Prova (Opcional)</Label>
+                <input
+                  type="date"
+                  id="data-prova"
+                  value={dataProva}
+                  onChange={(e) => setDataProva(e.target.value)}
+                  min={new Date().toISOString().split('T')[0]} // não permite datas no passado
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Cronograma especializado será criado com base nas semanas restantes
+                </p>
+              </div>
             </CardContent>
           </Card>
 
@@ -317,15 +343,15 @@ export function ConfiguradorSimulado({ onStart }: ConfiguradorSimuladoProps) {
                 <div className="flex justify-between">
                   <span className="text-sm text-muted-foreground">Modo:</span>
                   <span className="text-sm font-medium">
-                    {modo === 'geral' ? 'Simulado Geral' : 'Por Disciplina'}
+                    {modo === 'geral' ? 'Simulado Geral' : modo === 'tema' ? 'Por Tema' : 'Personalizado'}
                   </span>
                 </div>
                 
-                {modo === 'disciplina' && (
+                {modo === 'tema' && temaSelecionado && (
                   <div className="flex justify-between">
-                    <span className="text-sm text-muted-foreground">Disciplinas selecionadas:</span>
+                    <span className="text-sm text-muted-foreground">Tema:</span>
                     <span className="text-sm font-medium">
-                      {disciplinasSelecionadas.length}
+                      {TEMAS_CONCURSO.find(t => t.id === temaSelecionado)?.nome}
                     </span>
                   </div>
                 )}
@@ -341,12 +367,29 @@ export function ConfiguradorSimulado({ onStart }: ConfiguradorSimuladoProps) {
                     {mostrarGabarito ? 'Sim' : 'Não'}
                   </span>
                 </div>
+                
+                {dataProva && (
+                  <>
+                    <div className="flex justify-between">
+                      <span className="text-sm text-muted-foreground">Data da Prova:</span>
+                      <span className="text-sm font-medium">
+                        {new Date(dataProva).toLocaleDateString('pt-BR')}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm text-muted-foreground">Semanas restantes:</span>
+                      <span className="text-sm font-medium text-orange-600">
+                        {calcularSemanasAteProva(dataProva)} semanas
+                      </span>
+                    </div>
+                  </>
+                )}
               </div>
 
               <Button 
                 onClick={handleIniciar} 
                 className="w-full bg-red-600 hover:bg-red-700"
-                disabled={modo === 'disciplina' && disciplinasSelecionadas.length === 0}
+                disabled={modo === 'tema' && !temaSelecionado}
               >
                 <Play className="h-4 w-4 mr-2" />
                 Iniciar Simulado

@@ -57,6 +57,7 @@ export default function SimuladoPage() {
         <PlanejamentoCronograma 
           resultado={resultado}
           onVoltarSimulado={handleVoltarConfigurador}
+          configuracao={configuracao}
         />
       ) : resultado ? (
         <div className="max-w-4xl mx-auto space-y-6">

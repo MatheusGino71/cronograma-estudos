@@ -27,11 +27,30 @@ import {
 interface PlanejamentoCronogramaProps {
   resultado: ResultadoSimulado
   onVoltarSimulado: () => void
+  configuracao?: {
+    dataProva?: string
+  }
 }
 
-export function PlanejamentoCronograma({ resultado, onVoltarSimulado }: PlanejamentoCronogramaProps) {
+export function PlanejamentoCronograma({ resultado, onVoltarSimulado, configuracao }: PlanejamentoCronogramaProps) {
   const [horasSemanais, setHorasSemanais] = useState([20])
-  const [periodoEstudo, setPeriodoEstudo] = useState('8-semanas')
+  
+  // Calcular período baseado na data da prova
+  const calcularPeriodoPorDataProva = () => {
+    if (!configuracao?.dataProva) return '8-semanas'
+    
+    const hoje = new Date()
+    const prova = new Date(configuracao.dataProva)
+    const diferencaMilissegundos = prova.getTime() - hoje.getTime()
+    const semanas = Math.ceil(diferencaMilissegundos / (1000 * 60 * 60 * 24 * 7))
+    
+    if (semanas <= 4) return '4-semanas'
+    if (semanas <= 8) return '8-semanas'
+    if (semanas <= 12) return '12-semanas'
+    return '16-semanas'
+  }
+  
+  const [periodoEstudo, setPeriodoEstudo] = useState(calcularPeriodoPorDataProva())
   const [foco, setFoco] = useState('equilibrado')
   const [diasSelecionados, setDiasSelecionados] = useState(['segunda', 'terca', 'quarta', 'quinta', 'sexta'])
   
@@ -330,10 +349,27 @@ export function PlanejamentoCronograma({ resultado, onVoltarSimulado }: Planejam
           <CardTitle className="flex items-center gap-2 text-2xl">
             <Target className="h-6 w-6 text-blue-600" />
             Planejamento de Estudos Personalizado
+            {configuracao?.dataProva && (
+              <Badge variant="outline" className="ml-auto text-orange-600 border-orange-600">
+                Prova: {new Date(configuracao.dataProva).toLocaleDateString('pt-BR')}
+              </Badge>
+            )}
           </CardTitle>
-          <p className="text-muted-foreground">
-            Baseado na sua performance no simulado, criamos um cronograma otimizado para seus pontos de melhoria.
-          </p>
+          <div className="space-y-2">
+            <p className="text-muted-foreground">
+              Baseado na sua performance no simulado, criamos um cronograma otimizado para seus pontos de melhoria.
+            </p>
+            {configuracao?.dataProva && (
+              <p className="text-sm text-orange-600 font-medium">
+                ⏰ {(() => {
+                  const hoje = new Date()
+                  const prova = new Date(configuracao.dataProva)
+                  const semanas = Math.ceil((prova.getTime() - hoje.getTime()) / (1000 * 60 * 60 * 24 * 7))
+                  return `${semanas} semanas restantes até a prova - cronograma adaptado automaticamente`
+                })()}
+              </p>
+            )}
+          </div>
         </CardHeader>
       </Card>
 

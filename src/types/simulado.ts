@@ -37,12 +37,22 @@ export interface ResultadoSimulado {
   respostas: RespostaUsuario[];
 }
 
-export type ModoSimulado = 'geral' | 'disciplina' | 'personalizado';
+export type ModoSimulado = 'geral' | 'tema' | 'personalizado';
+
+export interface TemasConcurso {
+  id: string;
+  nome: string;
+  descricao: string;
+  disciplinas: string[];
+  icone: string;
+}
 
 export interface ConfigSimulado {
   modo: ModoSimulado;
+  tema?: string; // ID do tema selecionado
   disciplinas?: string[];
   numeroQuestoes?: number;
   tempoLimite?: number; // em minutos
   mostrarGabarito?: boolean;
+  dataProva?: string; // data da prova no formato YYYY-MM-DD
 }
