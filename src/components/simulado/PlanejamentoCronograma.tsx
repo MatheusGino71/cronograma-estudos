@@ -24,6 +24,23 @@ import {
   Play
 } from 'lucide-react'
 
+// Função para criar data local evitando problemas de fuso horário
+function criarDataLocal(dataString: string): Date {
+  if (!dataString) return new Date()
+  
+  // Parse da data no formato YYYY-MM-DD como data local
+  const [ano, mes, dia] = dataString.split('-').map(Number)
+  return new Date(ano, mes - 1, dia) // mês é 0-indexado no JavaScript
+}
+
+// Função para formatar data em pt-BR
+function formatarDataBR(dataString: string): string {
+  if (!dataString) return ''
+  
+  const data = criarDataLocal(dataString)
+  return data.toLocaleDateString('pt-BR')
+}
+
 interface PlanejamentoCronogramaProps {
   resultado: ResultadoSimulado
   onVoltarSimulado: () => void
@@ -40,7 +57,7 @@ export function PlanejamentoCronograma({ resultado, onVoltarSimulado, configurac
     if (!configuracao?.dataProva) return '8-semanas'
     
     const hoje = new Date()
-    const prova = new Date(configuracao.dataProva)
+    const prova = criarDataLocal(configuracao.dataProva)
     const diferencaMilissegundos = prova.getTime() - hoje.getTime()
     const semanas = Math.ceil(diferencaMilissegundos / (1000 * 60 * 60 * 24 * 7))
     
@@ -351,7 +368,7 @@ export function PlanejamentoCronograma({ resultado, onVoltarSimulado, configurac
             Planejamento de Estudos Personalizado
             {configuracao?.dataProva && (
               <Badge variant="outline" className="ml-auto text-orange-600 border-orange-600">
-                Prova: {new Date(configuracao.dataProva).toLocaleDateString('pt-BR')}
+                Prova: {formatarDataBR(configuracao.dataProva)}
               </Badge>
             )}
           </CardTitle>
@@ -363,7 +380,7 @@ export function PlanejamentoCronograma({ resultado, onVoltarSimulado, configurac
               <p className="text-sm text-orange-600 font-medium">
                 ⏰ {(() => {
                   const hoje = new Date()
-                  const prova = new Date(configuracao.dataProva)
+                  const prova = criarDataLocal(configuracao.dataProva)
                   const semanas = Math.ceil((prova.getTime() - hoje.getTime()) / (1000 * 60 * 60 * 24 * 7))
                   return `${semanas} semanas restantes até a prova - cronograma adaptado automaticamente`
                 })()}

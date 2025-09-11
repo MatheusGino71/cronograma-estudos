@@ -17,12 +17,29 @@ interface ConfiguradorSimuladoProps {
   onStart: (config: ConfigSimulado) => void;
 }
 
+// Função para criar data local evitando problemas de fuso horário
+function criarDataLocal(dataString: string): Date {
+  if (!dataString) return new Date()
+  
+  // Parse da data no formato YYYY-MM-DD como data local
+  const [ano, mes, dia] = dataString.split('-').map(Number)
+  return new Date(ano, mes - 1, dia) // mês é 0-indexado no JavaScript
+}
+
+// Função para formatar data em pt-BR
+function formatarDataBR(dataString: string): string {
+  if (!dataString) return ''
+  
+  const data = criarDataLocal(dataString)
+  return data.toLocaleDateString('pt-BR')
+}
+
 // Função para calcular semanas até a prova
 function calcularSemanasAteProva(dataProva: string): number {
   if (!dataProva) return 0
   
   const hoje = new Date()
-  const prova = new Date(dataProva)
+  const prova = criarDataLocal(dataProva)
   const diferencaMilissegundos = prova.getTime() - hoje.getTime()
   const diferencaDias = Math.ceil(diferencaMilissegundos / (1000 * 60 * 60 * 24))
   
@@ -373,7 +390,7 @@ export function ConfiguradorSimulado({ onStart }: ConfiguradorSimuladoProps) {
                     <div className="flex justify-between">
                       <span className="text-sm text-muted-foreground">Data da Prova:</span>
                       <span className="text-sm font-medium">
-                        {new Date(dataProva).toLocaleDateString('pt-BR')}
+                        {formatarDataBR(dataProva)}
                       </span>
                     </div>
                     <div className="flex justify-between">
