@@ -172,8 +172,9 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 
 **Matheus Gino**
 - 🐱 GitHub: [@MatheusGino71](https://github.com/MatheusGino71)
-- 💼 LinkedIn: [Matheus Gino](https://linkedin.com/in/matheusgino)
-- 📧 Email: matheusgino.dev@gmail.com
+- 💼 LinkedIn: www.linkedin.com/in/matheus-silva-gino-92a398263
+- 📧 Email: matheusgino17@icloud.com
+  
 
 ---
 
