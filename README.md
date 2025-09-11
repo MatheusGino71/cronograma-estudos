@@ -707,7 +707,17 @@ CMD ["npm", "start"]
 
 Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
 
-## 🙏 Agradecimentos
+## �‍💻 Desenvolvedor
+
+**Matheus Silva Gino**  
+Desenvolvedor Full Stack & Criador do MindTech
+
+📧 **Email:** [matheusgino17@icloud.com](mailto:matheusgino17@icloud.com)  
+💼 **LinkedIn:** [www.linkedin.com/in/matheus-silva-gino-92a398263](https://www.linkedin.com/in/matheus-silva-gino-92a398263)
+
+*Desenvolvedor apaixonado por tecnologia e educação, criando soluções inovadoras para otimizar o aprendizado e o crescimento acadêmico.*
+
+## �🙏 Agradecimentos
 
 - [Next.js](https://nextjs.org/) - Framework React
 - [shadcn/ui](https://ui.shadcn.com/) - Componentes UI
