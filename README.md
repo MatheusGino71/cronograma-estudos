@@ -8,12 +8,46 @@
 ![Firebase](https://img.shields.io/badge/Firebase-Auth-orange?style=for-the-badge&logo=firebase)
 ![Zustand](https://img.shields.io/badge/Zustand-State-purple?style=for-the-badge)
 
-## 🚀 **Demo Live**
+## 🚀 **Como Acessar o Projeto**
 
-### 🌐 **Acesse o projeto funcionando:**
-**[https://matheusgino71.github.io/cronograma-estudos/](https://matheusgino71.github.io/cronograma-estudos/)**
+### 🌐 **Demo Online - Acesso Imediato**
+**[📱 DEMO AO VIVO - Clique aqui para testar](https://cronograma-estudos-mindtech.vercel.app/)**
 
-*Deploy automático via GitHub Pages*
+> 🎯 **Teste todas as funcionalidades:**
+> 
+> - ✅ Sistema de simulados inteligente
+> - ✅ Chat IA especializado em estudos  
+> - ✅ Cronograma personalizado
+> - ✅ Análise de performance
+> - ✅ Disciplinas jurídicas completas
+
+*Deploy automático via Vercel - Sempre atualizado*
+
+### 💻 **Execução Local**
+
+1. **Clone o repositório:**
+```bash
+git clone https://github.com/MatheusGino71/cronograma-estudos.git
+cd cronograma-estudos
+```
+
+2. **Instale as dependências:**
+```bash
+npm install
+```
+
+3. **Configure as variáveis de ambiente:**
+```bash
+# Crie o arquivo .env.local com suas chaves
+NEXT_PUBLIC_FIREBASE_API_KEY=sua_chave_firebase
+NEXT_PUBLIC_GEMINI_API_KEY=sua_chave_gemini
+```
+
+4. **Execute o projeto:**
+```bash
+npm run dev
+# Acesse: http://localhost:3000
+```
 
 ---
 
