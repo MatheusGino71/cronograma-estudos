@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
@@ -32,15 +31,12 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 export default function Configuracoes() {
   const { theme, setTheme } = useTheme();
   
   const [isLoading, setIsLoading] = useState(false);
   const [showSaveAlert, setShowSaveAlert] = useState(false);
-  const [showPasswordModal, setShowPasswordModal] = useState(false);
-  const [show2FAModal, setShow2FAModal] = useState(false);
 
   // Estados para configurações
   const [userConfig, setUserConfig] = useState({
@@ -132,38 +128,6 @@ export default function Configuracoes() {
         window.location.href = '/';
       }
     }
-  };
-
-  const handleAlterarSenha = () => {
-    setShowPasswordModal(true);
-  };
-
-  const handleConfig2FA = () => {
-    setShow2FAModal(true);
-  };
-
-  const processarAlteracaoSenha = (senhaAtual: string, novaSenha: string) => {
-    // Simular validação de senha
-    if (senhaAtual === '' || novaSenha === '') {
-      alert('Preencha todos os campos');
-      return false;
-    }
-    
-    if (novaSenha.length < 8) {
-      alert('A nova senha deve ter pelo menos 8 caracteres');
-      return false;
-    }
-
-    // Simular sucesso
-    alert('Senha alterada com sucesso!');
-    setShowPasswordModal(false);
-    return true;
-  };
-
-  const processar2FA = (metodo: string) => {
-    // Simular configuração de 2FA
-    alert(`Autenticação de dois fatores configurada via ${metodo}!`);
-    setShow2FAModal(false);
   };
 
   return (
@@ -543,18 +507,10 @@ export default function Configuracoes() {
                       <span>Segurança da Conta</span>
                     </h4>
                     <div className="space-y-2">
-                      <Button 
-                        variant="outline" 
-                        className="w-full"
-                        onClick={handleAlterarSenha}
-                      >
+                      <Button variant="outline" className="w-full">
                         Alterar Senha
                       </Button>
-                      <Button 
-                        variant="outline" 
-                        className="w-full"
-                        onClick={handleConfig2FA}
-                      >
+                      <Button variant="outline" className="w-full">
                         Configurar Autenticação de Dois Fatores
                       </Button>
                     </div>
@@ -631,256 +587,7 @@ export default function Configuracoes() {
               </Card>
             </TabsContent>
           </Tabs>
-
-          {/* Modal Alterar Senha */}
-          <Dialog open={showPasswordModal} onOpenChange={setShowPasswordModal}>
-            <DialogContent className="sm:max-w-md">
-              <DialogHeader>
-                <DialogTitle className="flex items-center space-x-2">
-                  <Key className="h-5 w-5" />
-                  <span>Alterar Senha</span>
-                </DialogTitle>
-                <DialogDescription>
-                  Escolha uma senha forte para proteger sua conta
-                </DialogDescription>
-              </DialogHeader>
-
-              <PasswordChangeForm 
-                onSubmit={processarAlteracaoSenha}
-                onCancel={() => setShowPasswordModal(false)}
-              />
-            </DialogContent>
-          </Dialog>
-
-          {/* Modal 2FA */}
-          <Dialog open={show2FAModal} onOpenChange={setShow2FAModal}>
-            <DialogContent className="sm:max-w-md">
-              <DialogHeader>
-                <DialogTitle className="flex items-center space-x-2">
-                  <Shield className="h-5 w-5" />
-                  <span>Configurar Autenticação de Dois Fatores</span>
-                </DialogTitle>
-                <DialogDescription>
-                  Adicione uma camada extra de segurança à sua conta
-                </DialogDescription>
-              </DialogHeader>
-
-              <TwoFactorSetup 
-                onComplete={processar2FA}
-                onCancel={() => setShow2FAModal(false)}
-              />
-            </DialogContent>
-          </Dialog>
         </div>
-      </div>
-    </div>
-  );
-}
-
-// Componente para alteração de senha
-function PasswordChangeForm({ 
-  onSubmit, 
-  onCancel 
-}: { 
-  onSubmit: (current: string, newPass: string) => boolean; 
-  onCancel: () => void; 
-}) {
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [showPasswords, setShowPasswords] = useState(false);
-  const [errors, setErrors] = useState<string[]>([]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrors([]);
-
-    const validationErrors: string[] = [];
-
-    if (!currentPassword) {
-      validationErrors.push('Senha atual é obrigatória');
-    }
-
-    if (!newPassword) {
-      validationErrors.push('Nova senha é obrigatória');
-    }
-
-    if (newPassword !== confirmPassword) {
-      validationErrors.push('As senhas não coincidem');
-    }
-
-    if (newPassword.length < 8) {
-      validationErrors.push('A nova senha deve ter pelo menos 8 caracteres');
-    }
-
-    if (validationErrors.length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-
-    onSubmit(currentPassword, newPassword);
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      {errors.length > 0 && (
-        <Alert variant="destructive">
-          <AlertDescription>
-            <ul className="list-disc list-inside space-y-1">
-              {errors.map((error, index) => (
-                <li key={index}>{error}</li>
-              ))}
-            </ul>
-          </AlertDescription>
-        </Alert>
-      )}
-
-      <div className="space-y-2">
-        <Label htmlFor="current-password">Senha Atual</Label>
-        <div className="relative">
-          <Input
-            id="current-password"
-            type={showPasswords ? 'text' : 'password'}
-            value={currentPassword}
-            onChange={(e) => setCurrentPassword(e.target.value)}
-            className="pr-10"
-          />
-          <button
-            type="button"
-            onClick={() => setShowPasswords(!showPasswords)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-          >
-            {showPasswords ? <Eye className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-          </button>
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="new-password">Nova Senha</Label>
-        <Input
-          id="new-password"
-          type={showPasswords ? 'text' : 'password'}
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="confirm-password">Confirmar Nova Senha</Label>
-        <Input
-          id="confirm-password"
-          type={showPasswords ? 'text' : 'password'}
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
-      </div>
-
-      <div className="flex space-x-2 pt-4">
-        <Button type="button" variant="outline" onClick={onCancel} className="flex-1">
-          Cancelar
-        </Button>
-        <Button type="submit" className="flex-1">
-          Alterar Senha
-        </Button>
-      </div>
-    </form>
-  );
-}
-
-// Componente para configuração de 2FA
-function TwoFactorSetup({ 
-  onComplete, 
-  onCancel 
-}: { 
-  onComplete: (method: string) => void; 
-  onCancel: () => void; 
-}) {
-  const [selectedMethod, setSelectedMethod] = useState<string>('');
-
-  const methods = [
-    {
-      id: 'app',
-      name: 'App Autenticador',
-      description: 'Use Google Authenticator ou similar',
-      icon: Smartphone,
-      recommended: true
-    },
-    {
-      id: 'email',
-      name: 'E-mail',
-      description: 'Receba códigos por e-mail',
-      icon: Mail,
-      recommended: false
-    },
-    {
-      id: 'sms',
-      name: 'SMS',
-      description: 'Receba códigos por mensagem de texto',
-      icon: Smartphone,
-      recommended: false
-    }
-  ];
-
-  const handleSetup = () => {
-    if (!selectedMethod) {
-      alert('Selecione um método de autenticação');
-      return;
-    }
-
-    const method = methods.find(m => m.id === selectedMethod);
-    onComplete(method?.name || selectedMethod);
-  };
-
-  return (
-    <div className="space-y-4">
-      <div className="space-y-2">
-        {methods.map((method) => {
-          const Icon = method.icon;
-          return (
-            <div
-              key={method.id}
-              className={`p-3 border rounded-lg cursor-pointer transition-colors ${
-                selectedMethod === method.id
-                  ? 'border-primary bg-primary/5'
-                  : 'border-gray-200 hover:border-gray-300'
-              }`}
-              onClick={() => setSelectedMethod(method.id)}
-            >
-              <div className="flex items-center space-x-3">
-                <Icon className="h-5 w-5 text-gray-600" />
-                <div className="flex-1">
-                  <div className="flex items-center space-x-2">
-                    <span className="font-medium">{method.name}</span>
-                    {method.recommended && (
-                      <span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded">
-                        Recomendado
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-sm text-gray-600">{method.description}</p>
-                </div>
-                <div className={`w-4 h-4 rounded-full border-2 ${
-                  selectedMethod === method.id
-                    ? 'border-primary bg-primary'
-                    : 'border-gray-300'
-                }`}>
-                  {selectedMethod === method.id && (
-                    <div className="w-2 h-2 bg-white rounded-full m-0.5" />
-                  )}
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      <div className="flex space-x-2 pt-4">
-        <Button type="button" variant="outline" onClick={onCancel} className="flex-1">
-          Cancelar
-        </Button>
-        <Button onClick={handleSetup} className="flex-1">
-          Configurar
-        </Button>
       </div>
     </div>
   );

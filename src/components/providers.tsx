@@ -3,6 +3,7 @@
 import * as React from "react"
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from '@/components/ui/sonner'
+import { ConfiguracoesProvider } from '@/contexts/ConfiguracoesContext'
 
 // Criar cliente do React Query
 const queryClient = new QueryClient({
@@ -21,8 +22,10 @@ interface ProvidersProps {
 export function Providers({ children }: ProvidersProps) {
   return (
     <QueryClientProvider client={queryClient}>
-      {children}
-      <Toaster />
+      <ConfiguracoesProvider>
+        {children}
+        <Toaster />
+      </ConfiguracoesProvider>
     </QueryClientProvider>
   )
 }

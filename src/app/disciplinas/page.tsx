@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -14,7 +15,7 @@ import { Grid3X3, List, Heart, GitCompare, Star, TrendingUp, BookOpen, Clock } f
 
 export default function DisciplinasPage() {
   const [viewMode, setViewMode] = React.useState<'grid' | 'table'>('grid')
-  const [selectedDiscipline, setSelectedDiscipline] = React.useState<Discipline | null>(null)
+  const router = useRouter()
   
   const { data: disciplines = [], isLoading } = useFilteredDisciplines()
   const { data: stats = [] } = useDisciplineStats()
@@ -27,7 +28,7 @@ export default function DisciplinasPage() {
     : 0
   
   const handleViewDetails = (discipline: Discipline) => {
-    setSelectedDiscipline(discipline)
+    router.push(`/disciplinas/${discipline.id}`)
   }
 
   if (isLoading) {

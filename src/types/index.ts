@@ -8,10 +8,28 @@ export interface Discipline {
   durationMin: number; // carga estimada
   tags: string[];
   description?: string;
+  keyTopics?: string[];
+  studyTips?: string[];
+  contentStructure?: Array<{
+    title: string;
+    description: string;
+    topics: string[];
+  }>;
+  detailedContent?: {
+    modules?: Array<{
+      name: string;
+      topics: string[];
+      estimatedHours: number;
+    }>;
+    bibliography?: string[];
+    jurisprudence?: string[];
+  };
   materials?: {
     videos?: number;
     pdfs?: number;
     exercises?: number;
+    simulados?: number;
+    resumos?: number;
   };
   prerequisites?: string[];
 }

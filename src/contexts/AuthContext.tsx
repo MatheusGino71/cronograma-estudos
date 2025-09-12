@@ -91,6 +91,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       setAuthState(prev => ({ ...prev, loading: true, error: null }));
       
+      // Modo de desenvolvimento - permite login com qualquer email/senha
+      if (process.env.NODE_ENV === 'development') {
+        const mockUser: User = {
+          id: 'dev-user-1',
+          email: data.email,
+          name: 'Usuário',
+          lastName: 'Desenvolvimento',
+          phone: '',
+          avatar: '',
+          createdAt: new Date(),
+          updatedAt: new Date()
+        };
+        
+        setAuthState({
+          user: mockUser,
+          loading: false,
+          error: null
+        });
+        return;
+      }
+      
       const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
       const user = await createUserFromFirebase(userCredential.user);
       
@@ -132,6 +153,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const register = async (data: RegisterData) => {
     try {
       setAuthState(prev => ({ ...prev, loading: true, error: null }));
+      
+      // Modo de desenvolvimento - permite registro sem Firebase
+      if (process.env.NODE_ENV === 'development') {
+        const mockUser: User = {
+          id: 'dev-user-' + Date.now(),
+          email: data.email,
+          name: data.name,
+          lastName: data.lastName || '',
+          phone: data.phone || '',
+          avatar: '',
+          createdAt: new Date(),
+          updatedAt: new Date()
+        };
+        
+        setAuthState({
+          user: mockUser,
+          loading: false,
+          error: null
+        });
+        return;
+      }
       
       const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
       
@@ -234,6 +276,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Listen to Firebase auth state changes
   useEffect(() => {
+    // Em modo de desenvolvimento, não conecta ao Firebase
+    if (process.env.NODE_ENV === 'development') {
+      setAuthState({
+        user: null,
+        loading: false,
+        error: null
+      });
+      return;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       try {
         if (firebaseUser) {
