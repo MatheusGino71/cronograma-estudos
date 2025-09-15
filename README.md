@@ -1,4 +1,33 @@
-# 🎓 MindTech - Sistema Inteligente de Cronograma de Estudos
+# 🎓 MindT## 🚀 **Como Acessar o Projeto**
+
+### 🌐 **Acesso Instantâneo**
+
+**[🎓 TESTE O PROJETO AGORA - Clique aqui](https://github.com/MatheusGino71/cronograma-estudos/archive/refs/heads/main.zip)**
+
+> **📥 Download direto do código fonte**
+> 
+> 1. Baixe o arquivo ZIP (clique no link acima)
+> 2. Extraia em seu computador
+> 3. Abra um terminal na pasta extraída
+> 4. Execute: `npm install && npm run dev`
+> 5. Acesse: `http://localhost:3000`
+
+### 🚀 **Teste Online (Recomendado)**
+
+**[📱 VERSÃO DEMO - GitHub Pages](https://matheusgino71.github.io/cronograma-estudos)**
+
+> 🎯 **Funcionalidades disponíveis:**
+> 
+> - ✅ Sistema de simulados com 12 temas especializados
+> - ✅ Chat IA jurídico especializado  
+> - ✅ Cronograma personalizado por disciplina
+> - ✅ Análise detalhada de performance
+> - ✅ 15+ disciplinas com conteúdo completo
+> - ✅ Sistema de favoritos e comparação
+> - ✅ Interface responsiva e moderna
+> - ✅ Dados de exemplo pré-carregados
+
+*🔄 Atualizado automaticamente a cada commit*teligente de Cronograma de Estudos
 
 **Uma plataforma completa para otimizar seus estudos com inteligência artificial e análise de performance.**
 
@@ -11,17 +40,19 @@
 ## 🚀 **Como Acessar o Projeto**
 
 ### 🌐 **Demo Online - Acesso Imediato**
-**[📱 DEMO AO VIVO - Clique aqui para testar](https://cronograma-estudos-mindtech.vercel.app/)**
+**[📱 ACESSAR PROJETO - Clique aqui para usar](https://github.com/MatheusGino71/cronograma-estudos)**
 
-> 🎯 **Teste todas as funcionalidades:**
+> 🎯 **Funcionalidades disponíveis para teste:**
 > 
-> - ✅ Sistema de simulados inteligente
-> - ✅ Chat IA especializado em estudos  
-> - ✅ Cronograma personalizado
-> - ✅ Análise de performance
-> - ✅ Disciplinas jurídicas completas
+> - ✅ Sistema de simulados inteligente com 12 temas
+> - ✅ Chat IA especializado em estudos jurídicos
+> - ✅ Cronograma personalizado por disciplina
+> - ✅ Análise detalhada de performance e progresso
+> - ✅ 15+ disciplinas jurídicas com conteúdo completo
+> - ✅ Sistema de favoritos e comparação
+> - ✅ Interface responsiva e moderna
 
-*Deploy automático via Vercel - Sempre atualizado*
+*📋 **Para testar localmente**: Clone o repositório e siga as instruções abaixo*
 
 ### 💻 **Execução Local**
 
