@@ -1,4 +1,6 @@
-# 🎓 MindT## 🚀 **Como Acessar o Projeto**
+# 🎓 MindTech 
+
+🚀 **Como Acessar o Projeto**
 
 ### 🌐 **Acesso Instantâneo**
 
