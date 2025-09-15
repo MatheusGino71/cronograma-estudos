@@ -14,22 +14,6 @@
 > 4. Execute: `npm install && npm run dev`
 > 5. Acesse: `http://localhost:3000`
 
-### 🚀 **Teste Online (Recomendado)**
-
-**[📱 VERSÃO DEMO - GitHub Pages](https://matheusgino71.github.io/cronograma-estudos)**
-
-> 🎯 **Funcionalidades disponíveis:**
-> 
-> - ✅ Sistema de simulados com 12 temas especializados
-> - ✅ Chat IA jurídico especializado  
-> - ✅ Cronograma personalizado por disciplina
-> - ✅ Análise detalhada de performance
-> - ✅ 15+ disciplinas com conteúdo completo
-> - ✅ Sistema de favoritos e comparação
-> - ✅ Interface responsiva e moderna
-> - ✅ Dados de exemplo pré-carregados
-
-*🔄 Atualizado automaticamente a cada commit*teligente de Cronograma de Estudos
 
 **Uma plataforma completa para otimizar seus estudos com inteligência artificial e análise de performance.**
 
@@ -147,7 +131,6 @@ npm run dev
 ## 🚦 **Como Usar**
 
 ### 1. **Acesse o Sistema**
-👉 **[cronograma-estudos.vercel.app](https://cronograma-estudos.vercel.app)**
 
 ### 2. **Faça Login**
 - Clique em "Entrar" no canto superior direito
