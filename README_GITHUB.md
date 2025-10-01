@@ -92,9 +92,17 @@ Sistema completo de cronograma de estudos com recursos avançados de IA, incluin
 - Conta Firebase
 - Chaves de API (NotebookLM, Gemini, ElevenLabs)
 
+## 🚀 **Demo Online**
+
+### **📱 [ACESSAR DEMO AO VIVO](https://cronograma-estudos-ai.vercel.app)**
+
+*Experimente todas as funcionalidades da plataforma sem instalação!*
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/MatheusGino71/cronograma-estudos)
+
 ### 1. Clone o repositório
 ```bash
-git clone https://github.com/seu-usuario/cronograma-estudos.git
+git clone https://github.com/MatheusGino71/cronograma-estudos.git
 cd cronograma-estudos
 ```
 
@@ -252,10 +260,11 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 
 ## 📞 Suporte
 
-- 📧 Email: suporte@cronograma-estudos.com
-- 💬 Discord: [Link do servidor]
-- 📖 Documentação: [docs/](docs/)
-- 🐛 Issues: [GitHub Issues](https://github.com/seu-usuario/cronograma-estudos/issues)
+- 🌐 **Demo Online**: https://cronograma-estudos-ai.vercel.app
+- � **Repositório**: https://github.com/MatheusGino71/cronograma-estudos
+- 📖 **Documentação**: [DEMO.md](DEMO.md)
+- 🐛 **Issues**: [GitHub Issues](https://github.com/MatheusGino71/cronograma-estudos/issues)
+- 📧 **Email**: mindtech.suporte@gmail.com
 
 ## 🙏 Agradecimentos
 

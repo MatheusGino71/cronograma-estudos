@@ -9,7 +9,10 @@ export interface GeminiResponse {
       }>;
     };
     finishReason: string;
-    safetyRatings: Array<any>;
+    safetyRatings: Array<{
+      category: string;
+      probability: string;
+    }>;
   }>;
   usageMetadata: {
     promptTokenCount: number;
@@ -19,13 +22,16 @@ export interface GeminiResponse {
 }
 
 export async function callGeminiAPI(prompt: string): Promise<{ success: boolean; text: string; error?: string }> {
-  const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+  // Tentar usar a chave do servidor primeiro, depois a do cliente
+  const apiKey = process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+  
+  console.log('🔑 Gemini API Key configurada:', !!apiKey);
   
   if (!apiKey) {
     return {
       success: false,
       text: '',
-      error: 'API Key do Gemini não configurada. Adicione NEXT_PUBLIC_GEMINI_API_KEY no .env.local'
+      error: 'API Key do Gemini não configurada. Adicione GEMINI_API_KEY ou NEXT_PUBLIC_GEMINI_API_KEY no .env.local'
     };
   }
 
@@ -59,11 +65,12 @@ export async function callGeminiAPI(prompt: string): Promise<{ success: boolean;
       const errorText = await response.text();
       console.error('Erro na API do Gemini:', response.status, errorText);
       
-      if (response.status === 403) {
+      // Tratar erro de API key inválida
+      if (response.status === 400 || response.status === 403) {
         return {
           success: false,
           text: '',
-          error: 'API Key inválida ou sem permissão. Verifique sua chave do Gemini.'
+          error: 'API_KEY_INVALID'
         };
       }
       

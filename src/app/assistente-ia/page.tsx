@@ -24,6 +24,8 @@ import {
   BarChart3
 } from 'lucide-react';
 import { useState } from 'react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { AlertTriangle } from 'lucide-react';
 
 export default function AssistenteIA() {
   const [activeTab, setActiveTab] = useState('chat');
@@ -125,6 +127,18 @@ export default function AssistenteIA() {
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto py-8 px-4">
         <div className="max-w-7xl mx-auto">
+          
+          {/* Aviso sobre configuração da API */}
+          <Alert className="mb-6 border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-900/20">
+            <AlertTriangle className="h-4 w-4 text-blue-600" />
+            <AlertDescription className="text-blue-800 dark:text-blue-200">
+              <strong>💡 Dica:</strong> Para habilitar respostas reais da IA, configure sua chave do Google Gemini no Chat IA. 
+              <Link href="/chat-ia" className="underline ml-1 font-semibold">
+                Clique aqui para configurar →
+              </Link>
+            </AlertDescription>
+          </Alert>
+
           {/* Cabeçalho */}
           <div className="text-center mb-8">
             <div className="flex items-center justify-center mb-4">

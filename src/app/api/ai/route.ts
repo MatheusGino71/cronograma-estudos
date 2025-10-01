@@ -203,10 +203,18 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { type, data } = body;
 
-    // Verificar se a API key do Gemini está configurada
-    const hasGeminiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY && 
-                        process.env.NEXT_PUBLIC_GEMINI_API_KEY !== '' &&
-                        !process.env.NEXT_PUBLIC_GEMINI_API_KEY.includes('sua_chave');
+    // Verificar se a API key do Gemini está configurada (cliente ou servidor)
+    const clientKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+    const serverKey = process.env.GEMINI_API_KEY;
+    
+    const hasGeminiKey = (clientKey && clientKey !== '' && !clientKey.includes('sua_chave')) ||
+                        (serverKey && serverKey !== '' && !serverKey.includes('sua_chave'));
+    
+    console.log('🔑 Verificando API Keys:', {
+      hasClientKey: !!clientKey,
+      hasServerKey: !!serverKey,
+      hasValidKey: hasGeminiKey
+    });
 
     if (!hasGeminiKey) {
       // Usar respostas simuladas
@@ -225,8 +233,9 @@ export async function POST(request: NextRequest) {
 
       return NextResponse.json({
         success: true,
-        response: `${simulatedResponse}\n\n---\n\n⚠️ **Modo Demonstração**: Esta resposta é simulada. Para respostas reais da IA, configure sua chave da API do Google Gemini no arquivo \`.env.local\`:\n\n\`\`\`\nNEXT_PUBLIC_GEMINI_API_KEY=sua_chave_aqui\n\`\`\`\n\nObtenha sua chave em: https://makersuite.google.com/app/apikey`,
-        timestamp: new Date().toISOString()
+        response: `${simulatedResponse}\n\n---\n\n⚠️ **Modo Demonstração**: Esta resposta foi simulada. Para habilitar o **Chat IA** e **Assistente IA** completos, configure sua chave da API do Google Gemini:\n\n### 🔧 **Como configurar:**\n\n1. **Obtenha sua chave gratuita**: [Google AI Studio](https://makersuite.google.com/app/apikey)\n2. **Crie o arquivo** \`.env.local\` na raiz do projeto\n3. **Adicione a linha**:\n   \`\`\`\n   # Para Chat IA e Assistente IA\n   NEXT_PUBLIC_GEMINI_API_KEY=sua_chave_aqui\n   \`\`\`\n4. **Reinicie o servidor**: \`npm run dev\`\n\n### ✨ **Com a API configurada você terá**:\n- 🤖 Respostas reais da IA especializada em Direito\n- 📚 Explicações detalhadas de conceitos jurídicos\n- 📅 Cronogramas personalizados inteligentes\n- 🎯 Questões específicas para seu concurso\n- 💬 Chat interativo ilimitado`,
+        timestamp: new Date().toISOString(),
+        isDemo: true
       });
     }
 
@@ -273,6 +282,29 @@ export async function POST(request: NextRequest) {
     }
 
     if (!result.success) {
+      // Se for erro de API key inválida, usar resposta simulada
+      if (result.error === 'API_KEY_INVALID') {
+        let simulatedResponse = SIMULATED_RESPONSES.default;
+
+        if (data.question) {
+          const question = data.question.toLowerCase();
+          if (question.includes('cronograma') || question.includes('plano') || question.includes('estudo')) {
+            simulatedResponse = SIMULATED_RESPONSES.cronograma;
+          } else if (question.includes('explique') || question.includes('conceito') || question.includes('princípio') || question.includes('legalidade')) {
+            simulatedResponse = SIMULATED_RESPONSES.conceito;
+          } else if (question.includes('questão') || question.includes('questões') || question.includes('simulado')) {
+            simulatedResponse = SIMULATED_RESPONSES.questoes;
+          }
+        }
+
+        return NextResponse.json({
+          success: true,
+          response: `${simulatedResponse}\n\n---\n\n⚠️ **API Key Inválida**: A chave do Google Gemini no \`.env.local\` não é válida. Para usar a IA real:\n\n### 🔧 **Como obter uma chave válida:**\n\n1. **Acesse**: [Google AI Studio](https://makersuite.google.com/app/apikey)\n2. **Faça login** com sua conta Google\n3. **Clique** em "Create API Key"\n4. **Copie** a chave gerada\n5. **Substitua** no arquivo \`.env.local\`:\n   \`\`\`\n   NEXT_PUBLIC_GEMINI_API_KEY=sua_chave_real_aqui\n   \`\`\`\n6. **Reinicie** o servidor: \`npm run dev\`\n\n### ✨ **A API do Gemini é gratuita** com cota generosa para uso pessoal!`,
+          timestamp: new Date().toISOString(),
+          isDemo: true
+        });
+      }
+      
       return NextResponse.json(
         { error: result.error },
         { status: 500 }

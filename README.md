@@ -11,19 +11,27 @@
 ## 🚀 **Como Acessar o Projeto**
 
 ### 🌐 **Demo Online - Acesso Imediato**
-**[📱 ACESSAR PROJETO - Clique aqui para usar](https://github.com/MatheusGino71/cronograma-estudos)**
 
-> 🎯 **Funcionalidades disponíveis para teste:**
+#### **� [DEMO AO VIVO - Clique aqui](https://cronograma-estudos-ai.vercel.app)**
+
+*Ou acesse: https://cronograma-estudos-ai.vercel.app*
+
+> 🎯 **Funcionalidades disponíveis na demo:**
 > 
-> - ✅ Sistema de simulados inteligente com 12 temas
-> - ✅ Chat IA especializado em estudos jurídicos
-> - ✅ Cronograma personalizado por disciplina
-> - ✅ Análise detalhada de performance e progresso
-> - ✅ 15+ disciplinas jurídicas com conteúdo completo
-> - ✅ Sistema de favoritos e comparação
-> - ✅ Interface responsiva e moderna
+> - ✅ **NotebookLM IA**: Mapas mentais, podcasts e videoaulas com IA
+> - ✅ **Sistema de Vozes**: ElevenLabs + Web Speech API  
+> - ✅ **Firebase Database**: 5.422+ questões jurídicas reais
+> - ✅ **Simulados Inteligentes**: Sistema completo de questões
+> - ✅ **Chat IA Especializado**: Assistente para estudos jurídicos
+> - ✅ **Cronograma Personalizado**: Planejamento inteligente
+> - ✅ **Analytics Avançados**: Acompanhamento de progresso
+> - ✅ **Interface Moderna**: Responsiva com tema escuro/claro
 
-*📋 **Para testar localmente**: Clone o repositório e siga as instruções abaixo*
+#### **📚 [Guia da Demo Detalhado](DEMO.md)**
+
+*📋 **Para deploy próprio**: Use o botão do Vercel abaixo ou siga as instruções*
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/MatheusGino71/cronograma-estudos)
 
 ### 💻 **Execução Local**
 

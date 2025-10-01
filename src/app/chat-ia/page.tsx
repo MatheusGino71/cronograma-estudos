@@ -3,12 +3,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
-import { Send, Bot, User, Loader2, Lightbulb, BookOpen, Calendar, HelpCircle, ArrowLeft } from 'lucide-react';
+import { Send, Bot, User, Loader2, Lightbulb, BookOpen, Calendar, HelpCircle, ArrowLeft, Settings } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
+
+const GeminiSetup = dynamic(() => import('@/components/ai/GeminiSetup'), { ssr: false });
 
 interface Message {
   id: string;
@@ -49,6 +51,7 @@ export default function ChatPage() {
       timestamp: new Date()
     }
   ]);
+  const [showSetup, setShowSetup] = useState(false);
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -111,6 +114,11 @@ export default function ChatPage() {
           timestamp: new Date()
         };
         setMessages(prev => [...prev, aiMessage]);
+        
+        // Se for uma resposta de demo, mostrar opção de configuração
+        if (result.isDemo) {
+          setShowSetup(true);
+        }
       } else {
         throw new Error(result.error || 'Erro desconhecido');
       }
@@ -162,17 +170,37 @@ export default function ChatPage() {
                 </h1>
                 <p className="text-sm text-gray-600 dark:text-gray-400">Chat Interativo</p>
               </div>
-              <Badge variant="secondary" className="ml-auto bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400">
-                <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
-                Online
-              </Badge>
+              <div className="ml-auto flex items-center gap-2">
+                {showSetup && (
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => setShowSetup(!showSetup)}
+                    className="gap-2 border-blue-200 text-blue-600 bg-blue-50 hover:bg-blue-100"
+                  >
+                    <Settings className="h-4 w-4" />
+                    Configurar IA
+                  </Button>
+                )}
+                <Badge variant="secondary" className="bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+                  {showSetup ? 'Demo' : 'Online'}
+                </Badge>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
+      {/* Configuração da API */}
+      {showSetup && (
+        <div className="container mx-auto px-4 py-6">
+          <GeminiSetup />
+        </div>
+      )}
+
       {/* Chat Container */}
-      <div className="container mx-auto px-4 py-4 h-[calc(100vh-80px)]">
+      <div className={`container mx-auto px-4 py-4 ${showSetup ? 'h-auto' : 'h-[calc(100vh-80px)]'}`}>
         <div className="h-full max-w-4xl mx-auto flex flex-col">
           
           {/* Messages Area */}
@@ -198,23 +226,7 @@ export default function ChatPage() {
                       }`}
                     >
                       <div className="prose prose-sm max-w-none dark:prose-invert">
-                        <ReactMarkdown
-                          components={{
-                            p: ({ children }: any) => <p className="mb-2 last:mb-0 leading-relaxed">{children}</p>,
-                            ul: ({ children }: any) => <ul className="list-disc list-inside mb-2 space-y-1">{children}</ul>,
-                            ol: ({ children }: any) => <ol className="list-decimal list-inside mb-2 space-y-1">{children}</ol>,
-                            li: ({ children }: any) => <li className="mb-1">{children}</li>,
-                            strong: ({ children }: any) => <strong className="font-semibold text-blue-600 dark:text-blue-400">{children}</strong>,
-                            code: ({ children }: any) => (
-                              <code className="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded text-sm font-mono">
-                                {children}
-                              </code>
-                            ),
-                            h1: ({ children }: any) => <h1 className="text-lg font-bold mb-3 text-blue-600 dark:text-blue-400 border-b pb-1">{children}</h1>,
-                            h2: ({ children }: any) => <h2 className="text-md font-semibold mb-2 text-blue-600 dark:text-blue-400">{children}</h2>,
-                            h3: ({ children }: any) => <h3 className="text-sm font-semibold mb-1 text-blue-600 dark:text-blue-400">{children}</h3>,
-                          }}
-                        >
+                        <ReactMarkdown>
                           {message.text}
                         </ReactMarkdown>
                       </div>
