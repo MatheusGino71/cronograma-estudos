@@ -190,24 +190,39 @@ export default function PraticaQuestoesPage() {
   }
 
   const handleFinalizar = () => {
-    const acertos = questoes.filter((q, idx) => {
+    const tempoTotal = Date.now() - tempoInicio
+    const respondidas = Object.keys(respostasUsuario).length
+    const corretas = questoes.filter((q, idx) => {
       const resposta = respostasUsuario[idx]
       return q.alternativas.find(a => a.letra === resposta)?.correta
     }).length
+    const incorretas = respondidas - corretas
 
     const resultado = {
-      total: questoes.length,
-      acertos,
-      erros: questoes.length - acertos,
-      percentual: Math.round((acertos / questoes.length) * 100),
       questoes: questoes.map((q, idx) => ({
-        questao: q,
-        respostaUsuario: respostasUsuario[idx],
-        acertou: q.alternativas.find(a => a.letra === respostasUsuario[idx])?.correta || false
-      }))
+        id: q.id,
+        area: q.area,
+        enunciado: q.enunciado,
+        alternativas: q.alternativas,
+        respostaUsuario: {
+          alternativaSelecionada: respostasUsuario[idx] || null,
+          correta: respostasUsuario[idx] 
+            ? q.alternativas.find(a => a.letra === respostasUsuario[idx])?.correta || false
+            : null
+        }
+      })),
+      estatisticas: {
+        total: questoes.length,
+        respondidas,
+        corretas,
+        incorretas,
+        porcentagem: respondidas > 0 ? Math.round((corretas / respondidas) * 100) : 0,
+        tempoTotal
+      }
     }
 
     sessionStorage.setItem('resultado-pratica', JSON.stringify(resultado))
+    sessionStorage.setItem('questoes-pratica', JSON.stringify(questoes))
     router.push('/questoes/resultado')
   }
 
