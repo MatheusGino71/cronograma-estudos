@@ -57,7 +57,7 @@ export default function ResultadoPage() {
     }
   }, [router])
 
-  if (!resultado) {
+  if (!resultado || !resultado.estatisticas) {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-center min-h-[400px]">
@@ -71,12 +71,12 @@ export default function ResultadoPage() {
   }
 
   const { estatisticas } = resultado
-  const tempoMedio = estatisticas.respondidas > 0 
+  const tempoMedio = (estatisticas?.respondidas && estatisticas.respondidas > 0)
     ? Math.round(estatisticas.tempoTotal / estatisticas.respondidas / 1000)
     : 0
 
   const getMensagem = () => {
-    const porcentagem = estatisticas.porcentagem
+    const porcentagem = estatisticas?.porcentagem || 0
     if (porcentagem >= 90) return { texto: "Excelente! Desempenho excepcional! 🏆", cor: "text-yellow-600" }
     if (porcentagem >= 70) return { texto: "Muito Bom! Continue assim! 🎯", cor: "text-green-600" }
     if (porcentagem >= 50) return { texto: "Bom trabalho! Há espaço para melhorar. 💪", cor: "text-blue-600" }
@@ -113,9 +113,9 @@ export default function ResultadoPage() {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-purple-600">
-              {Math.round(estatisticas.porcentagem)}%
+              {Math.round(estatisticas?.porcentagem || 0)}%
             </div>
-            <Progress value={estatisticas.porcentagem} className="mt-2 h-2" />
+            <Progress value={estatisticas?.porcentagem || 0} className="mt-2 h-2" />
           </CardContent>
         </Card>
 
@@ -126,10 +126,10 @@ export default function ResultadoPage() {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-green-600">
-              {estatisticas.corretas}
+              {estatisticas?.corretas || 0}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
-              de {estatisticas.respondidas} respondidas
+              de {estatisticas?.respondidas || 0} respondidas
             </p>
           </CardContent>
         </Card>
@@ -141,7 +141,7 @@ export default function ResultadoPage() {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-red-600">
-              {estatisticas.incorretas}
+              {estatisticas?.incorretas || 0}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
               questões erradas
@@ -180,7 +180,7 @@ export default function ResultadoPage() {
                 <Award className="h-5 w-5 text-blue-600" />
                 <span className="font-semibold text-blue-900">Total de Questões</span>
               </div>
-              <p className="text-2xl font-bold text-blue-700">{estatisticas.total}</p>
+              <p className="text-2xl font-bold text-blue-700">{estatisticas?.total || 0}</p>
             </div>
 
             <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
@@ -189,7 +189,7 @@ export default function ResultadoPage() {
                 <span className="font-semibold text-purple-900">Tempo Total</span>
               </div>
               <p className="text-2xl font-bold text-purple-700">
-                {Math.floor(estatisticas.tempoTotal / 60000)}min {Math.floor((estatisticas.tempoTotal % 60000) / 1000)}s
+                {Math.floor((estatisticas?.tempoTotal || 0) / 60000)}min {Math.floor(((estatisticas?.tempoTotal || 0) % 60000) / 1000)}s
               </p>
             </div>
           </div>
@@ -201,29 +201,33 @@ export default function ResultadoPage() {
                 <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                 Corretas
               </span>
-              <span className="font-semibold">{estatisticas.corretas} ({Math.round((estatisticas.corretas / estatisticas.respondidas) * 100)}%)</span>
+              <span className="font-semibold">
+                {estatisticas?.corretas || 0} ({estatisticas?.respondidas ? Math.round(((estatisticas.corretas || 0) / estatisticas.respondidas) * 100) : 0}%)
+              </span>
             </div>
-            <Progress value={(estatisticas.corretas / estatisticas.respondidas) * 100} className="h-3 bg-green-100" />
+            <Progress value={estatisticas?.respondidas ? ((estatisticas.corretas || 0) / estatisticas.respondidas) * 100 : 0} className="h-3 bg-green-100" />
 
             <div className="flex items-center justify-between text-sm">
               <span className="flex items-center gap-2">
                 <div className="w-3 h-3 bg-red-500 rounded-full"></div>
                 Incorretas
               </span>
-              <span className="font-semibold">{estatisticas.incorretas} ({Math.round((estatisticas.incorretas / estatisticas.respondidas) * 100)}%)</span>
+              <span className="font-semibold">
+                {estatisticas?.incorretas || 0} ({estatisticas?.respondidas ? Math.round(((estatisticas.incorretas || 0) / estatisticas.respondidas) * 100) : 0}%)
+              </span>
             </div>
-            <Progress value={(estatisticas.incorretas / estatisticas.respondidas) * 100} className="h-3 bg-red-100" />
+            <Progress value={estatisticas?.respondidas ? ((estatisticas.incorretas || 0) / estatisticas.respondidas) * 100 : 0} className="h-3 bg-red-100" />
 
-            {estatisticas.total > estatisticas.respondidas && (
+            {estatisticas && estatisticas.total > (estatisticas.respondidas || 0) && (
               <>
                 <div className="flex items-center justify-between text-sm">
                   <span className="flex items-center gap-2">
                     <div className="w-3 h-3 bg-gray-400 rounded-full"></div>
                     Não Respondidas
                   </span>
-                  <span className="font-semibold">{estatisticas.total - estatisticas.respondidas}</span>
+                  <span className="font-semibold">{estatisticas.total - (estatisticas.respondidas || 0)}</span>
                 </div>
-                <Progress value={((estatisticas.total - estatisticas.respondidas) / estatisticas.total) * 100} className="h-3 bg-gray-100" />
+                <Progress value={((estatisticas.total - (estatisticas.respondidas || 0)) / estatisticas.total) * 100} className="h-3 bg-gray-100" />
               </>
             )}
           </div>
