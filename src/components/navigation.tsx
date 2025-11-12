@@ -5,7 +5,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { Calendar, BookOpen, BarChart3, Menu, X, FileText, LogIn, Sun, Moon, Bot, Sparkles } from "lucide-react"
+import { Calendar, BookOpen, BarChart3, Menu, X, FileText, LogIn, Sun, Moon, Bot, GraduationCap } from "lucide-react"
 import { useAuth } from "@/contexts/AuthContext"
 import { useTheme } from "@/contexts/ThemeContext"
 import { AuthModal } from "@/components/auth/AuthModal"
@@ -25,22 +25,16 @@ const navigation = [
     description: 'Catálogo de matérias'
   },
   {
+    name: 'Questões',
+    href: '/questoes',
+    icon: GraduationCap,
+    description: 'Pratique com questões reais'
+  },
+  {
     name: 'Chat IA',
     href: '/chat-ia',
     icon: Bot,
     description: 'Chat direto com MindLegal AI'
-  },
-  {
-    name: 'Assistente IA',
-    href: '/assistente-ia',
-    icon: Bot,
-    description: 'MindLegal AI - Recursos completos'
-  },
-  {
-    name: 'NotebookLM IA',
-    href: '/notebook-ia',
-    icon: Sparkles,
-    description: 'Mapas mentais, podcasts e aulas IA'
   },
   {
     name: 'Simulado',

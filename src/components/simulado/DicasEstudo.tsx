@@ -113,9 +113,9 @@ export function DicasEstudo({ resultadosPorDisciplina, percentualGeral }: DicasE
   }
 
   const calcularTempoMedioResposta = (): number => {
-    // Esta função seria implementada com dados reais do simulado
-    // Por enquanto, retornamos um valor mockado
-    return 120 // 2 minutos por questão (exemplo)
+    // Cálculo baseado nos resultados por disciplina
+    // Retorna 0 até que tenhamos dados reais de tempo
+    return 0
   }
 
   const dicas = gerarDicas()

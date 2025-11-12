@@ -19,7 +19,8 @@ import {
 } from "@/components/ui/select"
 import { useDisciplines } from "@/hooks/useDisciplines"
 import { useDisciplineStore } from "@/store/discipline"
-import { DisciplinePodcastGenerator } from "@/components/disciplines/DisciplinePodcastGenerator"
+import { carregarQuestoes, filtrarQuestoesPorDisciplina, embaralharArray, type QuestaoAgrupada } from "@/lib/questoes-loader"
+import { getConteudoPorDisciplina, getTotalTempoEstimado } from "@/lib/conteudo-disciplinas"
 import { 
   ArrowLeft, 
   Heart, 
@@ -28,10 +29,8 @@ import {
   BookOpen, 
   GraduationCap,
   Star,
-  Video,
   FileText,
   Download,
-  Play,
   CheckCircle,
   Target,
   Lightbulb,
@@ -39,8 +38,9 @@ import {
   Users,
   Calendar,
   TrendingUp,
-  Eye,
-  Settings
+  Settings,
+  List,
+  ChevronRight
 } from "lucide-react"
 
 const levelColors = {
@@ -67,6 +67,9 @@ export default function DisciplineDetailsPage() {
     canAddToComparison 
   } = useDisciplineStore()
 
+  const [questoesDisciplina, setQuestoesDisciplina] = React.useState<QuestaoAgrupada[]>([])
+  const [carregandoQuestoes, setCarregandoQuestoes] = React.useState(true)
+
   const disciplineId = params.id as string
   const discipline = disciplines.find(d => d.id === disciplineId)
 
@@ -75,6 +78,23 @@ export default function DisciplineDetailsPage() {
       router.push('/disciplinas')
     }
   }, [discipline, disciplines, router])
+
+  // Carrega as questões
+  React.useEffect(() => {
+    async function loadQuestoes() {
+      setCarregandoQuestoes(true)
+      const todasQuestoes = await carregarQuestoes()
+      
+      if (discipline) {
+        const questoesFiltradas = filtrarQuestoesPorDisciplina(todasQuestoes, discipline.name)
+        setQuestoesDisciplina(embaralharArray(questoesFiltradas))
+      }
+      
+      setCarregandoQuestoes(false)
+    }
+    
+    loadQuestoes()
+  }, [discipline])
 
   if (!discipline) {
     return (
@@ -103,7 +123,8 @@ export default function DisciplineDetailsPage() {
     }
   }
 
-  const progress = Math.floor(Math.random() * 100) // Mock progress
+  // Progresso real seria calculado baseado nas atividades concluídas
+  const progress = 0
 
   return (
     <div className="container mx-auto py-8 space-y-8">
@@ -291,144 +312,174 @@ export default function DisciplineDetailsPage() {
         </TabsContent>
 
         <TabsContent value="content" className="space-y-6">
-          {/* Content Structure */}
-          {discipline.contentStructure && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <BookOpen className="h-5 w-5" />
-                  Estrutura do Conteúdo
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {discipline.contentStructure.map((module, index) => (
-                    <div key={index} className="border rounded-lg p-4">
-                      <h4 className="font-semibold mb-2">{module.title}</h4>
-                      <p className="text-sm text-muted-foreground mb-3">{module.description}</p>
-                      <div className="space-y-1">
-                        {module.topics.map((topic, topicIndex) => (
-                          <div key={topicIndex} className="flex items-center gap-2">
-                            <div className="h-1 w-1 bg-gray-400 rounded-full" />
-                            <span className="text-sm">{topic}</span>
+          {/* Conteúdo Programático Detalhado */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <List className="h-5 w-5" />
+                Conteúdo Programático Completo
+              </CardTitle>
+              <p className="text-sm text-muted-foreground mt-2">
+                Todos os tópicos que você precisa dominar em {discipline.name}
+              </p>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {getConteudoPorDisciplina(discipline.id).map((topico, index) => (
+                  <div key={topico.id} className="border rounded-lg p-5 hover:shadow-md transition-shadow">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-700 font-semibold text-sm">
+                            {index + 1}
                           </div>
-                        ))}
+                          <h4 className="font-semibold text-lg">{topico.titulo}</h4>
+                        </div>
+                        <p className="text-sm text-muted-foreground ml-11 mb-3">
+                          {topico.descricao}
+                        </p>
+                      </div>
+                      <Badge 
+                        variant="outline" 
+                        className={
+                          topico.importancia === 'alta' 
+                            ? 'bg-red-50 text-red-700 border-red-200' 
+                            : topico.importancia === 'média'
+                            ? 'bg-yellow-50 text-yellow-700 border-yellow-200'
+                            : 'bg-blue-50 text-blue-700 border-blue-200'
+                        }
+                      >
+                        {topico.importancia === 'alta' ? '⚠️ Alta' : topico.importancia === 'média' ? '📌 Média' : '📍 Baixa'}
+                      </Badge>
+                    </div>
+
+                    <div className="ml-11 space-y-2">
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+                        <Clock className="h-4 w-4" />
+                        <span>Tempo estimado: {topico.tempoEstimado} minutos</span>
+                      </div>
+
+                      <div className="space-y-2">
+                        <p className="text-sm font-medium text-gray-700">Subtópicos:</p>
+                        <div className="grid gap-2">
+                          {topico.subtopicos.map((subtopico, subIndex) => (
+                            <div key={subIndex} className="flex items-start gap-2 text-sm">
+                              <ChevronRight className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                              <span>{subtopico}</span>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  ))}
+                  </div>
+                ))}
+              </div>
+
+              {/* Tempo Total */}
+              <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-5 w-5 text-blue-700" />
+                    <span className="font-semibold text-blue-900">Tempo Total Estimado:</span>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-2xl font-bold text-blue-700">
+                      {Math.floor(getTotalTempoEstimado(discipline.id) / 60)}h {getTotalTempoEstimado(discipline.id) % 60}min
+                    </div>
+                    <p className="text-xs text-blue-600">{getTotalTempoEstimado(discipline.id)} minutos totais</p>
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
-          )}
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
 
         <TabsContent value="materials" className="space-y-6">
-          {/* Materials */}
-          <div className="grid gap-6 md:grid-cols-2">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Video className="h-5 w-5" />
-                  Vídeo Aulas ({Math.min(discipline.materials?.videos || 0, 40)})
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3 max-h-96 overflow-y-auto">
-                  {[...Array(Math.min(discipline.materials?.videos || 0, 40))].map((_, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50 transition-colors">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 bg-red-100 rounded-lg">
-                          <Play className="h-4 w-4 text-red-600" />
-                        </div>
-                        <div>
-                          <p className="font-medium">Aula {index + 1} - {discipline.name}</p>
-                          <p className="text-sm text-muted-foreground">
-                            {Math.floor(Math.random() * 30) + 15} min • 
-                            {Math.random() > 0.5 ? ' Concluída' : ' Não assistida'}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex gap-2">
-                        <Button size="sm" variant="outline" className="gap-2">
-                          <Play className="h-3 w-3" />
-                          Assistir
-                        </Button>
-                        <Button size="sm" variant="ghost">
-                          <Download className="h-3 w-3" />
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
+          {/* Questões Reais */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <GraduationCap className="h-5 w-5" />
+                Questões Reais de Concursos ({questoesDisciplina.length})
+              </CardTitle>
+              <p className="text-sm text-muted-foreground mt-2">
+                Questões autênticas de concursos anteriores filtradas especificamente para {discipline.name}
+              </p>
+            </CardHeader>
+            <CardContent>
+              {carregandoQuestoes ? (
+                <div className="text-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                  <p className="mt-2 text-sm text-muted-foreground">Carregando questões...</p>
                 </div>
-                
-                {(discipline.materials?.videos || 0) > 40 && (
-                  <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-                    <p className="text-sm text-blue-700">
-                      Exibindo 40 de {discipline.materials?.videos} aulas. 
-                      <Button variant="link" className="p-0 h-auto text-blue-700 underline ml-1">
-                        Ver todas
-                      </Button>
-                    </p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <GraduationCap className="h-5 w-5" />
-                  Listas de Exercícios ({Math.min(discipline.materials?.exercises || 0, 40)})
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3 max-h-96 overflow-y-auto">
-                  {[...Array(Math.min(discipline.materials?.exercises || 0, 40))].map((_, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50 transition-colors">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 bg-blue-100 rounded-lg">
-                          <FileText className="h-4 w-4 text-blue-600" />
+              ) : questoesDisciplina.length === 0 ? (
+                <div className="text-center py-8">
+                  <FileText className="h-12 w-12 mx-auto text-muted-foreground opacity-50" />
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    Nenhuma questão encontrada para esta disciplina ainda.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-4 max-h-[600px] overflow-y-auto">
+                  {questoesDisciplina.slice(0, 20).map((questao, index) => (
+                    <div key={questao.id} className="p-4 border rounded-lg hover:bg-gray-50 transition-colors">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex items-center gap-2">
+                          <Badge variant="outline" className="bg-blue-50">
+                            Questão {index + 1}
+                          </Badge>
+                          <Badge variant="secondary">
+                            {questao.area}
+                          </Badge>
                         </div>
-                        <div>
-                          <p className="font-medium">Lista {index + 1} - {discipline.name}</p>
-                          <p className="text-sm text-muted-foreground">
-                            {Math.floor(Math.random() * 20) + 5} questões • 
-                            Nível {['Fácil', 'Médio', 'Difícil'][Math.floor(Math.random() * 3)]}
-                          </p>
-                          <div className="flex items-center gap-2 mt-1">
-                            <Progress value={Math.floor(Math.random() * 100)} className="w-20 h-2" />
-                            <span className="text-xs text-muted-foreground">
-                              {Math.floor(Math.random() * 100)}% concluído
-                            </span>
+                        <Button size="sm" variant="outline">
+                          Ver Detalhes
+                        </Button>
+                      </div>
+                      
+                      <div 
+                        className="text-sm mb-3 line-clamp-3"
+                        dangerouslySetInnerHTML={{ __html: questao.enunciado }}
+                      />
+                      
+                      <div className="grid grid-cols-1 gap-2">
+                        {questao.alternativas.slice(0, 2).map((alt) => (
+                          <div 
+                            key={alt.letra}
+                            className={`text-xs p-2 rounded border ${
+                              alt.correta ? 'bg-green-50 border-green-200' : 'bg-gray-50'
+                            }`}
+                          >
+                            <span className="font-bold">{alt.letra})</span> 
+                            <span 
+                              className="ml-1 line-clamp-1"
+                              dangerouslySetInnerHTML={{ __html: alt.descricao }}
+                            />
                           </div>
-                        </div>
-                      </div>
-                      <div className="flex gap-2">
-                        <Button size="sm" variant="outline" className="gap-2">
-                          <FileText className="h-3 w-3" />
-                          Resolver
-                        </Button>
-                        <Button size="sm" variant="ghost">
-                          <Eye className="h-3 w-3" />
-                        </Button>
+                        ))}
+                        {questao.alternativas.length > 2 && (
+                          <p className="text-xs text-muted-foreground">
+                            + {questao.alternativas.length - 2} alternativas...
+                          </p>
+                        )}
                       </div>
                     </div>
                   ))}
                 </div>
-                
-                {(discipline.materials?.exercises || 0) > 40 && (
-                  <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-                    <p className="text-sm text-blue-700">
-                      Exibindo 40 de {discipline.materials?.exercises} listas. 
-                      <Button variant="link" className="p-0 h-auto text-blue-700 underline ml-1">
-                        Ver todas
-                      </Button>
-                    </p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
+              )}
+              
+              {questoesDisciplina.length > 20 && (
+                <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+                  <p className="text-sm text-blue-700">
+                    Exibindo 20 de {questoesDisciplina.length} questões disponíveis.
+                    <Button variant="link" className="p-0 h-auto text-blue-700 underline ml-1">
+                      Ver todas no simulado
+                    </Button>
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
 
           {/* Additional Materials */}
           <div className="grid gap-4 md:grid-cols-3">
@@ -509,23 +560,6 @@ export default function DisciplineDetailsPage() {
             </Card>
           </div>
 
-          {/* Seção de Podcast com IA */}
-          <Card className="border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50">
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <div className="p-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded">
-                  <span className="text-white text-sm">✨</span>
-                </div>
-                Podcast Educativo com IA
-              </CardTitle>
-              <p className="text-sm text-muted-foreground">
-                Transforme o conteúdo desta disciplina em um podcast personalizado usando inteligência artificial
-              </p>
-            </CardHeader>
-            <CardContent>
-              <DisciplinePodcastGenerator discipline={discipline} />
-            </CardContent>
-          </Card>
         </TabsContent>
 
         <TabsContent value="study-plan" className="space-y-6">
@@ -802,12 +836,12 @@ export default function DisciplineDetailsPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  {['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'].map((day, index) => (
+                  {['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'].map((day) => (
                     <div key={day} className="flex items-center gap-3">
                       <span className="text-sm w-8">{day}</span>
-                      <Progress value={Math.random() * 100} className="flex-1 h-2" />
+                      <Progress value={0} className="flex-1 h-2" />
                       <span className="text-xs text-muted-foreground w-8">
-                        {Math.floor(Math.random() * 4)}h
+                        0h
                       </span>
                     </div>
                   ))}
@@ -821,13 +855,13 @@ export default function DisciplineDetailsPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {discipline.tags.slice(0, 5).map((tag, index) => (
+                  {discipline.tags.slice(0, 5).map((tag) => (
                     <div key={tag} className="space-y-1">
                       <div className="flex justify-between text-sm">
                         <span>{tag}</span>
-                        <span className="font-medium">{Math.floor(Math.random() * 40) + 60}%</span>
+                        <span className="font-medium">0%</span>
                       </div>
-                      <Progress value={Math.floor(Math.random() * 40) + 60} className="h-2" />
+                      <Progress value={0} className="h-2" />
                     </div>
                   ))}
                 </div>

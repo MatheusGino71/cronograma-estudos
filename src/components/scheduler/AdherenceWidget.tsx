@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { useAdherence, useWeeklyStats, useStudyStreak } from "@/hooks/useSchedule"
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell } from 'recharts'
+import { BarChart, Bar, ResponsiveContainer, Cell } from 'recharts'
 import { TrendingUp, TrendingDown, Target, Flame, Clock, BookOpen } from "lucide-react"
 
 interface AdherenceWidgetProps {
@@ -25,9 +25,9 @@ export function AdherenceWidget({ className }: AdherenceWidgetProps) {
       date.setDate(date.getDate() - i)
       const dateStr = date.toISOString().split('T')[0]
       
-      // Mock data - seria calculado com dados reais
-      const planned = Math.floor(Math.random() * 4) + 1
-      const completed = Math.floor(Math.random() * planned)
+      // Dados reais viriam do banco de dados
+      const planned = 0
+      const completed = 0
       
       data.push({
         day: date.toLocaleDateString('pt-BR', { weekday: 'short' }),

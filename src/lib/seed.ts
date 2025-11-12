@@ -10,9 +10,9 @@ export const disciplines: Discipline[] = [
     tags: ['Direitos Fundamentais', 'Organização do Estado', 'Poder Constituinte', 'Controle de Constitucionalidade'],
     description: 'Estudo completo da Constituição Federal de 1988 com foco em princípios, direitos fundamentais e organização dos poderes. Aborda desde teoria constitucional até aplicação prática em concursos públicos.',
     materials: {
-      videos: 85,
+      videos: 0,
       pdfs: 25,
-      exercises: 280,
+      exercises: 47,
       simulados: 15,
       resumos: 12
     },
@@ -27,9 +27,9 @@ export const disciplines: Discipline[] = [
     tags: ['Atos Administrativos', 'Licitações', 'Servidores Públicos', 'Responsabilidade Civil', 'Poderes Administrativos'],
     description: 'Princípios da administração pública, atos administrativos, licitações, contratos e responsabilidade civil do Estado. Disciplina essencial para concursos da área administrativa.',
     materials: {
-      videos: 75,
+      videos: 0,
       pdfs: 30,
-      exercises: 250,
+      exercises: 38,
       simulados: 12,
       resumos: 15
     },
@@ -44,9 +44,9 @@ export const disciplines: Discipline[] = [
     tags: ['Parte Geral', 'Crimes em Espécie', 'Execução Penal', 'Legislação Especial'],
     description: 'Teoria geral do crime, penas e medidas de segurança, crimes em espécie e lei de execução penal. Abordagem completa do Código Penal e legislação especial.',
     materials: {
-      videos: 90,
+      videos: 0,
       pdfs: 35,
-      exercises: 320,
+      exercises: 52,
       simulados: 18,
       resumos: 20
     },
@@ -61,9 +61,9 @@ export const disciplines: Discipline[] = [
     tags: ['Parte Geral', 'Obrigações', 'Contratos', 'Direitos Reais', 'Responsabilidade Civil'],
     description: 'Código Civil brasileiro: parte geral, direito das obrigações, contratos, responsabilidade civil e direitos reais. Base fundamental para diversas áreas jurídicas.',
     materials: {
-      videos: 95,
+      videos: 0,
       pdfs: 40,
-      exercises: 350,
+      exercises: 64,
       simulados: 20,
       resumos: 25
     },
@@ -78,9 +78,9 @@ export const disciplines: Discipline[] = [
     tags: ['Processo de Conhecimento', 'Recursos', 'Execução', 'Tutelas Provisórias'],
     description: 'Novo Código de Processo Civil: processo de conhecimento, recursos, execução e cumprimento de sentença. Procedimentos especiais e tutelas de urgência.',
     materials: {
-      videos: 85,
+      videos: 0,
       pdfs: 35,
-      exercises: 300,
+      exercises: 45,
       simulados: 16,
       resumos: 22
     },
@@ -95,9 +95,9 @@ export const disciplines: Discipline[] = [
     tags: ['Inquérito Policial', 'Ação Penal', 'Provas', 'Recursos'],
     description: 'Código de Processo Penal: inquérito policial, ação penal, teoria geral das provas e recursos criminais.',
     materials: {
-      videos: 75,
+      videos: 0,
       pdfs: 28,
-      exercises: 240,
+      exercises: 41,
       simulados: 14,
       resumos: 18
     },
@@ -112,9 +112,9 @@ export const disciplines: Discipline[] = [
     tags: ['CLT', 'Contrato de Trabalho', 'Direitos do Trabalhador', 'Jornada de Trabalho'],
     description: 'Consolidação das Leis do Trabalho: contrato de trabalho, direitos e deveres, jornada de trabalho e rescisão.',
     materials: {
-      videos: 70,
+      videos: 0,
       pdfs: 25,
-      exercises: 220,
+      exercises: 35,
       simulados: 12,
       resumos: 16
     },
@@ -129,9 +129,9 @@ export const disciplines: Discipline[] = [
     tags: ['Reclamação Trabalhista', 'Audiência', 'Recursos'],
     description: 'Processo trabalhista: reclamação trabalhista, audiência, instrução processual e recursos na Justiça do Trabalho.',
     materials: {
-      videos: 60,
+      videos: 0,
       pdfs: 22,
-      exercises: 190,
+      exercises: 28,
       simulados: 10,
       resumos: 14
     },
@@ -146,9 +146,9 @@ export const disciplines: Discipline[] = [
     tags: ['CTN', 'Tributos', 'Processo Administrativo Fiscal'],
     description: 'Código Tributário Nacional: sistema tributário, tributos em espécie, processo administrativo fiscal e execução fiscal.',
     materials: {
-      videos: 80,
+      videos: 0,
       pdfs: 32,
-      exercises: 270,
+      exercises: 53,
       simulados: 15,
       resumos: 19
     },
@@ -163,9 +163,9 @@ export const disciplines: Discipline[] = [
     tags: ['Empresa', 'Sociedades', 'Títulos de Crédito'],
     description: 'Direito empresarial moderno: teoria da empresa, sociedades empresárias, títulos de crédito e falência.',
     materials: {
-      videos: 65,
+      videos: 0,
       pdfs: 24,
-      exercises: 200,
+      exercises: 32,
       simulados: 11,
       resumos: 13
     },
@@ -180,9 +180,9 @@ export const disciplines: Discipline[] = [
     tags: ['INSS', 'Benefícios', 'Segurados'],
     description: 'Sistema previdenciário brasileiro: segurados, dependentes, benefícios previdenciários e custeio da previdência.',
     materials: {
-      videos: 55,
+      videos: 0,
       pdfs: 20,
-      exercises: 180,
+      exercises: 29,
       simulados: 9,
       resumos: 12
     },
@@ -197,9 +197,9 @@ export const disciplines: Discipline[] = [
     tags: ['Meio Ambiente', 'Licenciamento', 'Responsabilidade'],
     description: 'Direito ambiental brasileiro: princípios, licenciamento ambiental, crimes ambientais e responsabilidade.',
     materials: {
-      videos: 50,
+      videos: 0,
       pdfs: 18,
-      exercises: 160,
+      exercises: 24,
       simulados: 8,
       resumos: 11
     },
@@ -238,23 +238,8 @@ export const generateId = (): string => {
   return Math.random().toString(36).substring(2) + Date.now().toString(36);
 };
 
-export const mockProgressLogs = [
-  {
-    blockId: '1',
-    actualMinutes: 45,
-    completedAt: '2025-08-29T19:45:00.000Z'
-  },
-  {
-    blockId: '2',
-    actualMinutes: 50,
-    completedAt: '2025-08-28T20:50:00.000Z'
-  },
-  {
-    blockId: '3',
-    actualMinutes: 25,
-    completedAt: '2025-08-27T19:25:00.000Z'
-  }
-];
+// Logs de progresso vazios - serão preenchidos com dados reais do usuário
+export const mockProgressLogs: Array<{blockId: string; actualMinutes: number; completedAt: string}> = [];
 
 export const defaultTimeSlots = [
   { start: '06:00', end: '07:00' },

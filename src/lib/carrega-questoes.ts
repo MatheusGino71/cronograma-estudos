@@ -1,46 +1,28 @@
 import { Questao } from '@/types/simulado';
-import { parseCSVToQuestions } from './simulado-utils';
 import { carregarQuestoesDoFirebase } from './migrador-questoes';
 
 let questoesCache: Questao[] | null = null;
 
 /**
- * Carrega questões do Firebase (preferencial) ou CSV (fallback)
+ * Carrega questões do Firebase - SEM CACHE, SEMPRE ATUALIZADO
  */
 export async function carregarQuestoes(): Promise<Questao[]> {
-  if (questoesCache) {
-    return questoesCache;
-  }
-
   try {
-    console.log('Tentando carregar questões do Firebase...');
+    console.log('🔍 Carregando questões do Firebase...');
     
-    // Primeiro tenta carregar do Firebase
+    // Carrega SEMPRE do Firebase (sem cache para garantir dados atualizados)
     const questoesFirebase = await carregarQuestoesDoFirebase();
     
-    if (questoesFirebase.length > 0) {
-      console.log(`✅ Carregadas ${questoesFirebase.length} questões do Firebase`);
-      questoesCache = questoesFirebase;
-      return questoesCache;
-    }
+    console.log(`✅ Carregadas ${questoesFirebase.length} questões do Firebase`);
     
-    console.log('⚠️ Nenhuma questão encontrada no Firebase, carregando do CSV...');
+    // Atualiza cache
+    questoesCache = questoesFirebase;
     
-    // Fallback para CSV se Firebase estiver vazio
-    const response = await fetch('/api/simulado/questoes');
-    if (!response.ok) {
-      throw new Error('Erro ao carregar questões do CSV');
-    }
-    
-    const csvContent = await response.text();
-    questoesCache = parseCSVToQuestions(csvContent);
-    
-    console.log(`✅ Carregadas ${questoesCache.length} questões do CSV`);
-    return questoesCache;
+    return questoesFirebase;
     
   } catch (error) {
-    console.error('Erro ao carregar questões:', error);
-    return [];
+    console.error('❌ Erro ao carregar questões do Firebase:', error);
+    return questoesCache || [];
   }
 }
 

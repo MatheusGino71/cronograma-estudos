@@ -43,13 +43,20 @@ export const useProgressStore = create<ProgressState>()(
         const weeklyMinutes = weeklyLogs.reduce((sum, log) => sum + log.actualMinutes, 0);
         const monthlyMinutes = monthlyLogs.reduce((sum, log) => sum + log.actualMinutes, 0);
         
-        // Mock dos outros valores para demonstração
+        // Calcula valores reais baseados nos logs
+        const completedBlocks = weeklyLogs.length;
+        const plannedBlocks = weeklyLogs.length; // Seria obtido do cronograma
+        const adherence = plannedBlocks > 0 ? (completedBlocks / plannedBlocks) * 100 : 0;
+        
+        // Conta blocos únicos
+        const uniqueBlocks = new Set(logs.map(log => log.blockId)).size;
+        
         return {
           weeklyHours: Math.round(weeklyMinutes / 60 * 10) / 10,
           monthlyHours: Math.round(monthlyMinutes / 60 * 10) / 10,
-          activeDisciplines: 5,
-          adherencePercentage: 75,
-          revisionsUpToDate: 8
+          activeDisciplines: uniqueBlocks,
+          adherencePercentage: Math.round(adherence),
+          revisionsUpToDate: 0 // Precisa ser calculado baseado no cronograma
         };
       },
       

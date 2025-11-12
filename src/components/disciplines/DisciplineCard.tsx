@@ -10,7 +10,6 @@ import { useDisciplineStore } from "@/store/discipline"
 import { useAddDisciplineToSchedule } from "@/hooks/useDisciplines"
 import { Heart, Plus, Eye, Clock, BookOpen, GraduationCap } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { DisciplinePodcastGenerator } from "./DisciplinePodcastGenerator"
 
 interface DisciplineCardProps {
   discipline: Discipline
@@ -175,12 +174,12 @@ export function DisciplineCard({
         {discipline.materials && (
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
             <div className="flex items-center gap-1">
-              <BookOpen className="h-3 w-3" />
-              {discipline.materials.videos || 0} vídeos
+              <GraduationCap className="h-3 w-3" />
+              {discipline.materials.exercises || 0} questões
             </div>
             <div className="flex items-center gap-1">
-              <GraduationCap className="h-3 w-3" />
-              {discipline.materials.exercises || 0} exercícios
+              <BookOpen className="h-3 w-3" />
+              {discipline.materials.pdfs || 0} materiais
             </div>
           </div>
         )}
@@ -226,14 +225,6 @@ export function DisciplineCard({
             >
               Sim
             </Button>
-          </div>
-        </div>
-        
-        {/* Quick Actions on Hover */}
-        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-          <div className="flex justify-between items-center text-xs">
-            <span className="text-muted-foreground">IA Podcast:</span>
-            <DisciplinePodcastGenerator discipline={discipline} compact={true} />
           </div>
         </div>
       </CardContent>

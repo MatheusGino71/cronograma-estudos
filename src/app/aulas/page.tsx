@@ -23,9 +23,10 @@ import {
   FileText,
   Sparkles
 } from 'lucide-react'
-import { MindMapGenerator } from '@/components/notebook-ia/MindMapGenerator'
-import { PodcastGenerator } from '@/components/notebook-ia/PodcastGenerator'
-import { StudyAnalyzer } from '@/components/notebook-ia/StudyAnalyzer'
+// Componentes removidos temporariamente
+// import { MindMapGenerator } from '@/components/notebook-ia/MindMapGenerator'
+// import { PodcastGenerator } from '@/components/notebook-ia/PodcastGenerator'
+// import { StudyAnalyzer } from '@/components/notebook-ia/StudyAnalyzer'
 
 interface Aula {
   id: string
@@ -145,6 +146,14 @@ export default function AulasPage() {
 
         {/* Conteúdo da Aula */}
         <div className="space-y-6">
+          <Card>
+            <CardContent className="p-8">
+              <p className="text-center text-muted-foreground">
+                Conteúdo da aula em desenvolvimento...
+              </p>
+            </CardContent>
+          </Card>
+          {/* Temporariamente desabilitado
           {aulaAtiva.tipo === 'analise' && (
             <StudyAnalyzer />
           )}
@@ -156,6 +165,7 @@ export default function AulasPage() {
           {aulaAtiva.tipo === 'podcast' && (
             <PodcastGenerator />
           )}
+          */}
         </div>
       </div>
     )
@@ -345,7 +355,11 @@ export default function AulasPage() {
                   <li>• Recomendações personalizadas</li>
                   <li>• Dados do Firebase</li>
                 </ul>
-                <StudyAnalyzer onAulaCriada={(dados) => {
+                <Button className="w-full" disabled>
+                  Em desenvolvimento
+                </Button>
+                {/* Temporariamente desabilitado
+                <StudyAnalyzer onAulaCriada={(dados: any) => {
                   const novaAula: Aula = {
                     id: Date.now().toString(),
                     titulo: `Análise - ${dados.subjects?.[0] || 'Estudo'}`,
@@ -360,6 +374,7 @@ export default function AulasPage() {
                   salvarAulas([...aulas, novaAula])
                   setActiveTab('minhas-aulas')
                 }} />
+                */}
               </CardContent>
             </Card>
 
@@ -380,7 +395,11 @@ export default function AulasPage() {
                   <li>• Export em SVG</li>
                   <li>• Baseado no Firebase</li>
                 </ul>
-                <MindMapGenerator onAulaCriada={(dados) => {
+                <Button className="w-full" disabled>
+                  Em desenvolvimento
+                </Button>
+                {/* Temporariamente desabilitado
+                <MindMapGenerator onAulaCriada={(dados: any) => {
                   const novaAula: Aula = {
                     id: Date.now().toString(),
                     titulo: `Mapa Mental - ${dados.central || 'Conceitos'}`,
@@ -395,6 +414,7 @@ export default function AulasPage() {
                   salvarAulas([...aulas, novaAula])
                   setActiveTab('minhas-aulas')
                 }} />
+                */}
               </CardContent>
             </Card>
 
@@ -415,7 +435,11 @@ export default function AulasPage() {
                   <li>• Questões reais do Firebase</li>
                   <li>• Download para offline</li>
                 </ul>
-                <PodcastGenerator onAulaCriada={(dados) => {
+                <Button className="w-full" disabled>
+                  Em desenvolvimento
+                </Button>
+                {/* Temporariamente desabilitado
+                <PodcastGenerator onAulaCriada={(dados: any) => {
                   const novaAula: Aula = {
                     id: Date.now().toString(),
                     titulo: dados.title || 'Podcast Educativo',
@@ -431,6 +455,7 @@ export default function AulasPage() {
                   salvarAulas([...aulas, novaAula])
                   setActiveTab('minhas-aulas')
                 }} />
+                */}
               </CardContent>
             </Card>
           </div>

@@ -32,37 +32,54 @@ export async function processarArquivoExcel(filePath: string): Promise<Questao[]
     const questoes: Questao[] = [];
     const questoesAgrupadas = new Map<string, QuestaoExcel[]>();
     
-    // Agrupa questões por ID ou enunciado
+    // Agrupa questões APENAS por ID da Questão (cada linha = 1 alternativa)
     data.forEach(row => {
-      const chave = String(row['ID Questão'] || row['Questão'] || '');
-      if (!questoesAgrupadas.has(chave)) {
-        questoesAgrupadas.set(chave, []);
+      const idQuestao = String(row['ID Questão'] || '').trim();
+      if (!idQuestao) return; // Ignora linhas sem ID
+      
+      if (!questoesAgrupadas.has(idQuestao)) {
+        questoesAgrupadas.set(idQuestao, []);
       }
-      questoesAgrupadas.get(chave)!.push(row);
+      questoesAgrupadas.get(idQuestao)!.push(row);
     });
+    
+    console.log(`📦 Total de questões únicas encontradas: ${questoesAgrupadas.size}`);
     
     // Processa cada grupo de questões
     let questaoId = 1;
+    let questoesInvalidas = 0;
+    
     questoesAgrupadas.forEach((linhas) => {
-      if (linhas.length === 0) return;
+      if (linhas.length === 0) {
+        questoesInvalidas++;
+        return;
+      }
       
       const primeiraLinha = linhas[0];
-      const disciplina = String(primeiraLinha['Área'] || 'Geral');
-      const enunciado = limparTextoHTML(String(primeiraLinha['Questão'] || ''));
+      const disciplina = String(primeiraLinha['Área'] || 'Geral').trim();
+      const enunciadoOriginal = String(primeiraLinha['Questão'] || '');
+      const enunciado = limparTextoHTML(enunciadoOriginal);
       
-      if (!enunciado) return;
+      if (!enunciado || enunciado.length < 10) {
+        questoesInvalidas++;
+        return;
+      }
       
       const alternativas: Alternativa[] = [];
+      const letrasProcessadas = new Set<string>();
       
       // Processa cada linha como uma alternativa
       linhas.forEach(linha => {
-        const letra = String(linha['Letter'] || '');
-        const texto = limparTextoHTML(String(linha['Alternativa'] || ''));
-        const correta = linha['Correct'] === 1 || linha['Correct'] === '1';
+        const letra = String(linha['Letter'] || '').trim().toUpperCase();
+        const textoOriginal = String(linha['Alternativa'] || '');
+        const texto = limparTextoHTML(textoOriginal);
+        const correta = linha['Correct'] === 1 || linha['Correct'] === '1' || String(linha['Correct']).trim() === '1';
         
-        if (letra && texto) {
+        // Evita alternativas duplicadas pela letra
+        if (letra && texto && !letrasProcessadas.has(letra)) {
+          letrasProcessadas.add(letra);
           alternativas.push({
-            letra: letra.toUpperCase(),
+            letra,
             texto,
             correta
           });
@@ -77,10 +94,25 @@ export async function processarArquivoExcel(filePath: string): Promise<Questao[]
           enunciado,
           alternativas: alternativas.sort((a, b) => a.letra.localeCompare(b.letra))
         });
+      } else {
+        questoesInvalidas++;
       }
     });
     
-    console.log(`Processadas ${questoes.length} questões válidas`);
+    console.log(`✅ Processadas ${questoes.length} questões válidas`);
+    console.log(`⚠️ Ignoradas ${questoesInvalidas} questões inválidas (sem alternativas suficientes)`);
+    
+    // Estatísticas por disciplina
+    const estatisticas = questoes.reduce((acc, q) => {
+      acc[q.disciplina] = (acc[q.disciplina] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+    
+    console.log('📊 Questões por disciplina:');
+    Object.entries(estatisticas).forEach(([disc, qtd]) => {
+      console.log(`  - ${disc}: ${qtd} questões`);
+    });
+    
     return questoes;
     
   } catch (error) {
@@ -90,19 +122,58 @@ export async function processarArquivoExcel(filePath: string): Promise<Questao[]
 }
 
 /**
- * Limpa texto HTML e entidades
+ * Limpa texto HTML e entidades - VERSÃO MELHORADA
  */
 function limparTextoHTML(texto: string): string {
   if (!texto) return '';
   
-  return texto
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&amp;/g, '&')
-    .replace(/<[^>]*>/g, '') // Remove tags HTML
-    .replace(/\s+/g, ' ') // Normaliza espaços
-    .trim();
+  const entities: Record<string, string> = {
+    '&amp;': '&',
+    '&lt;': '<',
+    '&gt;': '>',
+    '&quot;': '"',
+    '&#39;': "'",
+    '&#x27;': "'",
+    '&nbsp;': ' ',
+    '&apos;': "'",
+  }
+  
+  let decoded = String(texto)
+  
+  // Decodifica entidades conhecidas
+  Object.entries(entities).forEach(([entity, char]) => {
+    decoded = decoded.replace(new RegExp(entity, 'g'), char)
+  })
+  
+  // Remove tags HTML comuns mas preserva o conteúdo
+  decoded = decoded
+    .replace(/<br\s*\/?>/gi, ' ')
+    .replace(/<\/p>/gi, '\n')
+    .replace(/<p[^>]*>/gi, '')
+    .replace(/<span[^>]*>/gi, '')
+    .replace(/<\/span>/gi, '')
+    .replace(/<div[^>]*>/gi, '')
+    .replace(/<\/div>/gi, '')
+    .replace(/<strong>/gi, '')
+    .replace(/<\/strong>/gi, '')
+    .replace(/<b>/gi, '')
+    .replace(/<\/b>/gi, '')
+    .replace(/<i>/gi, '')
+    .replace(/<\/i>/gi, '')
+    .replace(/<em>/gi, '')
+    .replace(/<\/em>/gi, '')
+    .replace(/<u>/gi, '')
+    .replace(/<\/u>/gi, '')
+  
+  // Remove qualquer outra tag HTML restante
+  decoded = decoded.replace(/<[^>]+>/g, '')
+  
+  // Limpa espaços múltiplos e quebras de linha excessivas
+  decoded = decoded
+    .replace(/\s+/g, ' ')
+    .replace(/\n{3,}/g, '\n\n')
+  
+  return decoded.trim()
 }
 
 /**
@@ -149,24 +220,22 @@ export async function carregarQuestoesDoFirebase(): Promise<Questao[]> {
     const snapshot = await getDocs(questoesCollection);
     
     const questoes: Questao[] = [];
+    
     snapshot.forEach(doc => {
       const data = doc.data();
       questoes.push({
-        id: data.id,
-        disciplina: data.disciplina,
-        enunciado: data.enunciado,
-        alternativas: data.alternativas
+        id: data.id || doc.id,
+        disciplina: data.disciplina || data.area || 'Geral',
+        enunciado: data.enunciado || '',
+        alternativas: data.alternativas || []
       });
     });
     
-    // Ordena por ID
-    questoes.sort((a, b) => a.id - b.id);
-    
-    console.log(`Carregadas ${questoes.length} questões do Firebase`);
+    console.log(`✅ Carregadas ${questoes.length} questões do Firebase`);
     return questoes;
     
   } catch (error) {
-    console.error('Erro ao carregar questões do Firebase:', error);
+    console.error('❌ Erro ao carregar questões do Firebase:', error);
     return [];
   }
 }

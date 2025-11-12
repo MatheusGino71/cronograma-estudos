@@ -1,8 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Configurações para produção
-  output: 'export',
-  trailingSlash: true,
+  // output: 'export', // Desabilitado pois impede rotas dinâmicas
   images: {
     unoptimized: true
   },
