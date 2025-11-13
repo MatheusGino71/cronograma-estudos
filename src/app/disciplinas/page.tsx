@@ -47,20 +47,24 @@ export default function DisciplinasPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Disciplinas de Direito</h1>
+          <h1 className="text-3xl font-bold tracking-tight">
+            <span className="bg-gradient-to-r from-[#FF3347] via-[#3D5AFE] to-[#6B46C1] bg-clip-text text-transparent">
+              Disciplinas de Direito
+            </span>
+          </h1>
           <p className="text-muted-foreground">
             Explore todas as disciplinas jurídicas, compare conteúdos e adicione ao seu cronograma de estudos
           </p>
         </div>
         
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm">
+          <Button size="sm" className="bg-[#FF3347] hover:bg-[#D92637] text-white font-semibold shadow-md">
             <Heart className="h-4 w-4 mr-2" />
             Favoritos ({favorites.length})
           </Button>
           
           {comparison.length > 0 && (
-            <Button variant="secondary" size="sm">
+            <Button size="sm" className="bg-[#3D5AFE] hover:bg-[#2648C7] text-white font-semibold shadow-md">
               <GitCompare className="h-4 w-4 mr-2" />
               Comparar ({comparison.length})
             </Button>
@@ -132,7 +136,7 @@ export default function DisciplinasPage() {
       </div>
       
       {/* Hero/Banner Section */}
-      <Card className="bg-gradient-to-r from-red-600 to-purple-600 text-white">
+      <Card className="bg-gradient-to-r from-[#FF3347] via-[#3D5AFE] to-[#6B46C1] text-white">
         <CardContent className="p-8">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
             <div className="space-y-4">

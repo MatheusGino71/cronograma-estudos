@@ -35,7 +35,11 @@ export default function CronogramaPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Cronograma de Estudos</h1>
+          <h1 className="text-3xl font-bold tracking-tight">
+            <span className="bg-gradient-to-r from-[#FF3347] via-[#3D5AFE] to-[#6B46C1] bg-clip-text text-transparent">
+              Cronograma de Estudos
+            </span>
+          </h1>
           <p className="text-muted-foreground">
             Organize seus estudos de forma inteligente e acompanhe seu progresso
           </p>
@@ -43,10 +47,12 @@ export default function CronogramaPage() {
         
         <div className="flex items-center gap-2">
           <Button
-            variant="outline"
             size="sm"
             onClick={handleEnableNotifications}
             disabled={notificationsEnabled}
+            className={notificationsEnabled 
+              ? "bg-[#FF3347] hover:bg-[#D92637] text-white font-semibold shadow-md disabled:opacity-50" 
+              : "bg-[#3D5AFE] hover:bg-[#2648C7] text-white font-semibold shadow-md"}
           >
             {notificationsEnabled ? (
               <>
@@ -61,7 +67,7 @@ export default function CronogramaPage() {
             )}
           </Button>
           
-          <Button onClick={() => setIsWizardOpen(true)}>
+          <Button onClick={() => setIsWizardOpen(true)} className="bg-[#FF3347] hover:bg-[#D92637] text-white font-semibold shadow-md">
             <Wand2 className="h-4 w-4 mr-2" />
             Assistente de Planejamento
           </Button>
@@ -86,10 +92,10 @@ export default function CronogramaPage() {
       
       {/* Cards de Ação Rápida */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <Card className="cursor-pointer hover:shadow-md transition-all">
+        <Card className="cursor-pointer hover:shadow-md transition-all border-2 border-[#FF3347]/20 hover:border-[#FF3347]/50">
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Target className="h-5 w-5 text-red-500" />
+            <CardTitle className="text-lg flex items-center gap-2 text-[#FF3347]">
+              <Target className="h-5 w-5" />
               Templates Prontos
             </CardTitle>
           </CardHeader>
@@ -97,16 +103,16 @@ export default function CronogramaPage() {
             <p className="text-sm text-muted-foreground mb-3">
               Use modelos pré-configurados: Intensivo, Equilíbrio ou Revisão
             </p>
-            <Button variant="outline" size="sm" className="w-full">
+            <Button size="sm" className="w-full bg-[#FF3347] hover:bg-[#D92637] text-white font-semibold">
               Explorar Templates
             </Button>
           </CardContent>
         </Card>
         
-        <Card className="cursor-pointer hover:shadow-md transition-all">
+        <Card className="cursor-pointer hover:shadow-md transition-all border-2 border-[#3D5AFE]/20 hover:border-[#3D5AFE]/50">
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Calendar className="h-5 w-5 text-green-500" />
+            <CardTitle className="text-lg flex items-center gap-2 text-[#3D5AFE]">
+              <Calendar className="h-5 w-5" />
               Revisão Automática
             </CardTitle>
           </CardHeader>
@@ -114,16 +120,16 @@ export default function CronogramaPage() {
             <p className="text-sm text-muted-foreground mb-3">
               Sistema de espaçamento 1-3-7 dias para fixação do conteúdo
             </p>
-            <Button variant="outline" size="sm" className="w-full">
+            <Button size="sm" className="w-full bg-[#3D5AFE] hover:bg-[#2648C7] text-white font-semibold">
               Ver Revisões Pendentes
             </Button>
           </CardContent>
         </Card>
         
-        <Card className="cursor-pointer hover:shadow-md transition-all">
+        <Card className="cursor-pointer hover:shadow-md transition-all border-2 border-[#FF3347]/20 hover:border-[#FF3347]/50">
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Bell className="h-5 w-5 text-purple-500" />
+            <CardTitle className="text-lg flex items-center gap-2 text-[#FF3347]">
+              <Bell className="h-5 w-5" />
               Lembretes Inteligentes
             </CardTitle>
           </CardHeader>

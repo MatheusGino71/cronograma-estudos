@@ -163,6 +163,65 @@ export default function PraticaQuestoesPage() {
       ...prev,
       [indiceAtual]: true
     }))
+    
+    // Salvar no histórico do localStorage
+    salvarRespostaNoHistorico()
+  }
+  
+  const salvarRespostaNoHistorico = () => {
+    const respostaSelecionada = respostasUsuario[indiceAtual]
+    if (!respostaSelecionada || !questaoAtual) return
+    
+    const alternativaCorreta = questaoAtual.alternativas.find(a => a.correta)
+    const acertou = respostaSelecionada === alternativaCorreta?.letra
+    
+    // Buscar histórico existente
+    const historicoStr = localStorage.getItem('historico-questoes')
+    const historico = historicoStr ? JSON.parse(historicoStr) : []
+    
+    // Criar novo registro
+    const novaResposta = {
+      questaoId: questaoAtual.id.replace('firebase-', ''),
+      disciplina: questaoAtual.area,
+      enunciado: questaoAtual.enunciado,
+      alternativas: questaoAtual.alternativas.map(alt => ({
+        letra: alt.letra,
+        texto: alt.descricao,
+        correta: alt.correta
+      })),
+      respostaCorreta: alternativaCorreta?.letra || '',
+      respostaUsuario: respostaSelecionada,
+      acertou: acertou,
+      dataResposta: new Date().toISOString(),
+      tempoResposta: Math.floor((Date.now() - tempoInicio) / 1000),
+      tentativas: 1
+    }
+    
+    // Adicionar ao histórico
+    historico.push(novaResposta)
+    localStorage.setItem('historico-questoes', JSON.stringify(historico))
+    
+    // Atualizar estatísticas
+    atualizarEstatisticas(acertou)
+  }
+  
+  const atualizarEstatisticas = (acertou: boolean) => {
+    const estatisticasStr = localStorage.getItem('estatisticas-questoes')
+    const estatisticas = estatisticasStr ? JSON.parse(estatisticasStr) : {
+      totalRespondidas: 0,
+      totalCorretas: 0,
+      totalIncorretas: 0
+    }
+    
+    estatisticas.totalRespondidas += 1
+    
+    if (acertou) {
+      estatisticas.totalCorretas += 1
+    } else {
+      estatisticas.totalIncorretas += 1
+    }
+    
+    localStorage.setItem('estatisticas-questoes', JSON.stringify(estatisticas))
   }
 
   const handleMarcar = () => {

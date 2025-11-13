@@ -106,8 +106,10 @@ export default function QuestoesPage() {
       {/* Header */}
       <div>
         <h1 className="text-4xl font-bold mb-2 flex items-center gap-3">
-          <GraduationCap className="h-10 w-10 text-blue-600" />
-          Banco de Questões
+          <GraduationCap className="h-10 w-10 text-[#3D5AFE]" />
+          <span className="bg-gradient-to-r from-[#FF3347] via-[#3D5AFE] to-[#6B46C1] bg-clip-text text-transparent">
+            Banco de Questões
+          </span>
         </h1>
         <p className="text-muted-foreground text-lg">
           Pratique com questões reais de concursos anteriores
@@ -122,46 +124,46 @@ export default function QuestoesPage() {
             <BookOpen className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">{todasQuestoes.length}</div>
+            <div className="text-2xl font-bold text-[#FF3347]">{todasQuestoes.length}</div>
             <p className="text-xs text-muted-foreground mt-1">
               Questões no banco
             </p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="cursor-pointer hover:shadow-lg transition-all border-2 border-transparent hover:border-[#3D5AFE]/30" onClick={() => router.push('/questoes/respondidas')}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Respondidas</CardTitle>
-            <Target className="h-4 w-4 text-muted-foreground" />
+            <Target className="h-4 w-4 text-[#3D5AFE]" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{estatisticas.totalRespondidas}</div>
+            <div className="text-2xl font-bold text-[#3D5AFE]">{estatisticas.totalRespondidas}</div>
             <p className="text-xs text-muted-foreground mt-1">
               Total de tentativas
             </p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="cursor-pointer hover:shadow-lg transition-all border-2 border-transparent hover:border-[#FF3347]/30" onClick={() => router.push('/questoes/acertos')}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Acertos</CardTitle>
-            <CheckCircle className="h-4 w-4 text-green-600" />
+            <CheckCircle className="h-4 w-4 text-[#FF3347]" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{estatisticas.totalCorretas}</div>
+            <div className="text-2xl font-bold text-[#FF3347]">{estatisticas.totalCorretas}</div>
             <p className="text-xs text-muted-foreground mt-1">
               Questões corretas
             </p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="cursor-pointer hover:shadow-lg transition-all border-2 border-transparent hover:border-[#3D5AFE]/30" onClick={() => router.push('/questoes/erros')}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Erros</CardTitle>
-            <XCircle className="h-4 w-4 text-red-600" />
+            <XCircle className="h-4 w-4 text-[#3D5AFE]" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">{estatisticas.totalIncorretas}</div>
+            <div className="text-2xl font-bold text-[#3D5AFE]">{estatisticas.totalIncorretas}</div>
             <p className="text-xs text-muted-foreground mt-1">
               Questões erradas
             </p>
@@ -171,10 +173,10 @@ export default function QuestoesPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Taxa de Acerto</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            <TrendingUp className="h-4 w-4 text-[#FF3347]" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-purple-600">
+            <div className="text-2xl font-bold text-[#FF3347]">
               {estatisticas.totalRespondidas > 0 
                 ? Math.round((estatisticas.totalCorretas / estatisticas.totalRespondidas) * 100)
                 : 0}%
@@ -185,6 +187,9 @@ export default function QuestoesPage() {
                 : 0} 
               className="mt-2 h-1"
             />
+            <p className="text-xs text-muted-foreground mt-2">
+              Atualiza automaticamente
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -238,12 +243,12 @@ export default function QuestoesPage() {
             </div>
           </div>
 
-          <div className="flex items-center justify-between p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <div className="flex items-center justify-between p-4 bg-gradient-to-r from-[#3D5AFE]/10 to-[#FF3347]/10 border-2 border-[#3D5AFE]/30 rounded-lg">
             <div>
-              <p className="font-medium text-blue-900">
+              <p className="font-medium text-[#3D5AFE]">
                 {getQuestoesDisponiveis()} questões disponíveis
               </p>
-              <p className="text-sm text-blue-700">
+              <p className="text-sm text-[#FF3347]">
                 Você vai praticar com {Math.min(parseInt(quantidadeQuestoes), getQuestoesDisponiveis())} questões
               </p>
             </div>
@@ -251,7 +256,7 @@ export default function QuestoesPage() {
               size="lg" 
               onClick={iniciarPratica}
               disabled={getQuestoesDisponiveis() === 0}
-              className="gap-2"
+              className="gap-2 bg-[#3D5AFE] hover:bg-[#2648C7] text-white font-semibold shadow-md"
             >
               <Play className="h-5 w-5" />
               Iniciar Prática
@@ -298,10 +303,10 @@ export default function QuestoesPage() {
 
       {/* Ações Rápidas */}
       <div className="grid gap-4 md:grid-cols-3">
-        <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => router.push('/questoes/historico')}>
+        <Card className="hover:shadow-lg transition-shadow cursor-pointer border-2 border-[#FF3347]/20 hover:border-[#FF3347]/50" onClick={() => router.push('/questoes/historico')}>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-base">
-              <Clock className="h-5 w-5 text-blue-600" />
+            <CardTitle className="flex items-center gap-2 text-base text-[#FF3347]">
+              <Clock className="h-5 w-5" />
               Ver Histórico
             </CardTitle>
           </CardHeader>
@@ -312,10 +317,10 @@ export default function QuestoesPage() {
           </CardContent>
         </Card>
 
-        <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => router.push('/questoes/estatisticas')}>
+        <Card className="hover:shadow-lg transition-shadow cursor-pointer border-2 border-[#3D5AFE]/20 hover:border-[#3D5AFE]/50" onClick={() => router.push('/questoes/estatisticas')}>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-base">
-              <BarChart3 className="h-5 w-5 text-purple-600" />
+            <CardTitle className="flex items-center gap-2 text-base text-[#3D5AFE]">
+              <BarChart3 className="h-5 w-5" />
               Estatísticas Detalhadas
             </CardTitle>
           </CardHeader>
@@ -326,10 +331,10 @@ export default function QuestoesPage() {
           </CardContent>
         </Card>
 
-        <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => router.push('/questoes/revisao')}>
+        <Card className="hover:shadow-lg transition-shadow cursor-pointer border-2 border-[#FF3347]/20 hover:border-[#FF3347]/50" onClick={() => router.push('/questoes/revisao')}>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-base">
-              <Trophy className="h-5 w-5 text-yellow-600" />
+            <CardTitle className="flex items-center gap-2 text-base text-[#FF3347]">
+              <Trophy className="h-5 w-5" />
               Modo Revisão
             </CardTitle>
           </CardHeader>

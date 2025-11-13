@@ -89,7 +89,11 @@ export default function ProgressoPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Progresso & Analytics</h1>
+          <h1 className="text-3xl font-bold tracking-tight">
+            <span className="bg-gradient-to-r from-[#FF3347] via-[#3D5AFE] to-[#6B46C1] bg-clip-text text-transparent">
+              Progresso & Analytics
+            </span>
+          </h1>
           <p className="text-muted-foreground">
             Acompanhe seu desempenho e receba insights personalizados
           </p>
@@ -97,19 +101,19 @@ export default function ProgressoPage() {
         
         <div className="flex items-center gap-2">
           <Button
-            variant="outline"
             size="sm"
             onClick={handleExportCSV}
+            className="bg-[#FF3347] hover:bg-[#D92637] text-white font-semibold shadow-md"
           >
             <FileText className="h-4 w-4 mr-2" />
             Exportar CSV
           </Button>
           
           <Button
-            variant="outline"
             size="sm"
             onClick={handleExportPDF}
             disabled={isExporting}
+            className="bg-[#3D5AFE] hover:bg-[#2648C7] text-white font-semibold shadow-md disabled:opacity-50"
           >
             <Download className="h-4 w-4 mr-2" />
             {isExporting ? 'Gerando PDF...' : 'Exportar PDF'}
@@ -147,10 +151,10 @@ export default function ProgressoPage() {
       
       {/* Summary Cards */}
       <div className="grid gap-4 md:grid-cols-3">
-        <Card>
+        <Card className="border-2 border-[#FF3347]/20">
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Calendar className="h-5 w-5 text-red-500" />
+            <CardTitle className="text-lg flex items-center gap-2 text-[#FF3347]">
+              <Calendar className="h-5 w-5" />
               Resumo Semanal
             </CardTitle>
           </CardHeader>
@@ -172,10 +176,10 @@ export default function ProgressoPage() {
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="border-2 border-[#3D5AFE]/20">
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <BarChart3 className="h-5 w-5 text-green-500" />
+            <CardTitle className="text-lg flex items-center gap-2 text-[#3D5AFE]">
+              <BarChart3 className="h-5 w-5" />
               Resumo Mensal
             </CardTitle>
           </CardHeader>
@@ -195,10 +199,10 @@ export default function ProgressoPage() {
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="border-2 border-[#FF3347]/20">
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <FileText className="h-5 w-5 text-purple-500" />
+            <CardTitle className="text-lg flex items-center gap-2 text-[#FF3347]">
+              <FileText className="h-5 w-5" />
               Próximos Passos
             </CardTitle>
           </CardHeader>

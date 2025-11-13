@@ -1,12 +1,12 @@
-# 🎓 MindTech - Sistema Inteligente de Cronograma de Estudos
+# � OAB NomeNaLista - Seu Maior Aliado na Aprovação
 
-**Uma plataforma completa para otimizar seus estudos com inteligência artificial e análise de performance.**
+**Treine para o Exame da OAB com milhares de questões reais. A prática leva à perfeição. Veja seu NOME NA LISTA dos aprovados!**
 
 ![Next.js](https://img.shields.io/badge/Next.js-15.5.2-black?style=for-the-badge&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)
-![React](https://img.shields.io/badge/React-18-61dafb?style=for-the-badge&logo=react)
-![Firebase](https://img.shields.io/badge/Firebase-Auth-orange?style=for-the-badge&logo=firebase)
-![Zustand](https://img.shields.io/badge/Zustand-State-purple?style=for-the-badge)
+![React](https://img.shields.io/badge/React-19-red?style=for-the-badge&logo=react)
+![Firebase](https://img.shields.io/badge/Firebase-12.2.1-red?style=for-the-badge&logo=firebase)
+![Questões](https://img.shields.io/badge/Questões-5.422-red?style=for-the-badge)
 
 ## 🚀 **Como Acessar o Projeto**
 

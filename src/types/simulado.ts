@@ -56,3 +56,32 @@ export interface ConfigSimulado {
   mostrarGabarito?: boolean;
   dataProva?: string; // data da prova no formato YYYY-MM-DD
 }
+
+// Histórico de questões
+export interface QuestaoHistorico {
+  questaoId: number;
+  disciplina: string;
+  enunciado: string;
+  alternativas: Alternativa[];
+  respostaCorreta: string;
+  respostaUsuario: string;
+  acertou: boolean;
+  dataResposta: string;
+  tempoResposta: number;
+  simuladoId?: string;
+  tentativas: number;
+}
+
+export interface EstatisticasQuestoes {
+  totalRespondidas: number;
+  totalAcertos: number;
+  totalErros: number;
+  taxaAcerto: number;
+  questoesErradas: QuestaoHistorico[];
+  questoesPorDisciplina: Record<string, {
+    total: number;
+    acertos: number;
+    erros: number;
+    taxaAcerto: number;
+  }>;
+}

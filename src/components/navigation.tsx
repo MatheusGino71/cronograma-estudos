@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -61,52 +62,65 @@ export function Navigation() {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center">
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/80 shadow-sm">
+      <div className="container flex h-20 items-center px-6">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 mr-8">
-          <div className="h-8 w-8 rounded-lg bg-red-600 flex items-center justify-center">
-            <Calendar className="h-4 w-4 text-white" />
+        <Link href="/" className="flex items-center gap-3 mr-10 group transition-all hover:scale-105">
+          <div className="relative">
+            <div className="absolute -inset-1 bg-gradient-to-r from-[#FF3347] via-[#3D5AFE] to-[#6B46C1] rounded-lg blur opacity-40 group-hover:opacity-70 transition"></div>
+            <Image 
+              src="/logo-penal-oab.svg" 
+              alt="Penal OAB - Mapa Mental" 
+              width={180}
+              height={56}
+              className="h-14 w-auto drop-shadow-xl relative"
+              priority
+            />
           </div>
-          <span className="hidden font-bold sm:inline-block">
-            MindTech
-          </span>
         </Link>
         
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-          {navigation.map((item) => {
+        <nav className="hidden md:flex items-center gap-2 text-sm font-medium flex-1">
+          {navigation.map((item, index) => {
             const isActive = pathname === item.href
             const Icon = item.icon
+            // Alterna entre vermelho e azul
+            const activeColor = index % 2 === 0 
+              ? 'bg-gradient-to-r from-[#FF3347]/15 to-[#FF3347]/5 text-[#FF3347] border-[#FF3347]/40 shadow-sm' 
+              : 'bg-gradient-to-r from-[#3D5AFE]/15 to-[#3D5AFE]/5 text-[#3D5AFE] border-[#3D5AFE]/40 shadow-sm'
+            const hoverColor = index % 2 === 0 
+              ? 'hover:bg-[#FF3347]/8 hover:text-[#FF3347] hover:border-[#FF3347]/20' 
+              : 'hover:bg-[#3D5AFE]/8 hover:text-[#3D5AFE] hover:border-[#3D5AFE]/20'
             
             return (
               <Link
                 key={item.name}
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-2 px-3 py-2 rounded-md transition-colors hover:bg-accent hover:text-accent-foreground",
-                  isActive ? "bg-accent text-accent-foreground" : "text-muted-foreground"
+                  "flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all duration-200 border-2 border-transparent font-semibold whitespace-nowrap",
+                  isActive ? activeColor : `text-muted-foreground ${hoverColor}`
                 )}
+                title={item.description}
               >
                 <Icon className="h-4 w-4" />
-                {item.name}
+                <span className="hidden lg:inline">{item.name}</span>
               </Link>
             )
           })}
         </nav>
         
-        <div className="flex flex-1 items-center justify-end space-x-4">
+        <div className="flex items-center justify-end gap-3">
           {/* Theme Toggle */}
           <Button
             variant="ghost"
             size="icon"
             onClick={toggleTheme}
-            className="h-9 w-9"
+            className="h-10 w-10 rounded-full hover:bg-muted transition-all"
           >
             {resolvedTheme === 'dark' ? (
-              <Sun className="h-4 w-4" />
+              <Sun className="h-5 w-5 text-yellow-500" />
             ) : (
-              <Moon className="h-4 w-4" />
+              <Moon className="h-5 w-5 text-[#3D5AFE]" />
             )}
             <span className="sr-only">Toggle theme</span>
           </Button>
@@ -117,7 +131,10 @@ export function Navigation() {
               <UserMenu />
             ) : (
               <AuthModal>
-                <Button variant="outline" size="sm" className="gap-2">
+                <Button 
+                  size="default" 
+                  className="gap-2 bg-gradient-to-r from-[#3D5AFE] to-[#2648C7] hover:from-[#2648C7] hover:to-[#1E3BA3] text-white font-semibold shadow-lg hover:shadow-xl transition-all px-6"
+                >
                   <LogIn className="h-4 w-4" />
                   Entrar
                 </Button>
