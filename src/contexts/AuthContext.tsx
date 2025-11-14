@@ -36,6 +36,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           lastName: userData.lastName || '',
           phone: userData.phone || '',
           avatar: userData.avatar || firebaseUser.photoURL || '',
+          isAdmin: userData.isAdmin || false,
           createdAt: userData.createdAt?.toDate() || new Date(),
           updatedAt: userData.updatedAt?.toDate() || new Date()
         };
@@ -48,6 +49,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           lastName: firebaseUser.displayName?.split(' ').slice(1).join(' ') || '',
           phone: '',
           avatar: firebaseUser.photoURL || '',
+          isAdmin: false,
           createdAt: new Date(),
           updatedAt: new Date()
         };
@@ -80,6 +82,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         lastName: firebaseUser.displayName?.split(' ').slice(1).join(' ') || '',
         phone: '',
         avatar: firebaseUser.photoURL || '',
+        isAdmin: false,
         createdAt: new Date(),
         updatedAt: new Date()
       };
@@ -93,13 +96,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       // Modo de desenvolvimento - permite login com qualquer email/senha
       if (process.env.NODE_ENV === 'development') {
+        // Verificar se é o admin específico
+        const isAdminLogin = data.email === 'stadm@administrativo.com' && data.password === 'adm2714';
+        
         const mockUser: User = {
-          id: 'dev-user-1',
+          id: isAdminLogin ? 'admin-1' : 'dev-user-1',
           email: data.email,
-          name: 'Usuário',
-          lastName: 'Desenvolvimento',
-          phone: '',
+          name: isAdminLogin ? 'Administrador' : 'Usuário',
+          lastName: isAdminLogin ? 'Sistema' : 'Desenvolvimento',
+          phone: isAdminLogin ? '(11) 99999-9999' : '',
           avatar: '',
+          isAdmin: isAdminLogin || data.email === 'admin@admin.com',
           createdAt: new Date(),
           updatedAt: new Date()
         };
@@ -163,6 +170,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           lastName: data.lastName || '',
           phone: data.phone || '',
           avatar: '',
+          isAdmin: data.email === 'admin@admin.com' || data.email === 'stadm@administrativo.com',
           createdAt: new Date(),
           updatedAt: new Date()
         };
@@ -197,6 +205,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         lastName: data.lastName,
         phone: data.phone,
         avatar: '',
+        isAdmin: false,
         createdAt: new Date(),
         updatedAt: new Date()
       };

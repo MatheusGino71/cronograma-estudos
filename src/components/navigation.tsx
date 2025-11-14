@@ -6,7 +6,7 @@ import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { Calendar, BookOpen, BarChart3, Menu, X, FileText, LogIn, Sun, Moon, Bot, GraduationCap } from "lucide-react"
+import { Calendar, BookOpen, BarChart3, Menu, X, FileText, LogIn, Sun, Moon, Bot, GraduationCap, Shield } from "lucide-react"
 import { useAuth } from "@/contexts/AuthContext"
 import { useTheme } from "@/contexts/ThemeContext"
 import { AuthModal } from "@/components/auth/AuthModal"
@@ -107,6 +107,23 @@ export function Navigation() {
               </Link>
             )
           })}
+          
+          {/* Admin Link - Only for admins */}
+          {user?.isAdmin && (
+            <Link
+              href="/admin"
+              className={cn(
+                "flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all duration-200 border-2 font-semibold whitespace-nowrap",
+                pathname.startsWith('/admin')
+                  ? 'bg-gradient-to-r from-purple-500/15 to-purple-500/5 text-purple-600 border-purple-500/40 shadow-sm'
+                  : 'text-muted-foreground hover:bg-purple-500/8 hover:text-purple-600 hover:border-purple-500/20 border-transparent'
+              )}
+              title="Painel Administrativo"
+            >
+              <Shield className="h-4 w-4" />
+              <span className="hidden lg:inline">Admin</span>
+            </Link>
+          )}
         </nav>
         
         <div className="flex items-center justify-end gap-3">
@@ -184,6 +201,24 @@ export function Navigation() {
                 </Link>
               )
             })}
+            
+            {/* Admin Link Mobile - Only for admins */}
+            {user?.isAdmin && (
+              <Link
+                href="/admin"
+                onClick={() => setMobileMenuOpen(false)}
+                className={cn(
+                  "flex items-center gap-3 px-3 py-3 rounded-md transition-colors hover:bg-accent",
+                  pathname.startsWith('/admin') ? "bg-accent text-accent-foreground" : "text-muted-foreground"
+                )}
+              >
+                <Shield className="h-5 w-5" />
+                <div>
+                  <div className="font-medium">Admin</div>
+                  <div className="text-xs text-muted-foreground">Painel Administrativo</div>
+                </div>
+              </Link>
+            )}
             
             {/* Mobile Auth Section */}
             <div className="pt-4 border-t space-y-3">

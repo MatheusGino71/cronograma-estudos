@@ -5,6 +5,7 @@ export interface User {
   lastName: string;
   phone: string;
   avatar?: string;
+  isAdmin?: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

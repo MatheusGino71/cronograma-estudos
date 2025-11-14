@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, Eye, EyeOff } from "lucide-react"
+import { Loader2, Eye, EyeOff, Shield } from "lucide-react"
 import { useAuth } from "@/contexts/AuthContext"
 import { LoginData } from "@/types/auth"
 
@@ -44,6 +44,15 @@ export function LoginForm({ onToggleMode, onClose }: LoginFormProps) {
 
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
+  };
+
+  const handleAdminLogin = () => {
+    // Clear form and let admin enter credentials manually
+    setFormData({
+      email: '',
+      password: ''
+    });
+    setValidationErrors({});
   };
 
   const handleForgotPassword = async () => {
@@ -191,6 +200,16 @@ export function LoginForm({ onToggleMode, onClose }: LoginFormProps) {
               'Entrar'
             )}
           </Button>
+          
+          <div className="w-full p-3 border border-purple-500 rounded-md bg-purple-50 dark:bg-purple-900/20 text-center">
+            <div className="flex items-center justify-center text-purple-600 font-medium mb-1">
+              <Shield className="mr-2 h-4 w-4" />
+              Área Administrativa
+            </div>
+            <p className="text-xs text-purple-600/80">
+              Use suas credenciais de administrador
+            </p>
+          </div>
           
           <div className="text-sm text-center text-muted-foreground">
             Não tem uma conta?{' '}
