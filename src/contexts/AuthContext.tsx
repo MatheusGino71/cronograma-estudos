@@ -25,6 +25,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Helper function to convert Firebase user to our User type
   const createUserFromFirebase = async (firebaseUser: FirebaseUser): Promise<User | null> => {
     try {
+      // Verificar se é o email do admin
+      const isAdminEmail = firebaseUser.email === 'stadm@administrativo.com' || firebaseUser.email === 'admin@admin.com';
+      
       const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
       
       if (userDoc.exists()) {
@@ -36,7 +39,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           lastName: userData.lastName || '',
           phone: userData.phone || '',
           avatar: userData.avatar || firebaseUser.photoURL || '',
-          isAdmin: userData.isAdmin || false,
+          isAdmin: userData.isAdmin || isAdminEmail,
           createdAt: userData.createdAt?.toDate() || new Date(),
           updatedAt: userData.updatedAt?.toDate() || new Date()
         };
@@ -49,7 +52,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           lastName: firebaseUser.displayName?.split(' ').slice(1).join(' ') || '',
           phone: '',
           avatar: firebaseUser.photoURL || '',
-          isAdmin: false,
+          isAdmin: isAdminEmail,
           createdAt: new Date(),
           updatedAt: new Date()
         };
@@ -82,7 +85,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         lastName: firebaseUser.displayName?.split(' ').slice(1).join(' ') || '',
         phone: '',
         avatar: firebaseUser.photoURL || '',
-        isAdmin: false,
+        isAdmin: isAdminEmail,
         createdAt: new Date(),
         updatedAt: new Date()
       };
@@ -93,31 +96,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (data: LoginData) => {
     try {
       setAuthState(prev => ({ ...prev, loading: true, error: null }));
-      
-      // Modo de desenvolvimento - permite login com qualquer email/senha
-      if (process.env.NODE_ENV === 'development') {
-        // Verificar se é o admin específico
-        const isAdminLogin = data.email === 'stadm@administrativo.com' && data.password === 'adm2714';
-        
-        const mockUser: User = {
-          id: isAdminLogin ? 'admin-1' : 'dev-user-1',
-          email: data.email,
-          name: isAdminLogin ? 'Administrador' : 'Usuário',
-          lastName: isAdminLogin ? 'Sistema' : 'Desenvolvimento',
-          phone: isAdminLogin ? '(11) 99999-9999' : '',
-          avatar: '',
-          isAdmin: isAdminLogin || data.email === 'admin@admin.com',
-          createdAt: new Date(),
-          updatedAt: new Date()
-        };
-        
-        setAuthState({
-          user: mockUser,
-          loading: false,
-          error: null
-        });
-        return;
-      }
       
       const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
       const user = await createUserFromFirebase(userCredential.user);
@@ -160,28 +138,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const register = async (data: RegisterData) => {
     try {
       setAuthState(prev => ({ ...prev, loading: true, error: null }));
-      
-      // Modo de desenvolvimento - permite registro sem Firebase
-      if (process.env.NODE_ENV === 'development') {
-        const mockUser: User = {
-          id: 'dev-user-' + Date.now(),
-          email: data.email,
-          name: data.name,
-          lastName: data.lastName || '',
-          phone: data.phone || '',
-          avatar: '',
-          isAdmin: data.email === 'admin@admin.com' || data.email === 'stadm@administrativo.com',
-          createdAt: new Date(),
-          updatedAt: new Date()
-        };
-        
-        setAuthState({
-          user: mockUser,
-          loading: false,
-          error: null
-        });
-        return;
-      }
       
       const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
       
@@ -285,16 +241,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Listen to Firebase auth state changes
   useEffect(() => {
-    // Em modo de desenvolvimento, não conecta ao Firebase
-    if (process.env.NODE_ENV === 'development') {
-      setAuthState({
-        user: null,
-        loading: false,
-        error: null
-      });
-      return;
-    }
-
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       try {
         if (firebaseUser) {
