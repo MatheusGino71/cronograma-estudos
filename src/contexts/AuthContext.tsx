@@ -32,6 +32,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       if (userDoc.exists()) {
         const userData = userDoc.data();
+        
+        // Se é email de admin mas o documento não tem isAdmin, atualizar
+        if (isAdminEmail && !userData.isAdmin) {
+          try {
+            await setDoc(doc(db, 'users', firebaseUser.uid), {
+              ...userData,
+              isAdmin: true,
+              updatedAt: serverTimestamp()
+            }, { merge: true });
+          } catch (error) {
+            console.error('Erro ao atualizar isAdmin:', error);
+          }
+        }
+        
         return {
           id: firebaseUser.uid,
           email: firebaseUser.email || '',
