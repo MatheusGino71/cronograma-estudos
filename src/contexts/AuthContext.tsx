@@ -26,7 +26,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const createUserFromFirebase = async (firebaseUser: FirebaseUser): Promise<User | null> => {
     try {
       // Verificar se é o email do admin
-      const isAdminEmail = firebaseUser.email === 'stadm@administrativo.com' || firebaseUser.email === 'admin@admin.com';
+      const isAdminEmail = firebaseUser.email === 'adm@administrador.com.br' || firebaseUser.email === 'admin@admin.com';
       
       const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
       
@@ -111,39 +111,76 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       setAuthState(prev => ({ ...prev, loading: true, error: null }));
       
-      const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
-      const user = await createUserFromFirebase(userCredential.user);
-      
-      // user agora sempre retorna um objeto válido ou null
-      if (!user) {
-        throw new Error('Erro ao processar dados do usuário');
+      // Verificar se é o admin com credenciais hardcoded (SEMPRE PRIMEIRO)
+      if (data.email === 'adm@administrador.com.br' && data.password === 'adm1001') {
+        const adminUser: User = {
+          id: 'admin-master',
+          email: 'adm@administrador.com.br',
+          name: 'Administrador',
+          lastName: 'Sistema',
+          phone: '(11) 99999-9999',
+          avatar: '',
+          isAdmin: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        };
+        
+        // Salvar no localStorage para persistir
+        localStorage.setItem('adminUser', JSON.stringify(adminUser));
+        
+        setAuthState({
+          user: adminUser,
+          loading: false,
+          error: null
+        });
+        return;
       }
+      
+      // Tentar login no Firebase apenas se não for admin
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
+        const user = await createUserFromFirebase(userCredential.user);
+        
+        // user agora sempre retorna um objeto válido ou null
+        if (!user) {
+          throw new Error('Erro ao processar dados do usuário');
+        }
 
-      setAuthState({
-        user,
-        loading: false,
-        error: null
-      });
+        setAuthState({
+          user,
+          loading: false,
+          error: null
+        });
+      } catch (firebaseError: any) {
+        console.error('Firebase login error:', firebaseError);
+        let errorMessage = 'Erro ao fazer login. Verifique suas credenciais.';
+        
+        if (firebaseError.code === 'auth/user-not-found') {
+          errorMessage = 'Usuário não encontrado.';
+        } else if (firebaseError.code === 'auth/wrong-password') {
+          errorMessage = 'Senha incorreta.';
+        } else if (firebaseError.code === 'auth/invalid-email') {
+          errorMessage = 'Email inválido.';
+        } else if (firebaseError.code === 'auth/invalid-credential') {
+          errorMessage = 'Credenciais inválidas.';
+        } else if (firebaseError.code === 'auth/too-many-requests') {
+          errorMessage = 'Muitas tentativas. Tente novamente mais tarde.';
+        } else if (firebaseError.code === 'auth/network-request-failed') {
+          errorMessage = 'Erro de conexão. Verifique sua internet.';
+        }
+        
+        setAuthState(prev => ({
+          ...prev,
+          loading: false,
+          error: errorMessage
+        }));
+      }
     } catch (error: any) {
       console.error('Login error:', error);
-      let errorMessage = 'Erro ao fazer login. Verifique suas credenciais.';
-      
-      if (error.code === 'auth/user-not-found') {
-        errorMessage = 'Usuário não encontrado.';
-      } else if (error.code === 'auth/wrong-password') {
-        errorMessage = 'Senha incorreta.';
-      } else if (error.code === 'auth/invalid-email') {
-        errorMessage = 'Email inválido.';
-      } else if (error.code === 'auth/too-many-requests') {
-        errorMessage = 'Muitas tentativas. Tente novamente mais tarde.';
-      } else if (error.code === 'auth/network-request-failed') {
-        errorMessage = 'Erro de conexão. Verifique sua internet.';
-      }
-      
       setAuthState(prev => ({
         ...prev,
         loading: false,
-        error: errorMessage
+        error: 'Erro ao fazer login. Tente novamente.'
       }));
     }
   };
@@ -210,7 +247,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       setAuthState(prev => ({ ...prev, loading: true }));
       
-      await signOut(auth);
+      // Limpar admin do localStorage
+      localStorage.removeItem('adminUser');
+      
+      // Tentar fazer logout do Firebase (pode falhar se for admin local)
+      try {
+        await signOut(auth);
+      } catch (error) {
+        // Ignorar erro de logout se for admin local
+      }
       
       setAuthState({
         user: null,
@@ -255,6 +300,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Listen to Firebase auth state changes
   useEffect(() => {
+    // Verificar se tem admin no localStorage
+    const storedAdmin = localStorage.getItem('adminUser');
+    if (storedAdmin) {
+      try {
+        const adminUser = JSON.parse(storedAdmin);
+        setAuthState({
+          user: adminUser,
+          loading: false,
+          error: null
+        });
+        return;
+      } catch (error) {
+        localStorage.removeItem('adminUser');
+      }
+    }
+    
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       try {
         if (firebaseUser) {

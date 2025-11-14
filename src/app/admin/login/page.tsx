@@ -48,7 +48,10 @@ export default function AdminLoginPage() {
 
     try {
       await login(formData)
-      router.push('/admin')
+      // Aguardar um pouco para garantir que o estado foi atualizado
+      setTimeout(() => {
+        router.push('/admin')
+      }, 100)
     } catch (error) {
       console.error('Admin login error:', error)
     }
